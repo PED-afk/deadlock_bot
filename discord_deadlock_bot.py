@@ -27,7 +27,7 @@ class Button(discord.ui.View):
     async def button_callback(self,interaction: discord.Interaction,button: discord.ui.Button):
         #await interaction.response.send_message("Button!",ephemeral=True) #only clicker sees
         await interaction.response.send_message("Button!")
-#test
+
 class MultButton(discord.ui.View):
     def __init__(self, author: discord.User):
         super().__init__(timeout=60)  #expire in 60 sec
@@ -473,11 +473,11 @@ RANK_COLORS = {
     "eternus":   discord.Color.from_rgb(220, 180, 60),
 }
 
-async def fetch_rank_from_api(steam_id_64: int) -> str | None:
+async def fetch_rank_from_api(steam_id_64: int) -> tuple[str, int] | None:
     account_id = steam_id_64 - 76561197960265728
-    url = f"https://api.deadlock-api.com/v1/players/{account_id}/mmr-history"
     try:
         async with aiohttp.ClientSession() as session:
+            url = f"https://api.deadlock-api.com/v1/players/{account_id}/mmr-history"
             async with session.get(url, timeout=aiohttp.ClientTimeout(total=10)) as resp:
                 if resp.status != 200:
                     return None
@@ -485,17 +485,16 @@ async def fetch_rank_from_api(steam_id_64: int) -> str | None:
                 if not data:
                     return None
                 latest = max(data, key=lambda x: x.get("start_time", 0))
-                rank_val = latest.get("rank")
-                if rank_val is None:
+                division = latest.get("division")
+                division_tier = latest.get("division_tier")
+                if division is None or division_tier is None:
                     return None
-                tier = rank_val // 10
-                if 0 <= tier < len(RANK_NAMES):
-                    return RANK_NAMES[tier]
+                idx = division - 1
+                if 0 <= idx < len(RANK_NAMES):
+                    return (RANK_NAMES[idx], division_tier)
                 return None
     except Exception:
         return None
-
-#comment
 
 async def assign_rank_role(member: discord.Member, rank: str):
     guild = member.guild
@@ -968,11 +967,12 @@ async def set_steam_id(ctx, id: int):
         bot.user_data[str(senderID)]["steamID"] = str(account_id)
         bot.user_data[str(senderID)]["steamID64"] = str(id)
         await ctx.reply("Steam ID saved! Fetching your rank from Deadlock API... " + chooseFaceFromCategory("concentrate"))
-        rank = await fetch_rank_from_api(id)
-        if rank:
+        result = await fetch_rank_from_api(id)
+        if result:
+            rank, division_tier = result
             bot.user_data[str(senderID)]["rank"] = rank
             await assign_rank_role(ctx.author, rank)
-            await ctx.reply("Your rank has been automatically set to: **" + rank + "** " + chooseFaceFromCategory("happy"))
+            await ctx.reply("Your rank has been automatically set to: **" + rank.capitalize() + " " + str(division_tier) + "** " + chooseFaceFromCategory("happy"))
         else:
             await ctx.reply("Couldn't fetch your rank automatically. Make sure your Steam profile is public and you have played ranked matches. You can set it manually with `!set_rank`.")
 
