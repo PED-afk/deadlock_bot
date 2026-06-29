@@ -813,7 +813,7 @@ async def restart(ctx,save:str="save"):
                 await ctx.reply("Shuting down.\nBe right back!\n"+chooseFaceFromCategory("blush_happy"),delete_after=20)
                 await bot.close()
 
-@bot.command() #aliases=["reload"] dont work on raspberry
+@bot.command()
 async def sleep(ctx,save:str="save"):
     senderID=ctx.author.id
     if ctx.channel.id==BOTS_CHANNEL_ID:
