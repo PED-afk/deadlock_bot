@@ -27,7 +27,7 @@ class Button(discord.ui.View):
     async def button_callback(self,interaction: discord.Interaction,button: discord.ui.Button):
         #await interaction.response.send_message("Button!",ephemeral=True) #only clicker sees
         await interaction.response.send_message("Button!")
-
+#test
 class MultButton(discord.ui.View):
     def __init__(self, author: discord.User):
         super().__init__(timeout=60)  #expire in 60 sec
