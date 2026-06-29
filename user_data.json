@@ -14,5 +14,59 @@
         "hidden": {
             "messageCD": 0
         }
+    },
+    "616710497378631709": {
+        "main": "None",
+        "steamID": "None",
+        "steamID3": "None",
+        "steamID64": "None",
+        "money": {
+            "unsecured": 0,
+            "secured": 0
+        },
+        "items": [],
+        "lvl": 1,
+        "XP": 0,
+        "wins": 0,
+        "hidden": {
+            "messageCD": 0
+        },
+        "rank": "None"
+    },
+    "534796790105505794": {
+        "main": "None",
+        "steamID": "None",
+        "steamID3": "None",
+        "steamID64": "None",
+        "money": {
+            "unsecured": 0,
+            "secured": 0
+        },
+        "items": [],
+        "lvl": 1,
+        "XP": 0,
+        "wins": 0,
+        "hidden": {
+            "messageCD": 0
+        },
+        "rank": "None"
+    },
+    "674177700545560606": {
+        "main": "None",
+        "steamID": "None",
+        "steamID3": "None",
+        "steamID64": "None",
+        "money": {
+            "unsecured": 0,
+            "secured": 0
+        },
+        "items": [],
+        "lvl": 1,
+        "XP": 0,
+        "wins": 0,
+        "hidden": {
+            "messageCD": 0
+        },
+        "rank": "None"
     }
 }

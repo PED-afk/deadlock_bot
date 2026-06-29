@@ -672,35 +672,36 @@ async def on_message(message):
         bot.user_data[idSTR]["hidden"]["messageCD"]=0
         bot.user_data[idSTR]["rank"]="None"
     else:
-        if message.content[0]!="!" and time.time()>=bot.user_data[idSTR]["hidden"]["messageCD"]:
-            bot.user_data[idSTR]["hidden"]["messageCD"]=time.time()+bot.messageCD
-            bonusM=1
+        if len(message.content)!=0:
+            if message.content[0]!="!" and time.time()>=bot.user_data[idSTR]["hidden"]["messageCD"]:
+                bot.user_data[idSTR]["hidden"]["messageCD"]=time.time()+bot.messageCD
+                bonusM=1
 
-            users_in_voice = []
+                users_in_voice = []
 
-            for guild in bot.guilds:
-                for voice_channel in guild.voice_channels:
-                    for member in voice_channel.members:
-                        users_in_voice.append(str(member.id)+" in "+voice_channel.name)
-            if len(users_in_voice)!=0:
-                givesBonus={
-                    "good luck":{"bonus":0.5,"alias":{"name":" gl ","bonus":0.25}},
-                    "have fun":{"bonus":0.5,"alias":{"name":" hf ","bonus":0.25}},
-                }
-                for i,key in enumerate(givesBonus):
-                    if key in message.content:
-                        bonusM+=givesBonus[key]["bonus"]
-                    elif givesBonus[key]["alias"]["name"] in message.content:
-                        bonusM+=givesBonus[key]["alias"]["bonus"]
+                for guild in bot.guilds:
+                    for voice_channel in guild.voice_channels:
+                        for member in voice_channel.members:
+                            users_in_voice.append(str(member.id)+" in "+voice_channel.name)
+                if len(users_in_voice)!=0:
+                    givesBonus={
+                        "good luck":{"bonus":0.5,"alias":{"name":" gl ","bonus":0.25}},
+                        "have fun":{"bonus":0.5,"alias":{"name":" hf ","bonus":0.25}},
+                    }
+                    for i,key in enumerate(givesBonus):
+                        if key in message.content:
+                            bonusM+=givesBonus[key]["bonus"]
+                        elif givesBonus[key]["alias"]["name"] in message.content:
+                            bonusM+=givesBonus[key]["alias"]["bonus"]
 
-            lenght=len(message.content)//10
-            bot.user_data[idSTR]["money"]["unsecured"]+=100+random.randint(0,lenght)*bonusM
-            bot.user_data[idSTR]["XP"]+=1+random.randint(0,lenght)*bonusM
-            level=bot.user_data[idSTR]["lvl"]
-            if level<bot.maxLevel:
-                if bot.user_data[idSTR]["XP"]>=100+2**(level/4)+level:
-                    bot.user_data[idSTR]["XP"]-=100+2**(level/4)+level
-                    bot.user_data[idSTR]["lvl"]+=1
+                lenght=len(message.content)//10
+                bot.user_data[idSTR]["money"]["unsecured"]+=100+random.randint(0,lenght)*bonusM
+                bot.user_data[idSTR]["XP"]+=1+random.randint(0,lenght)*bonusM
+                level=bot.user_data[idSTR]["lvl"]
+                if level<bot.maxLevel:
+                    if bot.user_data[idSTR]["XP"]>=100+2**(level/4)+level:
+                        bot.user_data[idSTR]["XP"]-=100+2**(level/4)+level
+                        bot.user_data[idSTR]["lvl"]+=1
     
     await bot.process_commands(message)
 
@@ -715,50 +716,6 @@ async def test(ctx):
             view=MultButton(ctx.author)
             view=FindRem(ctx)
             #await ctx.send("Buttons:", view=view)
-
-@bot.command()
-async def silly(ctx):
-    senderID=ctx.author.id
-    if ctx.channel.id==BOTS_CHANNEL_ID:
-        await ctx.reply("1")
-        def after_playing(error):
-            if error:
-                print(f"Playback error: {error}")
-            bot.loop.call_soon_threadsafe(finished.set)
-            
-        await ctx.reply("1.1")
-        if ctx.author.voice is None or ctx.author.voice.channel is None:
-            await ctx.send("You must be in a voice channel.")
-            return
-        await ctx.reply("2")
-        
-        channel = ctx.author.voice.channel
-        was_in = ctx.voice_client is not None
-
-        if was_in:
-            vc = ctx.voice_client
-            if vc.channel != channel:
-                await vc.move_to(channel)
-            await ctx.reply("3.A")
-        else:
-            vc = await channel.connect()
-            await ctx.reply("3.B")
-
-        if vc.is_playing():
-            vc.stop()
-        await ctx.reply("4")
-
-        finished = asyncio.Event()
-        source = discord.FFmpegPCMAudio(str(bot.sounds_folder / "voicechat" / "silly(128k).mp3"))
-        vc.play(source, after=after_playing)
-        await ctx.reply("5")
-
-        try:
-            await finished.wait()
-        finally:
-            if not was_in and vc.is_connected():
-                await vc.disconnect()
-        await ctx.reply("6")
 
 @bot.command()
 async def minigames(ctx, game:str=None):
@@ -1000,11 +957,6 @@ async def bot_help(ctx, section:str=None):
 async def ping(ctx):
     if ctx.channel.id==BOTS_CHANNEL_ID:
         await ctx.reply("Pong!",delete_after=2)
-
-@bot.command()
-async def pat(ctx):
-    if ctx.channel.id==BOTS_CHANNEL_ID:
-        await ctx.reply(chooseFaceFromCategory("pat"))
 
 @bot.command()
 async def remaining(ctx):
@@ -1459,10 +1411,209 @@ async def tick():
                 bot.timers[name]=None
 
 
+
+
+#"hidden" commands (they are not listed in bot_help; KEEP IT THIS WAY)
+#"a secret for everyone"
+#haha ... reference
+
+#silly, sillyer, fish and FISH should be made more professional (lot of copy paste) (also will move vc stuff to separate file)
+
+@bot.command()
+async def pat(ctx):
+    if ctx.channel.id==BOTS_CHANNEL_ID:
+        await ctx.reply(chooseFaceFromCategory("pat"))
+
+@bot.command()
+async def silly(ctx):
+    senderID=ctx.author.id
+    if ctx.channel.id==BOTS_CHANNEL_ID:
+        def after_playing(error):
+            if error:
+                print(f"Playback error: {error}")
+            bot.loop.call_soon_threadsafe(finished.set)
+            
+        if ctx.author.voice is None or ctx.author.voice.channel is None:
+            await ctx.send("You must be in a voice channel.")
+            return
+        
+        channel=ctx.author.voice.channel
+        was_in=ctx.voice_client is not None
+
+        if was_in:
+            vc=ctx.voice_client
+            if vc.channel != channel:
+                await vc.move_to(channel)
+        else:
+            vc=await channel.connect()
+
+        if vc.is_playing():
+            vc.stop()
+
+        finished=asyncio.Event()
+        #source = discord.PCMAudio(str(bot.sounds_folder / "voicechat" / "silly(128k).wav"))
+        source=discord.PCMAudio(open(str(bot.sounds_folder / "voicechat" / "silly(128k).pcm"),"rb"))
+        vc.play(source, after=after_playing)
+
+        try:
+            await finished.wait()
+        finally:
+            if not was_in and vc.is_connected():
+                await vc.disconnect()
+
+@bot.command()
+async def sillyer(ctx):
+    senderID=ctx.author.id
+    if ctx.channel.id==BOTS_CHANNEL_ID:
+        def after_playing(error):
+            if error:
+                print(f"Playback error: {error}")
+            bot.loop.call_soon_threadsafe(finished.set)
+            
+        if ctx.author.voice is None or ctx.author.voice.channel is None:
+            await ctx.send("You must be in a voice channel.")
+            return
+        
+        channel=ctx.author.voice.channel
+        was_in=ctx.voice_client is not None
+
+        if was_in:
+            vc=ctx.voice_client
+            if vc.channel != channel:
+                await vc.move_to(channel)
+        else:
+            vc=await channel.connect()
+
+        if vc.is_playing():
+            vc.stop()
+
+        finished=asyncio.Event()
+        #source = discord.PCMAudio(str(bot.sounds_folder / "voicechat" / "silly(128k).wav"))
+        source=discord.PCMAudio(open(str(bot.sounds_folder / "voicechat" / "sillyer(128k).pcm"),"rb"))
+        vc.play(source, after=after_playing)
+
+        try:
+            await finished.wait()
+        finally:
+            if not was_in and vc.is_connected():
+                await vc.disconnect()
+
+@bot.command()
+async def fish(ctx):
+    senderID=ctx.author.id
+    if ctx.channel.id==BOTS_CHANNEL_ID:
+        def after_playing(error):
+            if error:
+                print(f"Playback error: {error}")
+            bot.loop.call_soon_threadsafe(finished.set)
+            
+        if ctx.author.voice is None or ctx.author.voice.channel is None:
+            await ctx.send("You must be in a voice channel.")
+            return
+        
+        channel=ctx.author.voice.channel
+        was_in=ctx.voice_client is not None
+
+        if was_in:
+            vc=ctx.voice_client
+            if vc.channel != channel:
+                await vc.move_to(channel)
+        else:
+            vc=await channel.connect()
+
+        if vc.is_playing():
+            vc.stop()
+
+        finished=asyncio.Event()
+        #source = discord.PCMAudio(str(bot.sounds_folder / "voicechat" / "silly(128k).wav"))
+        source=discord.PCMAudio(open(str(bot.sounds_folder / "voicechat" / "FIH(128k).pcm"),"rb"))
+        vc.play(source, after=after_playing)
+
+        try:
+            await finished.wait()
+        finally:
+            if not was_in and vc.is_connected():
+                await vc.disconnect()
+
+@bot.command()
+async def FISH(ctx):
+    senderID=ctx.author.id
+    if ctx.channel.id==BOTS_CHANNEL_ID:
+        def after_playing(error):
+            if error:
+                print(f"Playback error: {error}")
+            bot.loop.call_soon_threadsafe(finished.set)
+            
+        if ctx.author.voice is None or ctx.author.voice.channel is None:
+            await ctx.send("You must be in a voice channel.")
+            return
+        
+        channel=ctx.author.voice.channel
+        was_in=ctx.voice_client is not None
+
+        if was_in:
+            vc=ctx.voice_client
+            if vc.channel != channel:
+                await vc.move_to(channel)
+        else:
+            vc=await channel.connect()
+
+        if vc.is_playing():
+            vc.stop()
+
+        finished=asyncio.Event()
+        #source = discord.PCMAudio(str(bot.sounds_folder / "voicechat" / "silly(128k).wav"))
+        source=discord.PCMAudio(open(str(bot.sounds_folder / "voicechat" / "FISH.pcm"),"rb"))
+        vc.play(source, after=after_playing)
+
+        try:
+            await finished.wait()
+        finally:
+            if not was_in and vc.is_connected():
+                await vc.disconnect()
+
+@bot.command()
+async def portal(ctx):
+    senderID=ctx.author.id
+    if ctx.channel.id==BOTS_CHANNEL_ID:
+        def after_playing(error):
+            if error:
+                print(f"Playback error: {error}")
+            bot.loop.call_soon_threadsafe(finished.set)
+            
+        if ctx.author.voice is None or ctx.author.voice.channel is None:
+            await ctx.send("You must be in a voice channel.")
+            return
+        
+        channel=ctx.author.voice.channel
+        was_in=ctx.voice_client is not None
+
+        if was_in:
+            vc=ctx.voice_client
+            if vc.channel != channel:
+                await vc.move_to(channel)
+        else:
+            vc=await channel.connect()
+
+        if vc.is_playing():
+            vc.stop()
+
+        finished=asyncio.Event()
+        #source = discord.PCMAudio(str(bot.sounds_folder / "voicechat" / "silly(128k).wav"))
+        source=discord.PCMAudio(open(str(bot.sounds_folder / "voicechat" / "portal.pcm"),"rb"))
+        vc.play(source, after=after_playing)
+
+        try:
+            await finished.wait()
+        finally:
+            if not was_in and vc.is_connected():
+                await vc.disconnect()
+
+
 bot.startTimers={"A":11*60,"B":11*60}
 bot.timers={"A":None,"B":None}
 bot.bootTime=time.time()//1
-bot.version="0.5.7"
+bot.version="0.5.8.sillies"
 
 
 
