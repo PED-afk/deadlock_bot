@@ -720,6 +720,7 @@ async def test(ctx):
 async def silly(ctx):
     senderID=ctx.author.id
     if ctx.channel.id==BOTS_CHANNEL_ID:
+        my_message= await ctx.reply(1)
         def after_playing(error):
             if error:
                 print(f"Playback error: {error}")
@@ -728,6 +729,7 @@ async def silly(ctx):
         if ctx.author.voice is None or ctx.author.voice.channel is None:
             await ctx.send("You must be in a voice channel.")
             return
+        await my_message.edit("2")
         
         channel = ctx.author.voice.channel
         was_in = ctx.voice_client is not None
@@ -736,21 +738,26 @@ async def silly(ctx):
             vc = ctx.voice_client
             if vc.channel != channel:
                 await vc.move_to(channel)
+            await my_message.edit("3.1")
         else:
             vc = await channel.connect()
+            await my_message.edit("3.2")
 
         if vc.is_playing():
-            vc.stop()
+            vc.stop()    
+        await my_message.edit("4")
 
         finished = asyncio.Event()
         source = discord.FFmpegPCMAudio(str(bot.sounds_folder / "voicechat" / "silly(128k).mp3"))
         vc.play(source, after=after_playing)
+        await my_message.edit("5")
 
         try:
             await finished.wait()
         finally:
             if not was_in and vc.is_connected():
                 await vc.disconnect()
+        await my_message.edit("6")
 
 @bot.command()
 async def minigames(ctx, game:str=None):
