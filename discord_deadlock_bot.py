@@ -711,7 +711,8 @@ async def test(ctx):
             view=Button()
             view=MultButton(ctx.author)
             view=FindRem(ctx)
-            await ctx.send("Buttons:", view=view)
+            #await ctx.send("Buttons:", view=view)
+            await ctx.send("TEST:\nStill works.",delete_after=10)
 
 @bot.command()
 async def minigames(ctx, game:str=None):
