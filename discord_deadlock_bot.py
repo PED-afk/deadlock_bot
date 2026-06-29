@@ -711,7 +711,8 @@ async def test(ctx):
     senderID=ctx.author.id
     if ctx.channel.id==BOTS_CHANNEL_ID:
         if senderID==ME or any(role.id == BOT_ROLE for role in ctx.author.roles):
-            await ctx.send("TEST:\nNothing to test.\n.=.",delete_after=10)
+            await ctx.send("TEST:\ngit wurks.\n.=.",delete_after=10)
+            #await ctx.send("TEST:\nNothing to test.\n.=.",delete_after=10)
             view=Button()
             view=MultButton(ctx.author)
             view=FindRem(ctx)
@@ -1614,7 +1615,6 @@ bot.startTimers={"A":11*60,"B":11*60}
 bot.timers={"A":None,"B":None}
 bot.bootTime=time.time()//1
 bot.version="0.5.8.sillies"
-#aaaaaa
 
 
 bot.messageCD=60*60*0.1 #6 minutes
