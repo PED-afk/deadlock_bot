@@ -1,4 +1,5 @@
 import subprocess
+import sys
 import time
 import os
 from datetime import datetime
@@ -22,6 +23,14 @@ with open(restart_file,"w") as f:
 
 pauseStart=4
 pauseEnd=12
+
+def install_requirements():
+    req_file = BASE / "requirements.txt"
+    if req_file.exists():
+        subprocess.run(
+            [sys.executable, "-m", "pip", "install", "-r", str(req_file)],
+            capture_output=True
+        )
 
 def update():
     # Try git pull first
@@ -92,6 +101,7 @@ while True:
                     process = subprocess.Popen(["python", bot_file])
                 else:
                     update()
+                    install_requirements()
                     process = subprocess.Popen(["python3", bot_file])
 
                 fromrestart=1
