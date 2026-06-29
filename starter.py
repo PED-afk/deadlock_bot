@@ -1,7 +1,3 @@
-
-
-
-
 import subprocess
 import time
 import os
@@ -28,6 +24,22 @@ pauseStart=4
 pauseEnd=12
 
 def update():
+    # Try git pull first
+    try:
+        result = subprocess.run(
+            ["git", "pull"],
+            cwd=Path(__file__).resolve().parent,
+            capture_output=True, text=True, timeout=30
+        )
+        if result.returncode == 0:
+            print(f"Git pull successful: {result.stdout.strip()}", flush=True)
+            return
+        else:
+            print(f"Git pull failed: {result.stderr.strip()}", flush=True)
+    except Exception as e:
+        print(f"Git pull error: {e}", flush=True)
+
+    # Fall back to USB stick if git pull didn't work
     def copy_contents(scr,dest):
         for item in scr.iterdir():
             target=dest / item.name
