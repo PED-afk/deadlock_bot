@@ -720,33 +720,33 @@ async def test(ctx):
 async def silly(ctx):
     senderID=ctx.author.id
     if ctx.channel.id == BOTS_CHANNEL_ID:
-        if ctx.author.voice is None or ctx.author.voice.channel is None:
-            await ctx.send("You must be in a voice channel.")
-            return
-
-        channel = ctx.author.voice.channel
-        #
-        if ctx.voice_client:
-            vc = ctx.voice_client
-            if vc.channel != channel:
-                await vc.move_to(channel)
-        else:
-            vc = await channel.connect()
-
-        finished = asyncio.Event()
-
+        wasIn=False
         def after_playing(error):
             if error:
                 print(f"Playback error: {error}")
             bot.loop.call_soon_threadsafe(finished.set)
 
-        source = discord.FFmpegPCMAudio(path)
+        if ctx.author.voice is None or ctx.author.voice.channel is None:
+            await ctx.send("You must be in a voice channel.")
+            return
+        
+        channel = ctx.author.voice.channel
+        #am I in there already
+        if ctx.voice_client:
+            wasIn=True
+            vc = ctx.voice_client
+            if vc.channel != channel:
+                await vc.move_to(channel)
+        else:
+            vc = await channel.connect()
+        finished = asyncio.Event()
+
+        source = discord.FFmpegPCMAudio(bot.sounds_folder / "voicechat" / "silly(128k).mp3")
         vc.play(source, after=after_playing)
-
-        # Wait until playback completes
+        # Wait until done
         await finished.wait()
-
-        await vc.disconnect()
+        if not wasIn:
+            await vc.disconnect()
 
 @bot.command()
 async def minigames(ctx, game:str=None):
