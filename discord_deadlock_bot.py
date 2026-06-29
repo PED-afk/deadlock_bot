@@ -456,46 +456,49 @@ def chooseFaceFromCategory(category:str):
 
 RANK_NAMES = [
     "initiate", "seeker", "alchemist", "arcanist", "ritualist",
-    "emissary", "archon", "oracle", "phantom", "ascedant", "eternus"
+    "emissary", "archon", "oracle", "phantom", "ascendant", "eternus"
 ]
 
 RANK_COLORS = {
-    "initiate":  discord.Color.from_rgb(102, 102, 102),
-    "seeker":    discord.Color.from_rgb(139, 115, 85),
-    "alchemist": discord.Color.from_rgb(85, 139, 85),
-    "arcanist":  discord.Color.from_rgb(85, 115, 139),
-    "ritualist": discord.Color.from_rgb(139, 85, 139),
-    "emissary":  discord.Color.from_rgb(85, 139, 139),
-    "archon":    discord.Color.from_rgb(200, 160, 60),
-    "oracle":    discord.Color.from_rgb(180, 100, 40),
-    "phantom":   discord.Color.from_rgb(140, 60, 180),
-    "ascedant":  discord.Color.from_rgb(60, 160, 220),
-    "eternus":   discord.Color.from_rgb(220, 180, 60),
+    "initiate":   discord.Color.from_rgb(180, 180, 180),
+    "seeker":     discord.Color.from_rgb(150, 30, 30),
+    "alchemist":  discord.Color.from_rgb(50, 120, 200),
+    "arcanist":   discord.Color.from_rgb(40, 140, 60),
+    "ritualist":  discord.Color.from_rgb(160, 90, 40),
+    "emissary":   discord.Color.from_rgb(180, 40, 40),
+    "archon":     discord.Color.from_rgb(120, 50, 180),
+    "oracle":     discord.Color.from_rgb(160, 110, 50),
+    "phantom":    discord.Color.from_rgb(180, 180, 190),
+    "ascendant":  discord.Color.from_rgb(210, 170, 50),
+    "eternus":    discord.Color.from_rgb(0, 210, 200),
 }
 
-async def fetch_rank_from_api(steam_id_64: int) -> str | None:
+async def fetch_rank_from_api(steam_id_64: int) -> tuple[str, int] | None:
     account_id = steam_id_64 - 76561197960265728
-    url = f"https://api.deadlock-api.com/v1/players/{account_id}/mmr-history"
     try:
         async with aiohttp.ClientSession() as session:
+            url = f"https://api.deadlock-api.com/v1/players/{account_id}/mmr-history"
             async with session.get(url, timeout=aiohttp.ClientTimeout(total=10)) as resp:
                 if resp.status != 200:
                     return None
                 data = await resp.json()
                 if not data:
                     return None
-                latest = data[0]
-                rank_val = latest.get("rank")
-                if rank_val is None:
+                recent = sorted(data, key=lambda x: x.get("start_time", 0))[-10:]
+                divisions = [x.get("division") for x in recent if x.get("division") is not None]
+                if not divisions:
                     return None
-                tier = rank_val // 10
-                if 0 <= tier < len(RANK_NAMES):
-                    return RANK_NAMES[tier]
+                division = max(set(divisions), key=divisions.count)
+                matching = [x for x in recent if x.get("division") == division]
+                division_tier = matching[-1].get("division_tier")
+                if division_tier is None:
+                    return None
+                idx = division - 1
+                if 0 <= idx < len(RANK_NAMES):
+                    return (RANK_NAMES[idx], division_tier)
                 return None
     except Exception:
         return None
-
-#comment
 
 async def assign_rank_role(member: discord.Member, rank: str):
     guild = member.guild
@@ -968,11 +971,12 @@ async def set_steam_id(ctx, id: int):
         bot.user_data[str(senderID)]["steamID"] = str(account_id)
         bot.user_data[str(senderID)]["steamID64"] = str(id)
         await ctx.reply("Steam ID saved! Fetching your rank from Deadlock API... " + chooseFaceFromCategory("concentrate"))
-        rank = await fetch_rank_from_api(id)
-        if rank:
+        result = await fetch_rank_from_api(id)
+        if result:
+            rank, division_tier = result
             bot.user_data[str(senderID)]["rank"] = rank
             await assign_rank_role(ctx.author, rank)
-            await ctx.reply("Your rank has been automatically set to: **" + rank + "** " + chooseFaceFromCategory("happy"))
+            await ctx.reply("Your rank has been automatically set to: **" + rank.capitalize() + " " + str(division_tier) + "** " + chooseFaceFromCategory("happy"))
         else:
             await ctx.reply("Couldn't fetch your rank automatically. Make sure your Steam profile is public and you have played ranked matches. You can set it manually with `!set_rank`.")
 
@@ -985,11 +989,12 @@ async def update_rank(ctx):
             await ctx.reply("You haven't set your Steam ID yet. Use `!set_steam_id <your_steamid64>` first.")
             return
         await ctx.reply("Fetching your latest rank... " + chooseFaceFromCategory("concentrate"))
-        rank = await fetch_rank_from_api(int(steam_id_64))
-        if rank:
+        result = await fetch_rank_from_api(int(steam_id_64))
+        if result:
+            rank, division_tier = result
             bot.user_data[str(senderID)]["rank"] = rank
             await assign_rank_role(ctx.author, rank)
-            await ctx.reply("Your rank has been updated to: **" + rank + "** " + chooseFaceFromCategory("happy"))
+            await ctx.reply("Your rank has been updated to: **" + rank.capitalize() + " " + str(division_tier) + "** " + chooseFaceFromCategory("happy"))
         else:
             await ctx.reply("Couldn't fetch your rank. Make sure your Steam profile is public and you have played ranked matches.")
 
