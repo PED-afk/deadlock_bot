@@ -1,0 +1,18 @@
+{
+    "dc id as str": {
+        "main": "None",
+        "steamID": "None",
+        "steamID3": "None",
+        "steamID64": "None",
+        "money": {
+            "unsecured": 0,
+            "secured": 0
+        },
+        "items": [],
+        "lvl": 0,
+        "XP": 0,
+        "hidden": {
+            "messageCD": 0
+        }
+    }
+}

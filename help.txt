@@ -1,0 +1,10 @@
+created using: sudo nano /etc/systemd/system/dc_bot.service
+edit: sudo systemctl edit --full dc_bot.service
+restart after edit: sudo systemctl restart dc_bot.service
+enable: sudo systemctl enable dc_bot.service
+sudo systemctl start dc_bot.service
+disable: sudo systemctl disable dc_bot.service
+stopit when alr running: sudo systemctl stop dc_bot.service
+
+status: systemctl status dc_bot.service
+logs: journalctl -u dc_bot.service -f
