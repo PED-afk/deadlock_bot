@@ -484,7 +484,7 @@ async def fetch_rank_from_api(steam_id_64: int) -> str | None:
                 data = await resp.json()
                 if not data:
                     return None
-                latest = data[-1]
+                latest = max(data, key=lambda x: x.get("start_time", 0))
                 rank_val = latest.get("rank")
                 if rank_val is None:
                     return None
