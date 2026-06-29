@@ -708,7 +708,7 @@ async def on_message(message):
 @bot.command()
 async def test(ctx):
     senderID=ctx.author.id
-    if ctx.channel.id == BOTS_CHANNEL_ID:
+    if ctx.channel.id==BOTS_CHANNEL_ID:
         if senderID==ME or any(role.id == BOT_ROLE for role in ctx.author.roles):
             await ctx.send("TEST:\nNothing to test.\n.=.",delete_after=10)
             view=Button()
@@ -719,39 +719,43 @@ async def test(ctx):
 @bot.command()
 async def silly(ctx):
     senderID=ctx.author.id
-    if ctx.channel.id == BOTS_CHANNEL_ID:
-        wasIn=False
+    if ctx.channel.id==BOTS_CHANNEL_ID:
         def after_playing(error):
             if error:
                 print(f"Playback error: {error}")
             bot.loop.call_soon_threadsafe(finished.set)
-
+            
         if ctx.author.voice is None or ctx.author.voice.channel is None:
             await ctx.send("You must be in a voice channel.")
             return
         
         channel = ctx.author.voice.channel
-        #am I in there already
-        if ctx.voice_client:
-            wasIn=True
+        was_in = ctx.voice_client is not None
+
+        if was_in:
             vc = ctx.voice_client
             if vc.channel != channel:
                 await vc.move_to(channel)
         else:
             vc = await channel.connect()
-        finished = asyncio.Event()
 
-        source = discord.FFmpegPCMAudio(bot.sounds_folder / "voicechat" / "silly(128k).mp3")
+        if vc.is_playing():
+            vc.stop()
+
+        finished = asyncio.Event()
+        source = discord.FFmpegPCMAudio(str(bot.sounds_folder / "voicechat" / "silly(128k).mp3"))
         vc.play(source, after=after_playing)
-        # Wait until done
-        await finished.wait()
-        if not wasIn:
-            await vc.disconnect()
+
+        try:
+            await finished.wait()
+        finally:
+            if not was_in and vc.is_connected():
+                await vc.disconnect()
 
 @bot.command()
 async def minigames(ctx, game:str=None):
     senderID=ctx.author.id
-    if ctx.channel.id == BOTS_CHANNEL_ID:
+    if ctx.channel.id==BOTS_CHANNEL_ID:
         if game==None:
             games=[
                 "`!minigames find_Rem`: Try to find the enemy Rem and stop them from getting the sinners.",
@@ -780,7 +784,7 @@ async def minigames(ctx, game:str=None):
 @bot.command()
 async def start(ctx):
     senderID=ctx.author.id
-    if ctx.channel.id == BOTS_CHANNEL_ID:
+    if ctx.channel.id==BOTS_CHANNEL_ID:
         if senderID==ME or any(role.id == BOT_ROLE for role in ctx.author.roles):
             if ctx.author.voice==None:
                 await ctx.reply("You must be in a voice channel to be able to start a timer.")
@@ -1086,7 +1090,7 @@ async def set_main(ctx,main:str):
 @bot.command()
 async def set_steam_id(ctx, id: int):
     senderID = ctx.author.id
-    if ctx.channel.id == BOTS_CHANNEL_ID:
+    if ctx.channel.id==BOTS_CHANNEL_ID:
         account_id = id - 76561197960265728
         bot.user_data[str(senderID)]["steamID"] = str(account_id)
         bot.user_data[str(senderID)]["steamID64"] = str(id)
@@ -1110,7 +1114,7 @@ async def set_steam_id(ctx, id: int):
 @bot.command()
 async def update_rank(ctx):
     senderID = ctx.author.id
-    if ctx.channel.id == BOTS_CHANNEL_ID:
+    if ctx.channel.id==BOTS_CHANNEL_ID:
         steam_id_64 = bot.user_data[str(senderID)].get("steamID64", "None")
         if steam_id_64 == "None" or not steam_id_64:
             await ctx.reply("You haven't set your Steam ID yet. Use `!set_steam_id <your_steamid64>` first.")
