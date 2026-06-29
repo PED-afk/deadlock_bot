@@ -14,7 +14,7 @@ from data_manage import save_json, load_json, load_txt
 load_txt returns a list of str from the filepath
 load_json and save_json loads from and saves to json files
 
-neither does anything else other than open the file on the filepath and load the data from it
+neither does anything else other than open the file on the filepath and load(/save) the data from it
 """
 
 class Item:
@@ -637,6 +637,8 @@ async def on_ready():
             await bot.get_channel(BOTS_CHANNEL_ID).send("I'm awake!\nGood morning!\n"+face)
         else:
             await bot.get_channel(BOTS_CHANNEL_ID).send("Back online! "+face)
+    
+    await bot.get_channel(BOTS_CHANNEL_ID).send(load_txt(bot.update_check)[0])
 
     if not tick.is_running():
         tick.start()
@@ -1634,6 +1636,8 @@ bot.face_file = BASE / "faces.json"
 bot.ranks_file=BASE / "ranks.json"
 
 bot.sounds_folder=BASE / "sounds"
+
+bot.update_check=BASE / "update_check.txt"
 
 bot.faces=load_json(bot.face_file)
 bot.user_data=load_json(bot.user_data_path)
