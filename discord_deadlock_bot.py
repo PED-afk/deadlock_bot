@@ -473,16 +473,32 @@ RANK_COLORS = {
     "eternus":    discord.Color.from_rgb(0, 210, 200),
 }
 
+HERO_ID_MAP = {
+    1: "Infernus", 2: "Seven", 3: "Vindicta", 4: "Lady Geist", 6: "Abrams",
+    7: "Wraith", 8: "McGinnis", 10: "Paradox", 11: "Dynamo", 12: "Kelvin",
+    13: "Haze", 14: "Holliday", 15: "Ivy", 16: "Grey Talon", 17: "Mo & Krill",
+    18: "Shiv", 19: "Bebop", 20: "Pocket", 25: "Mirage", 27: "Warden",
+    31: "Viscous", 35: "Yamato", 50: "Lash", 52: "Wraith", 58: "Calico",
+    63: "Sinclair", 68: "The Doorman", 70: "Viper", 71: "Phantom Strike",
+    75: "Slork", 76: "Fathom", 80: "Magician", 81: "Kali",
+}
+
 async def fetch_hero_id_to_name() -> dict[int, str]:
     try:
         async with aiohttp.ClientSession() as session:
             async with session.get("https://api.deadlock-api.com/v1/heroes", timeout=aiohttp.ClientTimeout(total=10)) as resp:
                 if resp.status != 200:
-                    return {}
+                    return HERO_ID_MAP
                 data = await resp.json()
-                return {h["id"]: h["name"] for h in data if "id" in h and "name" in h}
+                result = {}
+                for h in data:
+                    hid = h.get("id") or h.get("hero_id")
+                    hname = h.get("name") or h.get("hero_name") or h.get("display_name")
+                    if hid and hname:
+                        result[int(hid)] = hname
+                return result if result else HERO_ID_MAP
     except Exception:
-        return {}
+        return HERO_ID_MAP
 
 async def fetch_most_played(steam_id_64: int, top_n: int = 3) -> list[dict] | None:
     account_id = steam_id_64 - 76561197960265728
@@ -684,20 +700,6 @@ async def on_message(message):
                 if bot.user_data[idSTR]["XP"]>=100+2**(level/4)+level:
                     bot.user_data[idSTR]["XP"]-=100+2**(level/4)+level
                     bot.user_data[idSTR]["lvl"]+=1
-
-            senderID=message.author.id
-            steam_id_64 = bot.user_data[str(senderID)].get("steamID64", "None")
-            if steam_id_64 == "None" or not steam_id_64:
-                await bot.get_channel(BOTS_CHANNEL_ID).send("You haven't set your Steam ID yet. Use `!set_steam_id <your_steamid64>` first.")
-                return
-            await bot.get_channel(BOTS_CHANNEL_ID).send("Fetching your latest rank... " + chooseFaceFromCategory("concentrate"))
-            result = await fetch_rank_from_api(int(steam_id_64))
-            if result:
-                rank, division_tier = result
-                if bot.user_data[str(senderID)]["rank"]!=rank:
-                    bot.user_data[str(senderID)]["rank"]=rank
-                    await assign_rank_role(message.author, rank)
-                    await bot.get_channel(BOTS_CHANNEL_ID).send("Your rank has been updated to: **" + rank.capitalize() + " " + str(division_tier) + "** " + chooseFaceFromCategory("happy"))
     
     await bot.process_commands(message)
 
