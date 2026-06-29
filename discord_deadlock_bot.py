@@ -1038,6 +1038,7 @@ async def source(ctx):
     if ctx.channel.id==BOTS_CHANNEL_ID:
         file=discord.File(Path(__file__))
         await ctx.reply("My brain:",file=file)
+        await ctx.reply("Github: https://github.com/PED-afk/deadlock_bot")
 
 @bot.command()
 async def set_main(ctx,main:str):
