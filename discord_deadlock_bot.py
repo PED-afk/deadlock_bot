@@ -613,6 +613,20 @@ async def on_message(message):
                 if bot.user_data[idSTR]["XP"]>=100+2**(level/4)+level:
                     bot.user_data[idSTR]["XP"]-=100+2**(level/4)+level
                     bot.user_data[idSTR]["lvl"]+=1
+
+            senderID=message.author.id
+            steam_id_64 = bot.user_data[str(senderID)].get("steamID64", "None")
+            if steam_id_64 == "None" or not steam_id_64:
+                await bot.get_channel(BOTS_CHANNEL_ID).send("You haven't set your Steam ID yet. Use `!set_steam_id <your_steamid64>` first.")
+                return
+            await bot.get_channel(BOTS_CHANNEL_ID).send("Fetching your latest rank... " + chooseFaceFromCategory("concentrate"))
+            result = await fetch_rank_from_api(int(steam_id_64))
+            if result:
+                rank, division_tier = result
+                if bot.user_data[str(senderID)]["rank"]!=rank:
+                    bot.user_data[str(senderID)]["rank"]=rank
+                    await assign_rank_role(message.author, rank)
+                    await bot.get_channel(BOTS_CHANNEL_ID).send("Your rank has been updated to: **" + rank.capitalize() + " " + str(division_tier) + "** " + chooseFaceFromCategory("happy"))
     
     await bot.process_commands(message)
 
