@@ -473,6 +473,71 @@ RANK_COLORS = {
     "eternus":    discord.Color.from_rgb(0, 210, 200),
 }
 
+async def fetch_hero_id_to_name() -> dict[int, str]:
+    try:
+        async with aiohttp.ClientSession() as session:
+            async with session.get("https://api.deadlock-api.com/v1/heroes", timeout=aiohttp.ClientTimeout(total=10)) as resp:
+                if resp.status != 200:
+                    return {}
+                data = await resp.json()
+                return {h["id"]: h["name"] for h in data if "id" in h and "name" in h}
+    except Exception:
+        return {}
+
+async def fetch_most_played(steam_id_64: int, top_n: int = 3) -> list[dict] | None:
+    account_id = steam_id_64 - 76561197960265728
+    try:
+        async with aiohttp.ClientSession() as session:
+            url = f"https://api.deadlock-api.com/v1/players/{account_id}/hero-stats"
+            async with session.get(url, timeout=aiohttp.ClientTimeout(total=10)) as resp:
+                if resp.status != 200:
+                    return None
+                data = await resp.json()
+                if not data:
+                    return None
+                hero_map = await fetch_hero_id_to_name()
+                sorted_heroes = sorted(data, key=lambda x: x.get("matches_played", 0), reverse=True)
+                result = []
+                for h in sorted_heroes[:top_n]:
+                    hero_id = h.get("hero_id")
+                    name = hero_map.get(hero_id, f"Hero {hero_id}")
+                    matches = h.get("matches_played", 0)
+                    wins = h.get("wins", 0)
+                    winrate = round(wins / matches * 100) if matches > 0 else 0
+                    kda = round((h.get("kills", 0) + h.get("assists", 0)) / max(h.get("deaths", 1), 1), 2)
+                    result.append({"name": name, "matches": matches, "wins": wins, "winrate": winrate, "kda": kda})
+                return result
+    except Exception:
+        return None
+
+async def assign_hero_role(member: discord.Member, hero_name: str):
+    guild = member.guild
+    all_heroes = list(bot.characters.keys())
+    existing = [r for r in member.roles if r.name in all_heroes]
+    if existing:
+        await member.remove_roles(*existing, reason="Hero role update")
+    role = discord.utils.get(guild.roles, name=hero_name)
+    if role is None:
+        role = await guild.create_role(name=hero_name, reason="Auto-created hero role")
+    await member.add_roles(role, reason="Main hero assigned")
+
+class MainPickerView(discord.ui.View):
+    def __init__(self, author: discord.Member, heroes: list[dict]):
+        super().__init__(timeout=60)
+        self.author = author
+        for h in heroes:
+            btn = discord.ui.Button(label=h["name"], style=discord.ButtonStyle.primary)
+            async def callback(interaction: discord.Interaction, hero=h):
+                if interaction.user.id != self.author.id:
+                    await interaction.response.send_message("These aren't your buttons!", ephemeral=True)
+                    return
+                senderID = str(interaction.user.id)
+                bot.user_data[senderID]["main"] = hero["name"]
+                await assign_hero_role(interaction.user, hero["name"])
+                await interaction.response.edit_message(content=f"Main set to **{hero['name']}**! Role assigned.", view=None, embed=None)
+            btn.callback = callback
+            self.add_item(btn)
+
 async def fetch_rank_from_api(steam_id_64: int) -> tuple[str, int] | None:
     account_id = steam_id_64 - 76561197960265728
     try:
@@ -484,11 +549,17 @@ async def fetch_rank_from_api(steam_id_64: int) -> tuple[str, int] | None:
                 data = await resp.json()
                 if not data:
                     return None
-                recent = sorted(data, key=lambda x: x.get("start_time", 0))[-10:]
-                divisions = [x.get("division") for x in recent if x.get("division") is not None]
-                if not divisions:
+                recent = sorted(data, key=lambda x: x.get("start_time", 0))[-20:]
+                # weight last 5 matches double, then take highest division from weighted mode
+                weighted = [x.get("division") for x in recent if x.get("division") is not None]
+                weighted += [x.get("division") for x in recent[-5:] if x.get("division") is not None]
+                if not weighted:
                     return None
-                division = max(set(divisions), key=divisions.count)
+                division = max(set(weighted), key=weighted.count)
+                # also bump up to peak division if it appears at least twice
+                peak = max(weighted)
+                if weighted.count(peak) >= 2:
+                    division = peak
                 matching = [x for x in recent if x.get("division") == division]
                 division_tier = matching[-1].get("division_tier")
                 if division_tier is None:
@@ -984,7 +1055,7 @@ async def set_steam_id(ctx, id: int):
         account_id = id - 76561197960265728
         bot.user_data[str(senderID)]["steamID"] = str(account_id)
         bot.user_data[str(senderID)]["steamID64"] = str(id)
-        await ctx.reply("Steam ID saved! Fetching your rank from Deadlock API... " + chooseFaceFromCategory("concentrate"))
+        await ctx.reply("Steam ID saved! Fetching your rank and most played heroes... " + chooseFaceFromCategory("concentrate"))
         result = await fetch_rank_from_api(id)
         if result:
             rank, division_tier = result
@@ -993,6 +1064,13 @@ async def set_steam_id(ctx, id: int):
             await ctx.reply("Your rank has been automatically set to: **" + rank.capitalize() + " " + str(division_tier) + "** " + chooseFaceFromCategory("happy"))
         else:
             await ctx.reply("Couldn't fetch your rank automatically. Make sure your Steam profile is public and you have played ranked matches. You can set it manually with `!set_rank`.")
+        heroes = await fetch_most_played(id)
+        if heroes:
+            top = heroes[0]
+            bot.user_data[str(senderID)]["main"] = top["name"]
+            await assign_hero_role(ctx.author, top["name"])
+            heroes_str = ", ".join(f"**{h['name']}** ({h['matches']} games)" for h in heroes)
+            await ctx.reply(f"Most played: {heroes_str}\nMain automatically set to **{top['name']}** " + chooseFaceFromCategory("happy"))
 
 @bot.command()
 async def update_rank(ctx):
@@ -1011,6 +1089,62 @@ async def update_rank(ctx):
             await ctx.reply("Your rank has been updated to: **" + rank.capitalize() + " " + str(division_tier) + "** " + chooseFaceFromCategory("happy"))
         else:
             await ctx.reply("Couldn't fetch your rank. Make sure your Steam profile is public and you have played ranked matches.")
+
+@bot.command()
+async def profile(ctx, member: discord.Member = None):
+    if ctx.channel.id != BOTS_CHANNEL_ID:
+        return
+    target = member or ctx.author
+    senderID = str(target.id)
+    if senderID not in bot.user_data:
+        await ctx.reply(f"{target.display_name} hasn't registered yet. Use `!set_steam_id` first.")
+        return
+
+    data = bot.user_data[senderID]
+    steam_id_64 = data.get("steamID64", "None")
+
+    msg = await ctx.reply("Loading profile... " + chooseFaceFromCategory("concentrate"))
+
+    rank_str = "Unknown"
+    rank_color = discord.Color.blurple()
+    if steam_id_64 != "None":
+        rank_result = await fetch_rank_from_api(int(steam_id_64))
+        if rank_result:
+            rn, rt = rank_result
+            rank_str = f"{rn.capitalize()} {rt}"
+            rank_color = RANK_COLORS.get(rn, discord.Color.blurple())
+            data["rank"] = rn
+
+    heroes = []
+    if steam_id_64 != "None":
+        heroes = await fetch_most_played(int(steam_id_64), top_n=3) or []
+
+    main = data.get("main", "None")
+    embed = discord.Embed(
+        title=f"⚔️  {target.display_name}'s Deadlock Profile",
+        color=rank_color
+    )
+    embed.set_thumbnail(url=target.display_avatar.url)
+    embed.add_field(name="🏅  Rank", value=f"**{rank_str}**", inline=True)
+    embed.add_field(name="🎮  Main", value=f"**{main}**", inline=True)
+    embed.add_field(name="​", value="​", inline=False)
+
+    if heroes:
+        medals = ["🥇", "🥈", "🥉"]
+        for i, h in enumerate(heroes):
+            embed.add_field(
+                name=f"{medals[i]}  {h['name']}",
+                value=f"`{h['matches']}` games  •  `{h['winrate']}%` WR  •  `{h['kda']}` KDA",
+                inline=False
+            )
+
+    embed.set_footer(text="Use the buttons below to set your main hero")
+
+    view = None
+    if target.id == ctx.author.id and heroes:
+        view = MainPickerView(ctx.author, heroes)
+
+    await msg.edit(content=None, embed=embed, view=view)
 
 @bot.command()
 async def my_data(ctx):
@@ -1281,7 +1415,7 @@ async def tick():
 bot.startTimers={"A":11*60,"B":11*60}
 bot.timers={"A":None,"B":None}
 bot.bootTime=time.time()//1
-bot.version="0.5.8"
+bot.version="0.5.7"
 
 
 
