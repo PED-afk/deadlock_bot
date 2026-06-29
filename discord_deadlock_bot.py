@@ -1614,7 +1614,7 @@ bot.startTimers={"A":11*60,"B":11*60}
 bot.timers={"A":None,"B":None}
 bot.bootTime=time.time()//1
 bot.version="0.5.8.sillies"
-
+#aaaaaa
 
 
 bot.messageCD=60*60*0.1 #6 minutes
