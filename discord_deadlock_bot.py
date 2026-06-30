@@ -918,6 +918,7 @@ async def bot_help(ctx, section:str=None):
             botcommands=[
                 "`!ping`: I will send 'Pong!' if I'm alive.",
                 "`!status`: My version, OS and hardware I run on.",
+                "`!version`: My version only",
                 "`!sleep`: I will sleep until a certain hour to save on energy and hardware integrity. (the bot is unavailable during sleep but will automatically start at* the designated hour)"
                 "`!restart:` or `!reload`: I will restart and apply changes to my code.",
                 "`!clear_loaded`: I forget stuff so I don't save incorrect data.",
@@ -1004,6 +1005,12 @@ async def status(ctx):
         await ctx.reply("Bot version: "+bot.version+"\nOS:"+winlin+"\nHardware I'm living on:"+cpu+"\nI've been running for: "+str(hours)+" hours, "+str(minutes)+" minutes and "+str(seconds)+" seconds."+extra)
         if lindistr!=None:
             await ctx.send("Fun fact: Most likely I'm running on a rasberry pi 5. :D\nLinux dist: "+lindistr["PRETTY_NAME"],delete_after=30)
+
+@bot.command()
+async def version(ctx):
+    senderID=ctx.author.id
+    if ctx.channel.id==BOTS_CHANNEL_ID:
+        await ctx.reply("Bot version: "+bot.version)
 
 @bot.command()
 async def join(ctx):
