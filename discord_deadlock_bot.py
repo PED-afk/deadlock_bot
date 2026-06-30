@@ -1464,6 +1464,10 @@ bot.ranks=load_json(bot.ranks_file)
 
 bot.botchannel=BOTS_CHANNEL_ID
 
+#test
+print("Opus:", discord.opus.is_loaded())
+#will remove it later
+
 load_dotenv()
 bot.run(os.getenv("DISCORD_TOKEN"))
 
