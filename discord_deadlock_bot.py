@@ -7,7 +7,6 @@ import random
 from pathlib import Path
 import platform
 import aiohttp
-import asyncio
 
 from data_manage import save_json, load_json, load_txt
 """
@@ -16,6 +15,7 @@ load_json and save_json loads from and saves to json files
 
 neither does anything else other than open the file on the filepath and load(/save) the data from it
 """
+from own_utils import chooseFaceFromCategory
 
 class Item:
     def __init__(self,type:str,tier:int,name:str):
@@ -447,14 +447,6 @@ intents.voice_states = True
 bot = commands.Bot(command_prefix='!', intents=intents)
 
 
-def chooseFaceFromCategory(category:str):
-    if category in bot.faces:
-        faces=bot.faces[category]
-    else:
-        faces=["(face category not found)"]
-    r=random.randint(0,len(faces)-1)
-    return faces[r]
-
 RANK_NAMES = [
     "initiate", "seeker", "alchemist", "arcanist", "ritualist",
     "emissary", "archon", "oracle", "phantom", "ascendant", "eternus"
@@ -630,7 +622,7 @@ async def on_ready():
         except discord.HTTPException:
             pass
     
-    face=chooseFaceFromCategory("big_eyes")
+    face=chooseFaceFromCategory(bot,"big_eyes")
 
     with open(bot.hotboot_file,"r") as f:
         if int(f.readline().strip())==0:
@@ -654,9 +646,9 @@ async def on_message(message):
             thankingMessages=["thank you!","thank you","thanks!","thanks"]
             if message.content.lower() in thankingMessages:
                 if "My brain" in repliedTo.content:
-                    await message.reply("You're welcome!\n"+chooseFaceFromCategory("brain_hurt"))
+                    await message.reply("You're welcome!\n"+chooseFaceFromCategory(bot,"brain_hurt"))
                 else:
-                    await message.reply("You're welcome!\n"+chooseFaceFromCategory("pat"))
+                    await message.reply("You're welcome!\n"+chooseFaceFromCategory(bot,"pat"))
     if str(message.author.id) not in bot.user_data.keys():
         bot.user_data[idSTR]={}
         bot.user_data[idSTR]["main"]="None"
@@ -720,6 +712,14 @@ async def test(ctx):
             view=FindRem(ctx)
             #await ctx.send("Buttons:", view=view)
 
+@bot.slash_command(name="testwithslash",guild_ids=[1510049699695165471])
+async def testwithslash(ctx):
+    senderID=ctx.author.id
+    if ctx.channel.id==BOTS_CHANNEL_ID:
+        if senderID==ME or any(role.id == BOT_ROLE for role in ctx.author.roles):
+            await ctx.reply("slash command?")
+
+
 @bot.command()
 async def minigames(ctx, game:str=None):
     senderID=ctx.author.id
@@ -747,7 +747,7 @@ async def minigames(ctx, game:str=None):
                 view=runHome(ctx,"before start",userData)
                 await ctx.reply("Get back to the base!\nYou have: "+str(bot.user_data[str(senderID)]["money"]["unsecured"])+" unsecured souls!", view=view)
         else:
-            await ctx.reply("No minigame exists with that name."+chooseFaceFromCategory("nervous"))
+            await ctx.reply("No minigame exists with that name."+chooseFaceFromCategory(bot,"nervous"))
 
 @bot.command()
 async def start(ctx):
@@ -767,11 +767,11 @@ async def start(ctx):
                         for channel in discord.utils.get(guild.categories, name="["+name+"]").voice_channels:
                             for member in channel.members:
                                 if member.global_name=="PurpleEarthDragon":
-                                    names.append(member.global_name+chooseFaceFromCategory("love"))
+                                    names.append(member.global_name+chooseFaceFromCategory(bot,"love"))
                                 else:
                                     names.append(member.global_name)
                     
-                    await ctx.send("__Good luck, and Have fun!__\n"+'\n'.join(names)+"\n"+chooseFaceFromCategory("happy"),delete_after=bot.startTimers[ctx.author.voice.channel.category.name[-2]])
+                    await ctx.send("__Good luck, and Have fun!__\n"+'\n'.join(names)+"\n"+chooseFaceFromCategory(bot,"happy"),delete_after=bot.startTimers[ctx.author.voice.channel.category.name[-2]])
                 else:
                     await ctx.reply("There is already an active timer in this voice channel category.")
         else:
@@ -810,7 +810,7 @@ async def restart(ctx,save:str="save"):
                     save_json(bot.user_data_path,bot.user_data)
                 with open(bot.restart_file,"w") as f:
                     f.write("1")
-                await ctx.reply("Shuting down.\nBe right back!\n"+chooseFaceFromCategory("blush_happy"),delete_after=20)
+                await ctx.reply("Shuting down.\nBe right back!\n"+chooseFaceFromCategory(bot,"blush_happy"),delete_after=20)
                 await bot.close()
 
 @bot.command()
@@ -832,7 +832,7 @@ async def sleep(ctx,save:str="save"):
                     pauseStart=f.readline().strip()
                     pauseEnd=f.readline().strip()
                 
-                await ctx.reply("Going to sleep\nI will be unavailable between "+pauseStart+" and "+pauseEnd+" CEST\n"+chooseFaceFromCategory("sleep"),delete_after=20)
+                await ctx.reply("Going to sleep\nI will be unavailable between "+pauseStart+" and "+pauseEnd+" CEST\n"+chooseFaceFromCategory(bot,"sleep"),delete_after=20)
                 await bot.close()
         
 @bot.command()
@@ -906,7 +906,7 @@ async def bot_help(ctx, section:str=None):
                 "`!remaining:` Tells you how much time remains on the timer.",
             ]
         elif section=="voice":
-            face=chooseFaceFromCategory("annoyed")
+            face=chooseFaceFromCategory(bot,"annoyed")
             anyView=True
             botcommands=[
                 "`!join`: I will join `Deadlock [#]` and will use an experimental feature to automate my timer functionality.",
@@ -979,7 +979,7 @@ async def status(ctx):
     senderID=ctx.author.id
     if ctx.channel.id==BOTS_CHANNEL_ID:
         if senderID==ME:
-            face=chooseFaceFromCategory("annoyed")
+            face=chooseFaceFromCategory(bot,"annoyed")
             l="."
             for i in face:
                 l+=" "
@@ -1000,7 +1000,7 @@ async def status(ctx):
         seconds=diff
         extra=""
         if hours>2:
-            extra="\nI'm tired. "+chooseFaceFromCategory("tired")
+            extra="\nI'm tired. "+chooseFaceFromCategory(bot,"tired")
         await ctx.reply("Bot version: "+bot.version+"\nOS:"+winlin+"\nHardware I'm living on:"+cpu+"\nI've been running for: "+str(hours)+" hours, "+str(minutes)+" minutes and "+str(seconds)+" seconds."+extra)
         if lindistr!=None:
             await ctx.send("Fun fact: Most likely I'm running on a rasberry pi 5. :D\nLinux dist: "+lindistr["PRETTY_NAME"],delete_after=30)
@@ -1011,7 +1011,7 @@ async def join(ctx):
     if ctx.channel.id==BOTS_CHANNEL_ID:
         if senderID==ME or any(role.id == BOT_ROLE for role in ctx.author.roles):
             if ctx.guild.voice_client!=None:
-                await ctx.reply("Sorry I'm busy in another channel. "+chooseFaceFromCategory("nervous"))
+                await ctx.reply("Sorry I'm busy in another channel. "+chooseFaceFromCategory(bot,"nervous"))
             else:
                 if ctx.author.voice==None:
                     await ctx.reply("You must be in a voice channel so I know which channel to join.")
@@ -1058,13 +1058,13 @@ async def set_steam_id(ctx, id: int):
         account_id = id - 76561197960265728
         bot.user_data[str(senderID)]["steamID"] = str(account_id)
         bot.user_data[str(senderID)]["steamID64"] = str(id)
-        await ctx.reply("Steam ID saved! Fetching your rank and most played heroes... " + chooseFaceFromCategory("concentrate"))
+        await ctx.reply("Steam ID saved! Fetching your rank and most played heroes... " + chooseFaceFromCategory(bot,"concentrate"))
         result = await fetch_rank_from_api(id)
         if result:
             rank, division_tier = result
             bot.user_data[str(senderID)]["rank"] = rank
             await assign_rank_role(ctx.author, rank)
-            await ctx.reply("Your rank has been automatically set to: **" + rank.capitalize() + " " + str(division_tier) + "** " + chooseFaceFromCategory("happy"))
+            await ctx.reply("Your rank has been automatically set to: **" + rank.capitalize() + " " + str(division_tier) + "** " + chooseFaceFromCategory(bot,"happy"))
         else:
             await ctx.reply("Couldn't fetch your rank automatically. Make sure your Steam profile is public and you have played ranked matches. You can set it manually with `!set_rank`.")
         heroes = await fetch_most_played(id)
@@ -1073,7 +1073,7 @@ async def set_steam_id(ctx, id: int):
             bot.user_data[str(senderID)]["main"] = top["name"]
             await assign_hero_role(ctx.author, top["name"])
             heroes_str = ", ".join(f"**{h['name']}** ({h['matches']} games)" for h in heroes)
-            await ctx.reply(f"Most played: {heroes_str}\nMain automatically set to **{top['name']}** " + chooseFaceFromCategory("happy"))
+            await ctx.reply(f"Most played: {heroes_str}\nMain automatically set to **{top['name']}** " + chooseFaceFromCategory(bot,"happy"))
 
 @bot.command()
 async def update_rank(ctx):
@@ -1083,13 +1083,13 @@ async def update_rank(ctx):
         if steam_id_64 == "None" or not steam_id_64:
             await ctx.reply("You haven't set your Steam ID yet. Use `!set_steam_id <your_steamid64>` first.")
             return
-        await ctx.reply("Fetching your latest rank... " + chooseFaceFromCategory("concentrate"))
+        await ctx.reply("Fetching your latest rank... " + chooseFaceFromCategory(bot,"concentrate"))
         result = await fetch_rank_from_api(int(steam_id_64))
         if result:
             rank, division_tier = result
             bot.user_data[str(senderID)]["rank"] = rank
             await assign_rank_role(ctx.author, rank)
-            await ctx.reply("Your rank has been updated to: **" + rank.capitalize() + " " + str(division_tier) + "** " + chooseFaceFromCategory("happy"))
+            await ctx.reply("Your rank has been updated to: **" + rank.capitalize() + " " + str(division_tier) + "** " + chooseFaceFromCategory(bot,"happy"))
         else:
             await ctx.reply("Couldn't fetch your rank. Make sure your Steam profile is public and you have played ranked matches.")
 
@@ -1106,7 +1106,7 @@ async def profile(ctx, member: discord.Member = None):
     data = bot.user_data[senderID]
     steam_id_64 = data.get("steamID64", "None")
 
-    msg = await ctx.reply("Loading profile... " + chooseFaceFromCategory("concentrate"))
+    msg = await ctx.reply("Loading profile... " + chooseFaceFromCategory(bot,"concentrate"))
 
     rank_str = "Unknown"
     rank_color = discord.Color.blurple()
@@ -1179,9 +1179,9 @@ async def remove_me(ctx):
     if ctx.channel.id==BOTS_CHANNEL_ID:
         bot.user_data.pop(str(senderID),None)
         if random.randint(0,1)==0:
-            face=chooseFaceFromCategory("nervous")
+            face=chooseFaceFromCategory(bot,"nervous")
         else:
-            face=chooseFaceFromCategory("question")
+            face=chooseFaceFromCategory(bot,"question")
         await ctx.reply("Who are you?\n"+face)
 
 @bot.command()
@@ -1190,7 +1190,7 @@ async def save(ctx):
     if ctx.channel.id==BOTS_CHANNEL_ID:
         if senderID==ME or any(role.id == BOT_ROLE for role in ctx.author.roles):
             save_json(bot.user_data_path,bot.user_data)
-            await ctx.reply("Saving some stuff. "+chooseFaceFromCategory("concentrate"),delete_after=10)
+            await ctx.reply("Saving some stuff. "+chooseFaceFromCategory(bot,"concentrate"),delete_after=10)
 
 @bot.command()
 async def clear_loaded(ctx):
@@ -1198,7 +1198,7 @@ async def clear_loaded(ctx):
     if ctx.channel.id==BOTS_CHANNEL_ID:
         if senderID==ME:
             bot.user_data={}
-    await ctx.reply("I forgor. Head empty...\n"+chooseFaceFromCategory("big_eyes"))
+    await ctx.reply("I forgor. Head empty...\n"+chooseFaceFromCategory(bot,"big_eyes"))
 
 @bot.command()
 async def clear_user_data(ctx):
@@ -1207,7 +1207,7 @@ async def clear_user_data(ctx):
         if senderID==ME:
             bot.user_data={}
             save_json(bot.user_data_path,{})
-    await ctx.reply("I forgor. Head empty...\n"+chooseFaceFromCategory("big_eyes"))
+    await ctx.reply("I forgor. Head empty...\n"+chooseFaceFromCategory(bot,"big_eyes"))
 
 @bot.command()
 async def rand(ctx,sub:str=None, num:int=1):
@@ -1333,7 +1333,7 @@ async def rand(ctx,sub:str=None, num:int=1):
                 oItems.pop(r)
             await ctx.reply(returnChars)
         else:
-            await ctx.reply("I can't give you a random thing in that category."+chooseFaceFromCategory("nervous"))
+            await ctx.reply("I can't give you a random thing in that category."+chooseFaceFromCategory(bot,"nervous"))
 
 @bot.command()
 async def set_rank(ctx,rank:str=None):
@@ -1377,9 +1377,9 @@ async def people_at_rank(ctx,rank:str=None,r:int=0,online:int=0):
             await ctx.reply("These people have rank simmilar to what you are looking for:\n"+'\n'.join(lookedForPeople))
         else:
             if online:
-                await ctx.reply("No online people are in that rank. "+chooseFaceFromCategory("sad"))
+                await ctx.reply("No online people are in that rank. "+chooseFaceFromCategory(bot,"sad"))
             else:
-                await ctx.reply("No people found. "+chooseFaceFromCategory("sad"))
+                await ctx.reply("No people found. "+chooseFaceFromCategory(bot,"sad"))
 
 
 @tasks.loop(seconds=1)
@@ -1417,207 +1417,10 @@ async def tick():
 
 
 
-#"hidden" commands (they are not listed in bot_help; KEEP IT THIS WAY)
-#"a secret for everyone"
-#haha ... reference
-
-#silly, sillyer, fish and FISH should be made more professional (lot of copy paste) (also will move vc stuff to separate file)
-
-@bot.command()
-async def pat(ctx):
-    if ctx.channel.id==BOTS_CHANNEL_ID:
-        await ctx.reply(chooseFaceFromCategory("pat"))
-
-@bot.command()
-async def silly(ctx):
-    senderID=ctx.author.id
-    if ctx.channel.id==BOTS_CHANNEL_ID:
-        def after_playing(error):
-            if error:
-                print(f"Playback error: {error}")
-            bot.loop.call_soon_threadsafe(finished.set)
-            
-        if ctx.author.voice is None or ctx.author.voice.channel is None:
-            await ctx.send("You must be in a voice channel.")
-            return
-        
-        channel=ctx.author.voice.channel
-        was_in=ctx.voice_client is not None
-
-        if was_in:
-            vc=ctx.voice_client
-            if vc.channel != channel:
-                await vc.move_to(channel)
-        else:
-            vc=await channel.connect()
-
-        if vc.is_playing():
-            vc.stop()
-
-        finished=asyncio.Event()
-        #source = discord.PCMAudio(str(bot.sounds_folder / "voicechat" / "silly(128k).wav"))
-        source=discord.PCMAudio(open(str(bot.sounds_folder / "voicechat" / "silly(128k).pcm"),"rb"))
-        vc.play(source, after=after_playing)
-
-        try:
-            await finished.wait()
-        finally:
-            if not was_in and vc.is_connected():
-                await vc.disconnect()
-
-@bot.command()
-async def sillyer(ctx):
-    senderID=ctx.author.id
-    if ctx.channel.id==BOTS_CHANNEL_ID:
-        def after_playing(error):
-            if error:
-                print(f"Playback error: {error}")
-            bot.loop.call_soon_threadsafe(finished.set)
-            
-        if ctx.author.voice is None or ctx.author.voice.channel is None:
-            await ctx.send("You must be in a voice channel.")
-            return
-        
-        channel=ctx.author.voice.channel
-        was_in=ctx.voice_client is not None
-
-        if was_in:
-            vc=ctx.voice_client
-            if vc.channel != channel:
-                await vc.move_to(channel)
-        else:
-            vc=await channel.connect()
-
-        if vc.is_playing():
-            vc.stop()
-
-        finished=asyncio.Event()
-        #source = discord.PCMAudio(str(bot.sounds_folder / "voicechat" / "silly(128k).wav"))
-        source=discord.PCMAudio(open(str(bot.sounds_folder / "voicechat" / "sillyer(128k).pcm"),"rb"))
-        vc.play(source, after=after_playing)
-
-        try:
-            await finished.wait()
-        finally:
-            if not was_in and vc.is_connected():
-                await vc.disconnect()
-
-@bot.command()
-async def fish(ctx):
-    senderID=ctx.author.id
-    if ctx.channel.id==BOTS_CHANNEL_ID:
-        def after_playing(error):
-            if error:
-                print(f"Playback error: {error}")
-            bot.loop.call_soon_threadsafe(finished.set)
-            
-        if ctx.author.voice is None or ctx.author.voice.channel is None:
-            await ctx.send("You must be in a voice channel.")
-            return
-        
-        channel=ctx.author.voice.channel
-        was_in=ctx.voice_client is not None
-
-        if was_in:
-            vc=ctx.voice_client
-            if vc.channel != channel:
-                await vc.move_to(channel)
-        else:
-            vc=await channel.connect()
-
-        if vc.is_playing():
-            vc.stop()
-
-        finished=asyncio.Event()
-        #source = discord.PCMAudio(str(bot.sounds_folder / "voicechat" / "silly(128k).wav"))
-        source=discord.PCMAudio(open(str(bot.sounds_folder / "voicechat" / "FIH(128k).pcm"),"rb"))
-        vc.play(source, after=after_playing)
-
-        try:
-            await finished.wait()
-        finally:
-            if not was_in and vc.is_connected():
-                await vc.disconnect()
-
-@bot.command()
-async def FISH(ctx):
-    senderID=ctx.author.id
-    if ctx.channel.id==BOTS_CHANNEL_ID:
-        def after_playing(error):
-            if error:
-                print(f"Playback error: {error}")
-            bot.loop.call_soon_threadsafe(finished.set)
-            
-        if ctx.author.voice is None or ctx.author.voice.channel is None:
-            await ctx.send("You must be in a voice channel.")
-            return
-        
-        channel=ctx.author.voice.channel
-        was_in=ctx.voice_client is not None
-
-        if was_in:
-            vc=ctx.voice_client
-            if vc.channel != channel:
-                await vc.move_to(channel)
-        else:
-            vc=await channel.connect()
-
-        if vc.is_playing():
-            vc.stop()
-
-        finished=asyncio.Event()
-        #source = discord.PCMAudio(str(bot.sounds_folder / "voicechat" / "silly(128k).wav"))
-        source=discord.PCMAudio(open(str(bot.sounds_folder / "voicechat" / "FISH.pcm"),"rb"))
-        vc.play(source, after=after_playing)
-
-        try:
-            await finished.wait()
-        finally:
-            if not was_in and vc.is_connected():
-                await vc.disconnect()
-
-@bot.command()
-async def portal(ctx):
-    senderID=ctx.author.id
-    if ctx.channel.id==BOTS_CHANNEL_ID:
-        def after_playing(error):
-            if error:
-                print(f"Playback error: {error}")
-            bot.loop.call_soon_threadsafe(finished.set)
-            
-        if ctx.author.voice is None or ctx.author.voice.channel is None:
-            await ctx.send("You must be in a voice channel.")
-            return
-        
-        channel=ctx.author.voice.channel
-        was_in=ctx.voice_client is not None
-
-        if was_in:
-            vc=ctx.voice_client
-            if vc.channel != channel:
-                await vc.move_to(channel)
-        else:
-            vc=await channel.connect()
-
-        if vc.is_playing():
-            vc.stop()
-
-        finished=asyncio.Event()
-        #source = discord.PCMAudio(str(bot.sounds_folder / "voicechat" / "silly(128k).wav"))
-        source=discord.PCMAudio(open(str(bot.sounds_folder / "voicechat" / "portal.pcm"),"rb"))
-        vc.play(source, after=after_playing)
-
-        try:
-            await finished.wait()
-        finally:
-            if not was_in and vc.is_connected():
-                await vc.disconnect()
-
-
 bot.startTimers={"A":11*60,"B":11*60}
 bot.timers={"A":None,"B":None}
 bot.bootTime=time.time()//1
-bot.version="0.5.8.sillies"
+bot.version="0.6.0.sillies"
 
 
 bot.messageCD=60*60*0.1 #6 minutes
@@ -1651,6 +1454,9 @@ bot.items=loadItemsProper(load_txt(bot.items_file))
 bot.map_graph=load_json(bot.map_graph_file)
 
 bot.ranks=load_json(bot.ranks_file)
+
+#cogs
+bot.load_extension("cogs.hiddens")
 
 load_dotenv()
 bot.run(os.getenv("DISCORD_TOKEN"))
