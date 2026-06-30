@@ -9,16 +9,14 @@ from own_utils import chooseFaceFromCategory
 #"a secret for everyone"
 #haha ... reference
 
-BOTS_CHANNEL_ID=0
-
 class Hiddens(commands.Cog):
     def __init__(self,bot):
         self.bot=bot
-    #silly, sillyer, fish and FISH should be made more professional (lot of copy paste)
+        self.BOTS_CHANNEL_ID=bot.botchannel
 
     async def play_sound(self,ctx,path:str):
         senderID=ctx.author.id
-        if ctx.channel.id==BOTS_CHANNEL_ID:
+        if ctx.channel.id==self.BOTS_CHANNEL_ID:
             def after_playing(error):
                 if error:
                     print(f"Playback error: {error}")
@@ -53,9 +51,14 @@ class Hiddens(commands.Cog):
                     await vc.disconnect()
 
     @commands.command()
+    async def cogTest(self,ctx):
+        if ctx.channel.id==self.BOTS_CHANNEL_ID:
+            await ctx.reply("cog works")
+
+    @commands.command()
     async def pat(self,ctx):
-        if ctx.channel.id==BOTS_CHANNEL_ID:
-            await ctx.reply(chooseFaceFromCategory("pat"))
+        if ctx.channel.id==self.BOTS_CHANNEL_ID:
+            await ctx.reply(chooseFaceFromCategory(self.bot,"pat"))
 
     @commands.command()
     async def silly(self,ctx):

@@ -1,4 +1,5 @@
 import discord
+from discord import app_commands
 from discord.ext import commands, tasks
 import os
 from dotenv import load_dotenv
@@ -7,6 +8,7 @@ import random
 from pathlib import Path
 import platform
 import aiohttp
+import asyncio
 
 from data_manage import save_json, load_json, load_txt
 """
@@ -440,11 +442,15 @@ BOTS_CHANNEL_ID = 1515333724269445270
 
 
 #Set up the bot with a command prefix
-intents = discord.Intents.default()
+intents=discord.Intents.default()
 intents.messages = True
 intents.message_content = True
 intents.voice_states = True
-bot = commands.Bot(command_prefix='!', intents=intents)
+class MyBot(commands.Bot):
+    async def setup_hook(self):
+        await self.load_extension("cogs.hiddens")
+#bot=commands.Bot(command_prefix='!', intents=intents)
+bot=MyBot(command_prefix='!', intents=intents)
 
 
 RANK_NAMES = [
@@ -630,7 +636,9 @@ async def on_ready():
         else:
             await bot.get_channel(BOTS_CHANNEL_ID).send("Back online! "+face)
     
-    await bot.get_channel(BOTS_CHANNEL_ID).send(load_txt(bot.update_check)[0])
+    extraMessageOnStart=" ".join(load_txt(bot.update_check))
+    if extraMessageOnStart:
+        await bot.get_channel(BOTS_CHANNEL_ID).send(extraMessageOnStart)
 
     if not tick.is_running():
         tick.start()
@@ -705,20 +713,12 @@ async def test(ctx):
     senderID=ctx.author.id
     if ctx.channel.id==BOTS_CHANNEL_ID:
         if senderID==ME or any(role.id == BOT_ROLE for role in ctx.author.roles):
-            await ctx.send("TEST:\ngit wurks.\n.=.",delete_after=10)
-            #await ctx.send("TEST:\nNothing to test.\n.=.",delete_after=10)
+            #await ctx.send("TEST:\ngit wurks.\n.=.",delete_after=10)
+            await ctx.send("TEST:\nNothing to test.\n.=.",delete_after=10)
             view=Button()
             view=MultButton(ctx.author)
             view=FindRem(ctx)
             #await ctx.send("Buttons:", view=view)
-
-@bot.slash_command(name="testwithslash",guild_ids=[1510049699695165471])
-async def testwithslash(ctx):
-    senderID=ctx.author.id
-    if ctx.channel.id==BOTS_CHANNEL_ID:
-        if senderID==ME or any(role.id == BOT_ROLE for role in ctx.author.roles):
-            await ctx.reply("slash command?")
-
 
 @bot.command()
 async def minigames(ctx, game:str=None):
@@ -1462,8 +1462,7 @@ bot.map_graph=load_json(bot.map_graph_file)
 
 bot.ranks=load_json(bot.ranks_file)
 
-#cogs
-bot.load_extension("cogs.hiddens")
+bot.botchannel=BOTS_CHANNEL_ID
 
 load_dotenv()
 bot.run(os.getenv("DISCORD_TOKEN"))
