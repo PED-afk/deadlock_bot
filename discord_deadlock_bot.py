@@ -18,6 +18,7 @@ load_json and save_json loads from and saves to json files
 neither does anything else other than open the file on the filepath and load(/save) the data from it
 """
 from own_utils import chooseFaceFromCategory
+from pi_specific import getTemp, ramUse, uptime, usedSpace, getAll
 
 class Item:
     def __init__(self,type:str,tier:int,name:str):
@@ -1004,7 +1005,8 @@ async def status(ctx):
             extra="\nI'm tired. "+chooseFaceFromCategory(bot,"tired")
         await ctx.reply("Bot version: "+bot.version+"\nOS:"+winlin+"\nHardware I'm living on:"+cpu+"\nI've been running for: "+str(hours)+" hours, "+str(minutes)+" minutes and "+str(seconds)+" seconds."+extra)
         if lindistr!=None:
-            await ctx.send("Fun fact: Most likely I'm running on a rasberry pi 5. :D\nLinux dist: "+lindistr["PRETTY_NAME"],delete_after=30)
+            await ctx.reply(getAll())
+            #await ctx.send("Fun fact: Most likely I'm running on a rasberry pi 5. :D\nLinux dist: "+lindistr["PRETTY_NAME"],delete_after=30)
 
 @bot.command()
 async def version(ctx):
