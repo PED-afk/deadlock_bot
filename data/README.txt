@@ -18,4 +18,5 @@ if <!tipp X> is used
   else: X <tipp> is sent
 Only the before last category/thing is needed in the command. Eg.: if path is X/Y and this lists Z,V,W if we want to see Z only <!tipp Z>
 Code will find the path to Z
+If <!tipp X/Z> the code will look for Z on a path containing X
 
