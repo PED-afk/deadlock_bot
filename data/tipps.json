@@ -2,20 +2,16 @@
 {
   "example":{
     "isCategory":true,
+    "tipp":"the tipp about the categories to be printed next to sub categories when <!tipp example>",
     "subs":[
-      {
-        "subExaple":{
-          "isCategory":true,
-          "subs":[
-            {
-              "subsubNotCat":{
-                "isCategory":false,
-                "subs":[]
-              }
-            }
-          ]
-        }
-      }
+      
     ]
-  } 
+  }
+  "example2":{
+    "isCategory":true,
+    "tipp":"the tipp about the categories to be printed next to sub categories when <!tipp example>",
+    "subs":[
+      
+    ]
+  }
 }
