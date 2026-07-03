@@ -1,1 +1,21 @@
 
+{
+  "example":{
+    "isCategory":true,
+    "subs":[
+      {
+        "subExaple":{
+          "isCategory":true,
+          "subs":[
+            {
+              "subsubNotCat":{
+                "isCategory":false,
+                "subs":[]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  } 
+}
