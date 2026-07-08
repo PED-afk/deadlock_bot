@@ -610,8 +610,8 @@ def loadItemsProper(items):
     return newItems
 
 def activeTimerExists():
-    for i, (timerName,timerTime) in enumerate(bot.timers.items()):
-        if timerTime!=None:
+    for i, (timerName,timerData) in enumerate(bot.timers.items()):
+        if timerData["time"]!=None:
             return True
     return False
 
@@ -751,6 +751,38 @@ async def minigames(ctx, game:str=None):
             await ctx.reply("No minigame exists with that name."+chooseFaceFromCategory(bot,"nervous"))
 
 @bot.command()
+async def pause(ctx):
+    senderID=ctx.author.id
+    if ctx.channel.id==BOTS_CHANNEL_ID:
+        if senderID==ME or any(role.id == BOT_ROLE for role in ctx.author.roles):
+            if ctx.author.voice==None:
+                await ctx.reply("You must be in a voice channel to be able to pause a timer.")
+            else:
+                if bot.timers[ctx.author.voice.channel.category.name[-2]]["time"]!=None and bot.timers[ctx.author.voice.channel.category.name[-2]]["paused"]==False:
+                    bot.timers[ctx.author.voice.channel.category.name[-2]]["paused"]=True
+                    await ctx.reply("Paused timer for the ["+ctx.author.voice.channel.category.name[-2]+"] category.")
+                else:
+                    await ctx.reply("There isn't an active timer in this voice channel category or it's already paused.")
+        else:
+            await ctx.reply("You don't have permission! >:)",delete_after=10)
+                    
+@bot.command()
+async def unpause(ctx):
+    senderID=ctx.author.id
+    if ctx.channel.id==BOTS_CHANNEL_ID:
+        if senderID==ME or any(role.id == BOT_ROLE for role in ctx.author.roles):
+            if ctx.author.voice==None:
+                await ctx.reply("You must be in a voice channel to be able to unpause a timer.")
+            else:
+                if bot.timers[ctx.author.voice.channel.category.name[-2]]["time"]!=None and bot.timers[ctx.author.voice.channel.category.name[-2]]["paused"]==True:
+                    bot.timers[ctx.author.voice.channel.category.name[-2]]["paused"]=False
+                    await ctx.reply("Unpaused timer for the ["+ctx.author.voice.channel.category.name[-2]+"] category.")
+                else:
+                    await ctx.reply("There isn't an active timer in this voice channel category or it's already running.")
+        else:
+            await ctx.reply("You don't have permission! >:)",delete_after=10)
+
+@bot.command()
 async def start(ctx):
     senderID=ctx.author.id
     if ctx.channel.id==BOTS_CHANNEL_ID:
@@ -758,8 +790,8 @@ async def start(ctx):
             if ctx.author.voice==None:
                 await ctx.reply("You must be in a voice channel to be able to start a timer.")
             else:
-                if bot.timers[ctx.author.voice.channel.category.name[-2]]==None:
-                    bot.timers[ctx.author.voice.channel.category.name[-2]]=time.time()+bot.startTimers[ctx.author.voice.channel.category.name[-2]]
+                if bot.timers[ctx.author.voice.channel.category.name[-2]]["time"]==None:
+                    bot.timers[ctx.author.voice.channel.category.name[-2]]["time"]=time.time()+bot.startTimers[ctx.author.voice.channel.category.name[-2]]
                     await ctx.reply("Started timer for the ["+ctx.author.voice.channel.category.name[-2]+"] category.")
                     
                     name=ctx.author.voice.channel.name[-2]
@@ -844,8 +876,8 @@ async def end(ctx):
             if ctx.author.voice==None:
                 await ctx.reply("You must be in a voice channel so I know which timer to end.")
             else:
-                if bot.timers[ctx.author.voice.channel.category.name[-2]]>time.time()-1:
-                    bot.timers[ctx.author.voice.channel.category.name[-2]]=time.time()-1
+                if bot.timers[ctx.author.voice.channel.category.name[-2]]["time"]>time.time()-1:
+                    bot.timers[ctx.author.voice.channel.category.name[-2]]["time"]=time.time()-1
                     await ctx.reply("Timer stoped.")
 
 @bot.command()
@@ -856,8 +888,8 @@ async def endit(ctx):
             if ctx.author.voice==None:
                 await ctx.reply("You must be in a voice channel so I know which timer to end.")
             else:
-                if bot.timers[ctx.author.voice.channel.category.name[-2]]!=None:
-                    bot.timers[ctx.author.voice.channel.category.name[-2]]=None
+                if bot.timers[ctx.author.voice.channel.category.name[-2]]["time"]!=None:
+                    bot.timers[ctx.author.voice.channel.category.name[-2]]["time"]=None
                     await ctx.reply("Timer stoped. Moving noone.")
 
 @bot.command()
@@ -972,7 +1004,7 @@ async def remaining(ctx):
                 await ctx.reply("You must be in a voice channel to view a timer.")
             else:
                 if bot.startTimers[ctx.author.voice.channel.category.name[-2]]!=None:
-                    await ctx.reply("Remaining time: "+str(round(abs(bot.timers[ctx.author.voice.channel.category.name[-2]]-time.time())/60,2))+" min(s).")
+                    await ctx.reply("Remaining time: "+str(round(abs(bot.timers[ctx.author.voice.channel.category.name[-2]]["time"]-time.time())/60,2))+" min(s).")
                 else:
                     await ctx.reply("Timer is not active.")
 
@@ -1393,8 +1425,11 @@ async def people_at_rank(ctx,rank:str=None,r:int=0,online:int=0):
 
 @tasks.loop(seconds=1)
 async def tick():
-    for i, (name,timerTime) in enumerate(bot.timers.items()):
+    for i, (name,timerData) in enumerate(bot.timers.items()):
+        timerTime=timerData["time"]
         if timerTime!=None:
+            if timerData["paused"]:
+                bot.timers[name]["time"]+=1
             curTime=time.time()//1
             timerTime=timerTime//1
             if timerTime-curTime==60:
@@ -1421,13 +1456,13 @@ async def tick():
                                 await bot.get_channel(BOTS_CHANNEL_ID).send("Can't move "+member.display_name)
                             except discord.HTTPException:
                                 pass
-                bot.timers[name]=None
+                bot.timers[name]["time"]=None
 
 
 
 
 bot.startTimers={"A":11*60,"B":11*60}
-bot.timers={"A":None,"B":None}
+bot.timers={"A":{"time":None,"paused":False},"B":{"time":None,"paused":False}}
 bot.bootTime=time.time()//1
 bot.version="0.6.1.cogs"
 
