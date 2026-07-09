@@ -842,7 +842,11 @@ async def status(ctx):
     if ctx.channel.id==BOTS_CHANNEL_ID:
         if senderID==ME:
             face=chooseFaceFromCategory(bot,"annoyed")
-            l="."
+            #WATCH OUT!!!
+            #DO NOT DELETE OR REPLACE
+            l="‎ " #this is not a 'space' character (that wouldn't work) this is an invisible character different from a 'space'
+            #DO NOT DELETE OR REPLACE
+            #WATCH OUT!!!
             for i in face:
                 l+=" "
             l+="(Why do you want to know?)"
