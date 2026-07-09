@@ -32,19 +32,12 @@ pauseEnd=12
 def install_requirements():
     req_file = BASE / "requirements.txt"
     if req_file.exists():
-        subprocess.run(
-            [sys.executable, "-m", "pip", "install", "-r", str(req_file)],
-            capture_output=True
-        )
+        subprocess.run([sys.executable, "-m", "pip", "install", "-r", str(req_file)],capture_output=True)
 
 def update():
     # Try git pull first
     try:
-        result = subprocess.run(
-            ["git", "pull"],
-            cwd=Path(__file__).resolve().parent,
-            capture_output=True, text=True, timeout=30
-        )
+        result = subprocess.run(["git", "pull"],cwd=Path(__file__).resolve().parent,capture_output=True, text=True, timeout=30)
         if result.returncode == 0:
             print(f"Git pull successful: {result.stdout.strip()}", flush=True)
             with open(update_check_file,"w") as f:
@@ -52,40 +45,52 @@ def update():
             return
         else:
             print(f"Git pull failed: {result.stderr.strip()}", flush=True)
-    except Exception as e:
-        print(f"Git pull error: {e}", flush=True)
-
-    # Fall back to USB stick if git pull didn't work
-    def copy_contents(scr,dest):
-        for item in scr.iterdir():
-            target=dest / item.name
-            if item.is_dir():
-                if target.exists():
-                    shutil.rmtree(target)
-                shutil.copytree(item,target)
+            print("This may be because of local changes. Retrying by deleting all local files.")
+            subprocess.run(["git", "reset", "--hard", "HEAD"],cwd=Path(__file__).resolve().parent,capture_output=True,text=True,timeout=30,check=True,)
+            subprocess.run(["git", "clean", "-fd"],cwd=Path(__file__).resolve().parent,capture_output=True,text=True,timeout=30,check=True,)
+            subprocess.run(["git", "pull"],cwd=Path(__file__).resolve().parent,capture_output=True,text=True,timeout=30,check=True,)
+            result=subprocess.run(["git", "pull"],cwd=Path(__file__).resolve().parent,capture_output=True,text=True,timeout=30,check=True,)
+            if result.returncode == 0:
+                print(f"Git pull successful: {result.stdout.strip()}", flush=True)
+                with open(update_check_file,"w") as f:
+                    f.write("An update was found and applied from github.")
+                return
             else:
-                shutil.copy2(item,target)
-    def find_update_folder():
-        paths=[
-            Path("/media"),
-            Path("/mnt"),
-            Path("/run/media"),
-        ]
-        for base_path in paths:
-            if not base_path.exists():
-                continue
-            for root, dirs, files in os.walk(base_path):
-                if raspberry_update_name in dirs:
-                    return Path(root) / raspberry_update_name
-        return None
-    path=find_update_folder()
-    if path:
-        try:
-            copy_contents(path,Path(__file__).resolve().parent)
-            with open(update_check_file,"w") as f:
-                f.write("An update was found and applied from USB.")
-        except Exception as e:
-            print(f"Update error {e}",flush=True)
+                print(f"Git pull failed: {result.stderr.strip()}", flush=True)
+    except Exception as e:
+        print(f"Git pull error: {e}\nTrying USB method.", flush=True)
+    
+        # Fall back to USB stick if git pull didn't work
+        def copy_contents(scr,dest):
+            for item in scr.iterdir():
+                target=dest / item.name
+                if item.is_dir():
+                    if target.exists():
+                        shutil.rmtree(target)
+                    shutil.copytree(item,target)
+                else:
+                    shutil.copy2(item,target)
+        def find_update_folder():
+            paths=[
+                Path("/media"),
+                Path("/mnt"),
+                Path("/run/media"),
+            ]
+            for base_path in paths:
+                if not base_path.exists():
+                    continue
+                for root, dirs, files in os.walk(base_path):
+                    if raspberry_update_name in dirs:
+                        return Path(root) / raspberry_update_name
+            return None
+        path=find_update_folder()
+        if path:
+            try:
+                copy_contents(path,Path(__file__).resolve().parent)
+                with open(update_check_file,"w") as f:
+                    f.write("An update was found and applied from USB.")
+            except Exception as e:
+                print(f"Update error {e}",flush=True)
 
 while True:
     if process is None or process.poll() is not None:
