@@ -21,8 +21,8 @@ class Hiddens(commands.Cog):
                 if ctx.author.voice==None:
                     await ctx.reply("You must be in a voice channel to be able to pause a timer.")
                 else:
-                    if bot.timers[ctx.author.voice.channel.category.name[-2]]["time"]!=None and bot.timers[ctx.author.voice.channel.category.name[-2]]["paused"]==False:
-                        bot.timers[ctx.author.voice.channel.category.name[-2]]["paused"]=True
+                    if self.bot.timers[ctx.author.voice.channel.category.name[-2]]["time"]!=None and self.bot.timers[ctx.author.voice.channel.category.name[-2]]["paused"]==False:
+                        self.bot.timers[ctx.author.voice.channel.category.name[-2]]["paused"]=True
                         await ctx.reply("Paused timer for the ["+ctx.author.voice.channel.category.name[-2]+"] category.")
                     else:
                         await ctx.reply("There isn't an active timer in this voice channel category or it's already paused.")
@@ -37,8 +37,8 @@ class Hiddens(commands.Cog):
                 if ctx.author.voice==None:
                     await ctx.reply("You must be in a voice channel to be able to unpause a timer.")
                 else:
-                    if bot.timers[ctx.author.voice.channel.category.name[-2]]["time"]!=None and bot.timers[ctx.author.voice.channel.category.name[-2]]["paused"]==True:
-                        bot.timers[ctx.author.voice.channel.category.name[-2]]["paused"]=False
+                    if self.bot.timers[ctx.author.voice.channel.category.name[-2]]["time"]!=None and self.bot.timers[ctx.author.voice.channel.category.name[-2]]["paused"]==True:
+                        self.bot.timers[ctx.author.voice.channel.category.name[-2]]["paused"]=False
                         await ctx.reply("Unpaused timer for the ["+ctx.author.voice.channel.category.name[-2]+"] category.")
                     else:
                         await ctx.reply("There isn't an active timer in this voice channel category or it's already running.")
@@ -53,13 +53,13 @@ class Hiddens(commands.Cog):
                 if ctx.author.voice==None:
                     await ctx.reply("You must be in a voice channel to be able to start a timer.")
                 else:
-                    if bot.timers[ctx.author.voice.channel.category.name[-2]]["time"]==None:
-                        bot.timers[ctx.author.voice.channel.category.name[-2]]["time"]=time.time()+bot.startTimers[ctx.author.voice.channel.category.name[-2]]
+                    if self.bot.timers[ctx.author.voice.channel.category.name[-2]]["time"]==None:
+                        self.bot.timers[ctx.author.voice.channel.category.name[-2]]["time"]=time.time()+self.bot.startTimers[ctx.author.voice.channel.category.name[-2]]
                         await ctx.reply("Started timer for the ["+ctx.author.voice.channel.category.name[-2]+"] category.")
                         
                         name=ctx.author.voice.channel.name[-2]
                         names=[]
-                        for guild in bot.guilds:
+                        for guild in self.bot.guilds:
                             for channel in discord.utils.get(guild.categories, name="["+name+"]").voice_channels:
                                 for member in channel.members:
                                     if member.global_name=="PurpleEarthDragon":
@@ -67,7 +67,7 @@ class Hiddens(commands.Cog):
                                     else:
                                         names.append(member.global_name)
                         
-                        await ctx.send("__Good luck, and Have fun!__\n"+'\n'.join(names)+"\n"+chooseFaceFromCategory(bot,"happy"),delete_after=bot.startTimers[ctx.author.voice.channel.category.name[-2]])
+                        await ctx.send("__Good luck, and Have fun!__\n"+'\n'.join(names)+"\n"+chooseFaceFromCategory(bot,"happy"),delete_after=self.bot.startTimers[ctx.author.voice.channel.category.name[-2]])
                     else:
                         await ctx.reply("There is already an active timer in this voice channel category.")
             else:
@@ -81,8 +81,8 @@ class Hiddens(commands.Cog):
                 if ctx.author.voice==None:
                     await ctx.reply("You must be in a voice channel so I know which timer to end.")
                 else:
-                    if bot.timers[ctx.author.voice.channel.category.name[-2]]["time"]>time.time()-1:
-                        bot.timers[ctx.author.voice.channel.category.name[-2]]["time"]=time.time()-1
+                    if self.bot.timers[ctx.author.voice.channel.category.name[-2]]["time"]>time.time()-1:
+                        self.bot.timers[ctx.author.voice.channel.category.name[-2]]["time"]=time.time()-1
                         await ctx.reply("Timer stoped.")
     
     @bot.command()
@@ -93,8 +93,8 @@ class Hiddens(commands.Cog):
                 if ctx.author.voice==None:
                     await ctx.reply("You must be in a voice channel so I know which timer to end.")
                 else:
-                    if bot.timers[ctx.author.voice.channel.category.name[-2]]["time"]!=None:
-                        bot.timers[ctx.author.voice.channel.category.name[-2]]["time"]=None
+                    if self.bot.timers[ctx.author.voice.channel.category.name[-2]]["time"]!=None:
+                        self.bot.timers[ctx.author.voice.channel.category.name[-2]]["time"]=None
                         await ctx.reply("Timer stoped. Moving noone.")
     
     @bot.command()
@@ -105,7 +105,7 @@ class Hiddens(commands.Cog):
                 if ctx.author.voice==None:
                     await ctx.reply("You must be in a voice channel to change a timer lenght.")
                 else:
-                    bot.startTimers[ctx.author.voice.channel.category.name[-2]]=x*60
+                    self.bot.startTimers[ctx.author.voice.channel.category.name[-2]]=x*60
                     await ctx.reply("Starting time set to "+str(x)+" minutes.")
                 
     @bot.command()
@@ -116,7 +116,7 @@ class Hiddens(commands.Cog):
                 if ctx.author.voice==None:
                     await ctx.reply("You must be in a voice channel to view a timer lenght.")
                 else:
-                    await ctx.reply("The timer is set to "+str(bot.startTimers[ctx.author.voice.channel.category.name[-2]]/60)+" minutes.")
+                    await ctx.reply("The timer is set to "+str(self.bot.startTimers[ctx.author.voice.channel.category.name[-2]]/60)+" minutes.")
                   
     
     @bot.command()
@@ -127,8 +127,8 @@ class Hiddens(commands.Cog):
                 if ctx.author.voice==None:
                     await ctx.reply("You must be in a voice channel to view a timer.")
                 else:
-                    if bot.startTimers[ctx.author.voice.channel.category.name[-2]]!=None:
-                        await ctx.reply("Remaining time: "+str(round(abs(bot.timers[ctx.author.voice.channel.category.name[-2]]["time"]-time.time())/60,2))+" min(s).")
+                    if self.bot.startTimers[ctx.author.voice.channel.category.name[-2]]!=None:
+                        await ctx.reply("Remaining time: "+str(round(abs(self.bot.timers[ctx.author.voice.channel.category.name[-2]]["time"]-time.time())/60,2))+" min(s).")
                     else:
                         await ctx.reply("Timer is not active.")
 
