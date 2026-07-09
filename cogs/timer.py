@@ -8,7 +8,7 @@ from own_utils import chooseFaceFromCategory
 #commands to control the timer function
 #moved here from main file
 
-class Hiddens(commands.Cog):
+class Timer(commands.Cog):
     def __init__(self,bot):
         self.bot=bot
         self.BOTS_CHANNEL_ID=bot.botchannel
