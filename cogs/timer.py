@@ -5,9 +5,8 @@ import asyncio
 
 from own_utils import chooseFaceFromCategory
 
-#"hidden" commands (they are not listed in bot_help; KEEP IT THIS WAY)
-#"a secret for everyone"
-#haha ... reference
+#commands to control the timer function
+#moved here from main file
 
 class Hiddens(commands.Cog):
     def __init__(self,bot):
