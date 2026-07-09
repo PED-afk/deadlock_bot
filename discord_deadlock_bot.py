@@ -751,64 +751,6 @@ async def minigames(ctx, game:str=None):
                 await ctx.reply("Get back to the base!\nYou have: "+str(bot.user_data[str(senderID)]["money"]["unsecured"])+" unsecured souls!", view=view)
         else:
             await ctx.reply("No minigame exists with that name."+chooseFaceFromCategory(bot,"nervous"))
-        
-@bot.command()
-async def shutdown(ctx):
-    senderID=ctx.author.id
-    if ctx.channel.id==BOTS_CHANNEL_ID:
-        me=await bot.fetch_user(ME)
-        if senderID==ME:
-            if activeTimerExists():
-                ctx.reply("Sorry, I can't shutdown now, there is at least 1 active timer.")
-            else:
-                if ctx.guild.voice_client:
-                    await ctx.guild.voice_client.disconnect()
-                save_json(bot.user_data_path,bot.user_data)
-                await ctx.reply("Shuting down.\nGood night!\nᴗ˳ᴗ",delete_after=10)
-                with open(bot.restart_file,"w") as f:
-                    f.write("0")
-                await bot.close()
-        elif any(role.id == BOT_ROLE for role in ctx.author.roles):
-            await ctx.send("Sorry only `"+str(me)+"` can shut me down.\n(Because then he knows I'm not running.)",delete_after=10)
-            
-@bot.command(aliases=["reload"])
-async def restart(ctx,save:str="save"):
-    senderID=ctx.author.id
-    if ctx.channel.id==BOTS_CHANNEL_ID:
-        if senderID==ME or any(role.id == BOT_ROLE for role in ctx.author.roles):
-            if activeTimerExists():
-                ctx.reply("Sorry, I restart now, there is at least 1 active timer.")
-            else:
-                if ctx.guild.voice_client:
-                    await ctx.guild.voice_client.disconnect()
-                if save=="save":
-                    save_json(bot.user_data_path,bot.user_data)
-                with open(bot.restart_file,"w") as f:
-                    f.write("1")
-                await ctx.reply("Shuting down.\nBe right back!\n"+chooseFaceFromCategory(bot,"blush_happy"),delete_after=20)
-                await bot.close()
-
-@bot.command()
-async def sleep(ctx,save:str="save"):
-    senderID=ctx.author.id
-    if ctx.channel.id==BOTS_CHANNEL_ID:
-        if senderID==ME or any(role.id == BOT_ROLE for role in ctx.author.roles):
-            if activeTimerExists():
-                await ctx.reply("Sorry, I can't go to sleep now, there is at least 1 active timer.")
-            else:
-                if ctx.guild.voice_client:
-                    await ctx.guild.voice_client.disconnect()
-                if save=="save":
-                    save_json(bot.user_data_path,bot.user_data)
-                
-                with open(bot.restart_file,"w") as f:
-                    f.write("2")
-                with open(bot.pause_file,"r") as f:
-                    pauseStart=f.readline().strip()
-                    pauseEnd=f.readline().strip()
-                
-                await ctx.reply("Going to sleep\nI will be unavailable between "+pauseStart+" and "+pauseEnd+" CEST\n"+chooseFaceFromCategory(bot,"sleep"),delete_after=20)
-                await bot.close()
 
 @bot.command()
 async def bot_help(ctx, section:str=None):
@@ -828,7 +770,9 @@ async def bot_help(ctx, section:str=None):
         elif section=="timer":
             anyView=True
             botcommands=[
-                "`!start` and `!start second`: Start an x minute timer. When the timer ends I put everyone into the `Deadlock [#]` channel (from lane channels).\n(Timer lenght is configureable; only 1 timer can be used at the same time (as right no there is only 1 set of lane channels))",
+                "`!start`: Start an x minute timer. When the timer ends I put everyone into the `Deadlock [#]` channel (from lane channels).\n(Timer lenght is configureable.)",
+                "`!pause`: Pauses the timer.",
+                "`!unpause`: Guess what this does.",
                 "`!end`: Ends the timer and moves everyone immediately.",
                 "`!endit`: Ends the timer without sending people to the `Deadlock [#]` channel.",
                 "`!settimer x`: Set the timer lenght to x minutes.",
