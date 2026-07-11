@@ -1,12 +1,12 @@
 
 {
   "lane":{
-    "tipp":"buy cheap counters /n counters for each hero will be searchable ETA unspecified.",
-     "tipp": "Prioritize farm to carry, if carry dies in the first three mins let tower take dmg from troppers. if wraith seven doo too much dmg to tower then maybe take farm solo",
-      "tipp": "deny hero's that require stacks as best you can.",
-      "tipp": "try pair a Carry with a support or a roamer or a tank in lane, when a romaer leaves the carry can solo soak the farm in lane. at min3 boxes spawn supports can leave to box for a few waves at this time tanks can look to invade jungle to deny farm",
-    "tipp": "don't disregard tropper dmg. they hurt more than you think. shoot from behind your own wave as much as possible",
-    
+    "tipp":["buy cheap counters /n counters for each hero will be searchable ETA unspecified.",
+      "Prioritize farm to carry, if carry dies in the first three mins let tower take dmg from troppers. if wraith seven doo too much dmg to tower then maybe take farm solo",
+      "deny hero's that require stacks as best you can.",
+      "try pair a Carry with a support or a roamer or a tank in lane, when a romaer leaves the carry can solo soak the farm in lane. at min3 boxes spawn supports can leave to box for a few waves at this time tanks can look to invade jungle to deny farm",
+      "don't disregard tropper dmg. they hurt more than you think. shoot from behind your own wave as much as possible"
+    ],
     "subs":{
       "trooper":{
         "tipp":"first wave try leave heal trooper till last all other waves prioritise heal trooper as you see fit. if healthy alwasy kill last if against Rem and heal tropper buffed maybe kill heal trooper first otherwise all troppers hard to kill /n need to confirm all souls from first wave otherwise you cannot shop at the end of the first wave. mellee minions if need be, also look to parry if you see the enimy melee minions",
