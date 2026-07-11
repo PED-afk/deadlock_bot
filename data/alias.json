@@ -3,7 +3,9 @@
 {
   "this is an alias":"for this",
   "this is not in the tipps.json as a key":"this is",
-  "minion":"trooper"
+  "minion":"trooper",
+  "door":"base_guardian",
+  "front_door":"base_guardian"
 }
 
 
