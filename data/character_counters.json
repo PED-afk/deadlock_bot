@@ -1,3 +1,12 @@
 {
+  "apollo":{
+    "hero_counter":{
+      "char_name":"why"
+    },
+    "item_counter":{
+      "item_name":"why"
+    },
+    "playstyle":""
+  },
   "bebop":""
 }
