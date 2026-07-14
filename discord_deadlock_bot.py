@@ -19,6 +19,7 @@ neither does anything else other than open the file on the filepath and load(/sa
 """
 from own_utils import chooseFaceFromCategory
 from pi_specific import getTemp, ramUse, uptime, usedSpace, getAll
+from dc_ids import ME, BOT_ROLE, BOT_DEBUG_CHANNEL, BOTS_CHANNEL_ID
 
 class Item:
     def __init__(self,type:str,tier:int,name:str):
@@ -432,14 +433,6 @@ class runHome(discord.ui.View):
             bot.user_data[userID]["money"]["secured"]+=bot.user_data[userID]["money"]["unsecured"]
             bot.user_data[userID]["money"]["unsecured"]=0
 
-
-
-#users
-ME=616710497378631709
-BOT_ROLE=1516075439347470437
-
-#channel(s)
-BOTS_CHANNEL_ID = 1515333724269445270
 
 
 #Set up the bot with a command prefix
@@ -863,7 +856,7 @@ async def status(ctx):
             extra="\nI'm tired. "+chooseFaceFromCategory(bot,"tired")
         await ctx.reply("Bot version: "+bot.version+"\nOS: "+winlin+"\nHardware I'm living on: "+cpu+"\nI've been running for: "+str(hours)+" hours, "+str(minutes)+" minutes and "+str(seconds)+" seconds."+extra)
         if lindistr!=None:
-            await ctx.reply(getAll())
+            await ctx.reply(getAll()+lindistr["PRETTY_NAME"],delete_after=30)
             #await ctx.send("Fun fact: Most likely I'm running on a rasberry pi 5. :D\nLinux dist: "+lindistr["PRETTY_NAME"],delete_after=30)
 
 @bot.command()
@@ -934,6 +927,7 @@ async def set_steam_id(ctx, id: int):
             await ctx.reply("Your rank has been automatically set to: **" + rank.capitalize() + " " + str(division_tier) + "** " + chooseFaceFromCategory(bot,"happy"))
         else:
             await ctx.reply("Couldn't fetch your rank automatically. Make sure your Steam profile is public and you have played ranked matches. You can set it manually with `!set_rank`.")
+        
         heroes = await fetch_most_played(id)
         if heroes:
             top = heroes[0]
