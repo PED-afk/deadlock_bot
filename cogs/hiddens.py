@@ -4,6 +4,7 @@ from discord.ext import commands, tasks
 import asyncio
 
 from own_utils import chooseFaceFromCategory
+from dc_ids import ME,BOT_ROLE,BOTS_CHANNEL_ID
 
 #"hidden" commands (they are not listed in bot_help; KEEP IT THIS WAY)
 #"a secret for everyone"
@@ -12,7 +13,7 @@ from own_utils import chooseFaceFromCategory
 class Hiddens(commands.Cog):
     def __init__(self,bot):
         self.bot=bot
-        self.BOTS_CHANNEL_ID=bot.botchannel
+        self.BOTS_CHANNEL_ID=BOTS_CHANNEL_ID
 
     async def play_sound(self,ctx,path:str):
         senderID=ctx.author.id

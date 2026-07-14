@@ -2,8 +2,10 @@
 import discord
 from discord.ext import commands, tasks
 import asyncio
+import time
 
 from own_utils import chooseFaceFromCategory
+from dc_ids import ME,BOT_ROLE,BOTS_CHANNEL_ID
 
 #commands to control the timer function
 #moved here from main file
@@ -11,13 +13,15 @@ from own_utils import chooseFaceFromCategory
 class Timer(commands.Cog):
     def __init__(self,bot):
         self.bot=bot
-        self.BOTS_CHANNEL_ID=bot.botchannel
-          
-    @bot.command()
+        self.BOTS_CHANNEL_ID=BOTS_CHANNEL_ID
+        self.ME=ME
+        self.BOT_ROLE=BOT_ROLE
+
+    @commands.command()
     async def pause(self,ctx):
         senderID=ctx.author.id
-        if ctx.channel.id==BOTS_CHANNEL_ID:
-            if senderID==ME or any(role.id == BOT_ROLE for role in ctx.author.roles):
+        if ctx.channel.id==self.BOTS_CHANNEL_ID:
+            if senderID==self.ME or any(role.id == self.BOT_ROLE for role in ctx.author.roles):
                 if ctx.author.voice==None:
                     await ctx.reply("You must be in a voice channel to be able to pause a timer.")
                 else:
@@ -29,11 +33,11 @@ class Timer(commands.Cog):
             else:
                 await ctx.reply("You don't have permission! >:)",delete_after=10)
                         
-    @bot.command()
+    @commands.command()
     async def unpause(self,ctx):
         senderID=ctx.author.id
-        if ctx.channel.id==BOTS_CHANNEL_ID:
-            if senderID==ME or any(role.id == BOT_ROLE for role in ctx.author.roles):
+        if ctx.channel.id==self.BOTS_CHANNEL_ID:
+            if senderID==self.ME or any(role.id == self.BOT_ROLE for role in ctx.author.roles):
                 if ctx.author.voice==None:
                     await ctx.reply("You must be in a voice channel to be able to unpause a timer.")
                 else:
@@ -45,11 +49,11 @@ class Timer(commands.Cog):
             else:
                 await ctx.reply("You don't have permission! >:)",delete_after=10)
     
-    @bot.command()
+    @commands.command()
     async def start(self,ctx):
         senderID=ctx.author.id
-        if ctx.channel.id==BOTS_CHANNEL_ID:
-            if senderID==ME or any(role.id == BOT_ROLE for role in ctx.author.roles):
+        if ctx.channel.id==self.BOTS_CHANNEL_ID:
+            if senderID==self.ME or any(role.id == self.BOT_ROLE for role in ctx.author.roles):
                 if ctx.author.voice==None:
                     await ctx.reply("You must be in a voice channel to be able to start a timer.")
                 else:
@@ -63,21 +67,21 @@ class Timer(commands.Cog):
                             for channel in discord.utils.get(guild.categories, name="["+name+"]").voice_channels:
                                 for member in channel.members:
                                     if member.global_name=="PurpleEarthDragon":
-                                        names.append(member.global_name+chooseFaceFromCategory(bot,"love"))
+                                        names.append(member.global_name+chooseFaceFromCategory(self.bot,"love"))
                                     else:
                                         names.append(member.global_name)
                         
-                        await ctx.send("__Good luck, and Have fun!__\n"+'\n'.join(names)+"\n"+chooseFaceFromCategory(bot,"happy"),delete_after=self.bot.startTimers[ctx.author.voice.channel.category.name[-2]])
+                        await ctx.send("__Good luck, and Have fun!__\n"+'\n'.join(names)+"\n"+chooseFaceFromCategory(self.bot,"happy"),delete_after=self.bot.startTimers[ctx.author.voice.channel.category.name[-2]])
                     else:
                         await ctx.reply("There is already an active timer in this voice channel category.")
             else:
                 await ctx.reply("You don't have permission! >:)",delete_after=10)
               
-    @bot.command()
-    async def end(ctx):
+    @commands.command()
+    async def end(self,ctx):
         senderID=ctx.author.id
-        if ctx.channel.id==BOTS_CHANNEL_ID:
-            if senderID==ME or any(role.id == BOT_ROLE for role in ctx.author.roles):
+        if ctx.channel.id==self.BOTS_CHANNEL_ID:
+            if senderID==self.ME or any(role.id == self.BOT_ROLE for role in ctx.author.roles):
                 if ctx.author.voice==None:
                     await ctx.reply("You must be in a voice channel so I know which timer to end.")
                 else:
@@ -85,11 +89,11 @@ class Timer(commands.Cog):
                         self.bot.timers[ctx.author.voice.channel.category.name[-2]]["time"]=time.time()-1
                         await ctx.reply("Timer stoped.")
     
-    @bot.command()
-    async def endit(ctx):
+    @commands.command()
+    async def endit(self,ctx):
         senderID=ctx.author.id
-        if ctx.channel.id==BOTS_CHANNEL_ID:
-            if senderID==ME or any(role.id == BOT_ROLE for role in ctx.author.roles):
+        if ctx.channel.id==self.BOTS_CHANNEL_ID:
+            if senderID==self.ME or any(role.id == self.BOT_ROLE for role in ctx.author.roles):
                 if ctx.author.voice==None:
                     await ctx.reply("You must be in a voice channel so I know which timer to end.")
                 else:
@@ -97,33 +101,33 @@ class Timer(commands.Cog):
                         self.bot.timers[ctx.author.voice.channel.category.name[-2]]["time"]=None
                         await ctx.reply("Timer stoped. Moving noone.")
     
-    @bot.command()
-    async def settimer(ctx,x:float):
+    @commands.command()
+    async def settimer(self,ctx,x:float):
         senderID=ctx.author.id
-        if ctx.channel.id==BOTS_CHANNEL_ID:
-            if senderID==ME or any(role.id == BOT_ROLE for role in ctx.author.roles):
+        if ctx.channel.id==self.BOTS_CHANNEL_ID:
+            if senderID==self.ME or any(role.id == self.BOT_ROLE for role in ctx.author.roles):
                 if ctx.author.voice==None:
                     await ctx.reply("You must be in a voice channel to change a timer lenght.")
                 else:
                     self.bot.startTimers[ctx.author.voice.channel.category.name[-2]]=x*60
                     await ctx.reply("Starting time set to "+str(x)+" minutes.")
                 
-    @bot.command()
-    async def gettimer(ctx):
+    @commands.command()
+    async def gettimer(self,ctx):
         senderID=ctx.author.id
-        if ctx.channel.id==BOTS_CHANNEL_ID:
-            if senderID==ME or any(role.id == BOT_ROLE for role in ctx.author.roles):
+        if ctx.channel.id==self.BOTS_CHANNEL_ID:
+            if senderID==self.ME or any(role.id == self.BOT_ROLE for role in ctx.author.roles):
                 if ctx.author.voice==None:
                     await ctx.reply("You must be in a voice channel to view a timer lenght.")
                 else:
                     await ctx.reply("The timer is set to "+str(self.bot.startTimers[ctx.author.voice.channel.category.name[-2]]/60)+" minutes.")
                   
     
-    @bot.command()
-    async def remaining(ctx):
-        if ctx.channel.id==BOTS_CHANNEL_ID:
+    @commands.command()
+    async def remaining(self,ctx):
+        if ctx.channel.id==self.BOTS_CHANNEL_ID:
             senderID=ctx.author.id
-            if senderID==ME or any(role.id == BOT_ROLE for role in ctx.author.roles):
+            if senderID==self.ME or any(role.id == self.BOT_ROLE for role in ctx.author.roles):
                 if ctx.author.voice==None:
                     await ctx.reply("You must be in a voice channel to view a timer.")
                 else:
@@ -133,4 +137,4 @@ class Timer(commands.Cog):
                         await ctx.reply("Timer is not active.")
 
 async def setup(bot):
-    await bot.add_cog(Hiddens(bot))
+    await bot.add_cog(Timer(bot))

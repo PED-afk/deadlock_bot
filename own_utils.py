@@ -9,3 +9,10 @@ def chooseFaceFromCategory(bot,category:str):
         faces=["(face category not found)"]
     r=random.randint(0,len(faces)-1)
     return faces[r]
+
+
+def activeTimerExists(bot):
+    for i, (timerName,timerData) in enumerate(bot.timers.items()):
+        if timerData["time"]!=None:
+            return True
+    return False

@@ -611,12 +611,6 @@ def loadItemsProper(items):
         newItems.append(Item(curItemParts[0],int(curItemParts[1]),curItemParts[2]))
     return newItems
 
-def activeTimerExists():
-    for i, (timerName,timerData) in enumerate(bot.timers.items()):
-        if timerData["time"]!=None:
-            return True
-    return False
-
 
 @bot.event
 async def on_ready():
@@ -1330,8 +1324,9 @@ bot.items=loadItemsProper(load_txt(bot.items_file))
 bot.map_graph=load_json(bot.map_graph_file)
 
 bot.ranks=load_json(bot.ranks_file)
-
 bot.botchannel=BOTS_CHANNEL_ID
+bot.me=ME
+bot.bot_role=BOT_ROLE
 
 #test
 print("Opus:", discord.opus.is_loaded())
