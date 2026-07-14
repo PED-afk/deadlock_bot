@@ -19,7 +19,7 @@ class Power(commands.Cog):
         if ctx.channel.id==BOTS_CHANNEL_ID:
             me=await self.bot.fetch_user(ME)
             if senderID==ME:
-                if activeTimerExists():
+                if activeTimerExists(self.bot):
                     ctx.reply("Sorry, I can't shutdown now, there is at least 1 active timer.")
                 else:
                     if ctx.guild.voice_client:
@@ -37,7 +37,7 @@ class Power(commands.Cog):
         senderID=ctx.author.id
         if ctx.channel.id==BOTS_CHANNEL_ID:
             if senderID==ME or any(role.id==BOT_ROLE for role in ctx.author.roles):
-                if activeTimerExists():
+                if activeTimerExists(self.bot):
                     ctx.reply("Sorry, I restart now, there is at least 1 active timer.")
                 else:
                     if ctx.guild.voice_client:
@@ -54,7 +54,7 @@ class Power(commands.Cog):
         senderID=ctx.author.id
         if ctx.channel.id==BOTS_CHANNEL_ID:
             if senderID==ME or any(role.id==BOT_ROLE for role in ctx.author.roles):
-                if activeTimerExists():
+                if activeTimerExists(self.bot):
                     await ctx.reply("Sorry, I can't go to sleep now, there is at least 1 active timer.")
                 else:
                     if ctx.guild.voice_client:
