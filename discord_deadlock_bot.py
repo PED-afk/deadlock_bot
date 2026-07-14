@@ -20,6 +20,7 @@ neither does anything else other than open the file on the filepath and load(/sa
 from own_utils import chooseFaceFromCategory
 from pi_specific import getTemp, ramUse, uptime, usedSpace, getAll
 from dc_ids import ME, BOT_ROLE, BOT_DEBUG_CHANNEL, BOTS_CHANNEL_ID
+from debug import printLog
 
 class Item:
     def __init__(self,type:str,tier:int,name:str):
@@ -196,7 +197,7 @@ class runHome(discord.ui.View):
             self.where=nexts[random.randint(0,len(nexts)-1)]
             self.nextWheres.append(self.where)
             self.nextWheres.append(self.where)
-            print(self.where)
+            printLog("run home",self.where)
         else:
             nexts=bot.map_graph[self.where]["nexts"].copy()
             for i in range(2):
@@ -258,7 +259,6 @@ class runHome(discord.ui.View):
                     extraMessage[i]="You took "+str(damage)+" damage from the enemy guardian."
                     doAfterInteract[i]="damage "+str(damage)
                 elif "walker" in i:
-                    print("aaaA: "+i)
                     damage=125*random.randint(1,4)
                     extraMessage[i]="You took "+str(damage)+" damage from the enemy walker."
                     doAfterInteract[i]="damage "+str(damage)
@@ -300,8 +300,6 @@ class runHome(discord.ui.View):
                 doAfterInteract[i]=None
             if i not in extraMessage:
                 extraMessage[i]=None
-
-        print(doAfterInteract,"\n",extraMessage,"\n____")
 
         global nextpos
         nextpos=None
@@ -444,6 +442,7 @@ class MyBot(commands.Bot):
     async def setup_hook(self):
         await self.load_extension("cogs.hiddens")
         await self.load_extension("cogs.timer")
+        await self.load_extension("cogs.system")
 
 #bot=commands.Bot(command_prefix='!', intents=intents)
 bot=MyBot(command_prefix='!', intents=intents)
@@ -607,13 +606,13 @@ def loadItemsProper(items):
 
 @bot.event
 async def on_ready():
-    print(f"Bot connected as {bot.user}")
+    printLog("on ready",f"Bot connected as {bot.user}")
     #cleanup
     async for msg in bot.get_channel(BOTS_CHANNEL_ID).history(limit=None):
         try:
             await msg.delete()
         except discord.Forbidden:
-            print("I don't have permission to delete this messages.")
+            printLog("error","I don't have permission to delete this messages.")
             break
         except discord.HTTPException:
             pass
@@ -722,7 +721,6 @@ async def minigames(ctx, game:str=None):
             await ctx.reply('\n'.join(games))
         elif game=="find_Rem":
             view=FindRem(ctx)
-            print(view.buttonTexts)
             await ctx.reply("Find the enemy Rem:", view=view)
         elif game=="run_home_not_done":
             if bot.user_data[str(senderID)]["main"]=="None":
@@ -1016,7 +1014,6 @@ async def my_data(ctx):
     if ctx.channel.id==BOTS_CHANNEL_ID:
         message=""
         for i, (key,data) in enumerate(bot.user_data[str(senderID)].items()):
-            print(key, data)
             if key=="hidden":
                 continue
             if key=="items" and len(data)==0:
@@ -1322,9 +1319,16 @@ bot.botchannel=BOTS_CHANNEL_ID
 bot.me=ME
 bot.bot_role=BOT_ROLE
 
-#test
-print("Opus:", discord.opus.is_loaded())
-#will remove it later
+
+try:
+    lindistr=platform.freedesktop_os_release()
+except:
+    lindistr=None
+if lindistr:
+    if not discord.opus.is_loaded():
+        printLog("log","Opus not loaded, trying to load it...")
+        discord.opus.load_opus("libopus.so.0")
+    printLog("log","Opus:", discord.opus.is_loaded())
 
 load_dotenv()
 bot.run(os.getenv("DISCORD_TOKEN"))

@@ -8,6 +8,10 @@ from pathlib import Path
 import platform
 import shutil
 
+from debug import setupFolders
+
+setupFolders()
+
 process = None
 shouldrestart=1
 fromrestart=0
