@@ -13,11 +13,10 @@ from dc_ids import ME,BOT_ROLE,BOTS_CHANNEL_ID
 class Hiddens(commands.Cog):
     def __init__(self,bot):
         self.bot=bot
-        self.BOTS_CHANNEL_ID=BOTS_CHANNEL_ID
 
     async def play_sound(self,ctx,path:str):
         senderID=ctx.author.id
-        if ctx.channel.id==self.BOTS_CHANNEL_ID:
+        if ctx.channel.id==BOTS_CHANNEL_ID:
             def after_playing(error):
                 if error:
                     print(f"Playback error: {error}")
@@ -53,12 +52,12 @@ class Hiddens(commands.Cog):
 
     @commands.command()
     async def cogTest(self,ctx):
-        if ctx.channel.id==self.BOTS_CHANNEL_ID:
+        if ctx.channel.id==BOTS_CHANNEL_ID:
             await ctx.reply("cog works")
 
     @commands.command()
     async def pat(self,ctx):
-        if ctx.channel.id==self.BOTS_CHANNEL_ID:
+        if ctx.channel.id==BOTS_CHANNEL_ID:
             await ctx.reply(chooseFaceFromCategory(self.bot,"pat"))
 
     @commands.command()

@@ -12,14 +12,13 @@ from dc_ids import ME,BOT_ROLE,BOTS_CHANNEL_ID
 class Power(commands.Cog):
     def __init__(self,bot):
         self.bot=bot
-        self.BOTS_CHANNEL_ID=BOTS_CHANNEL_ID
 
     @commands.command()
     async def shutdown(self,ctx):
         senderID=ctx.author.id
-        if ctx.channel.id==self.BOTS_CHANNEL_ID:
-            me=await self.bot.fetch_user(self.ME)
-            if senderID==self.ME:
+        if ctx.channel.id==BOTS_CHANNEL_ID:
+            me=await self.bot.fetch_user(ME)
+            if senderID==ME:
                 if activeTimerExists():
                     ctx.reply("Sorry, I can't shutdown now, there is at least 1 active timer.")
                 else:
@@ -30,14 +29,14 @@ class Power(commands.Cog):
                     with open(self.bot.restart_file,"w") as f:
                         f.write("0")
                     await self.bot.close()
-            elif any(role.id == self.BOT_ROLE for role in ctx.author.roles):
+            elif any(role.id==BOT_ROLE for role in ctx.author.roles):
                 await ctx.send("Sorry only `"+str(me)+"` can shut me down.\n(Because then he knows I'm not running.)",delete_after=10)
                 
     @commands.command(aliases=["reload"])
     async def restart(self,ctx,save:str="save"):
         senderID=ctx.author.id
-        if ctx.channel.id==self.BOTS_CHANNEL_ID:
-            if senderID==self.ME or any(role.id == self.BOT_ROLE for role in ctx.author.roles):
+        if ctx.channel.id==BOTS_CHANNEL_ID:
+            if senderID==ME or any(role.id==BOT_ROLE for role in ctx.author.roles):
                 if activeTimerExists():
                     ctx.reply("Sorry, I restart now, there is at least 1 active timer.")
                 else:
@@ -53,8 +52,8 @@ class Power(commands.Cog):
     @commands.command()
     async def sleep(self,ctx,save:str="save"):
         senderID=ctx.author.id
-        if ctx.channel.id==self.BOTS_CHANNEL_ID:
-            if senderID==self.ME or any(role.id == self.BOT_ROLE for role in ctx.author.roles):
+        if ctx.channel.id==BOTS_CHANNEL_ID:
+            if senderID==ME or any(role.id==BOT_ROLE for role in ctx.author.roles):
                 if activeTimerExists():
                     await ctx.reply("Sorry, I can't go to sleep now, there is at least 1 active timer.")
                 else:
