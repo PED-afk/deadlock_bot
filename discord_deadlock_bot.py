@@ -607,6 +607,8 @@ def loadItemsProper(items):
 @bot.event
 async def on_ready():
     printLog("on ready",f"Bot connected as {bot.user}")
+    await bot.load_extension("priority_cog")
+    await bot.tree.sync()
     #cleanup
     async for msg in bot.get_channel(BOTS_CHANNEL_ID).history(limit=None):
         try:
