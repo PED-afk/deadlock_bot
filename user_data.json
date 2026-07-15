@@ -21,15 +21,15 @@
         "steamID3": "None",
         "steamID64": "None",
         "money": {
-            "unsecured": 0,
+            "unsecured": 101,
             "secured": 0
         },
         "items": [],
         "lvl": 1,
-        "XP": 0,
+        "XP": 2,
         "wins": 0,
         "hidden": {
-            "messageCD": 0
+            "messageCD": 1784139347.123488
         },
         "rank": "None"
     },
