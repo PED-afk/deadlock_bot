@@ -709,12 +709,25 @@ async def test(ctx):
     senderID=ctx.author.id
     if ctx.channel.id==BOTS_CHANNEL_ID:
         if senderID==ME or any(role.id == BOT_ROLE for role in ctx.author.roles):
-            #await ctx.send("TEST:\ngit wurks.\n.=.",delete_after=10)
             await ctx.send("TEST:\nNothing to test.\n.=.",delete_after=10)
             view=Button()
             view=MultButton(ctx.author)
             view=FindRem(ctx)
             #await ctx.send("Buttons:", view=view)
+
+@bot.command()
+async def check_cogs(ctx, cog_name):
+    senderID=ctx.author.id
+    if ctx.channel.id==BOTS_CHANNEL_ID:
+        try:
+            bot.load_extension(f"cogs.{cog_name}")
+        except commands.ExtensionAlreadyLoaded:
+            await ctx.send("Cog is loaded")
+        except commands.ExtensionNotFound:
+            await ctx.send("Cog not found")
+        else:
+            await ctx.send("Cog is unloaded")
+            bot.unload_extension(f"cogs.{cog_name}")
 
 @bot.command()
 async def minigames(ctx, game:str=None):
