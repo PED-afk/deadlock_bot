@@ -443,6 +443,7 @@ class MyBot(commands.Bot):
         await self.load_extension("cogs.hiddens")
         await self.load_extension("cogs.timer")
         await self.load_extension("cogs.power")
+        await self.load_extension("cogs.priority_cog")
 
 #bot=commands.Bot(command_prefix='!', intents=intents)
 bot=MyBot(command_prefix='!', intents=intents)
@@ -607,8 +608,12 @@ def loadItemsProper(items):
 @bot.event
 async def on_ready():
     printLog("on ready",f"Bot connected as {bot.user}")
+    """
     await bot.load_extension("priority_cog")
     await bot.tree.sync()
+    
+    this is done above in around line 441 in the MyBot class
+    """
     #cleanup
     async for msg in bot.get_channel(BOTS_CHANNEL_ID).history(limit=None):
         try:
