@@ -70,6 +70,7 @@ class Power(commands.Cog):
                     
                     await ctx.reply("Going to sleep\nI will be unavailable between "+pauseStart+" and "+pauseEnd+" CEST\n"+chooseFaceFromCategory(self.bot,"sleep"),delete_after=20)
                     await self.bot.close()
+
 async def setup(bot):
     await bot.add_cog(Power(bot))
 
