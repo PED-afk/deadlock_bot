@@ -1,6 +1,8 @@
 
 import random
+from discord.ext import commands
 
+from dc_ids import ME, BOT_ROLE, BOTS_CHANNEL_ID
 
 def chooseFaceFromCategory(bot,category:str):
     if category in bot.faces:
@@ -11,8 +13,28 @@ def chooseFaceFromCategory(bot,category:str):
     return faces[r]
 
 
-def activeTimerExists(bot):
+def activeTimerExists(bot:commands.Bot):
     for i, (timerName,timerData) in enumerate(bot.timers.items()):
         if timerData["time"]!=None:
             return True
     return False
+
+def canUseCommand(ctx:commands.Context, level:int=2):
+    """
+    
+    check if user can use this command\n
+    <level>\n
+    0: user id must match ME (and must be in the correct channel)\n
+    1: must have the "can use the bot" role (and must be in the correct channel)\n
+    2: just check for correct channel\n
+    """
+    
+    if ctx.channel.id!=BOTS_CHANNEL_ID:
+        return False
+
+    if level==0 and ctx.author.id!=ME:
+        return False
+    elif level==1 and not any(role.id==BOT_ROLE for role in ctx.author.roles):
+        return False
+
+    return True

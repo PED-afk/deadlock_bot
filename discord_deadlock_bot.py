@@ -15,6 +15,7 @@ load_json and save_json loads from and saves to json files
 
 neither does anything else other than open the file on the filepath and load the data from it
 """
+from dc_ids import ME, BOT_ROLE, BOTS_CHANNEL_ID
 
 class Item:
     def __init__(self,type:str,tier:int,name:str):
@@ -427,15 +428,6 @@ class runHome(discord.ui.View):
             userID=str(self.ctx.author.id)
             bot.user_data[userID]["money"]["secured"]+=bot.user_data[userID]["money"]["unsecured"]
             bot.user_data[userID]["money"]["unsecured"]=0
-
-
-
-#users
-ME=616710497378631709
-BOT_ROLE=1516075439347470437
-
-#channel(s)
-BOTS_CHANNEL_ID = 1515333724269445270
 
 
 #Set up the bot with a command prefix

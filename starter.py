@@ -8,7 +8,7 @@ from pathlib import Path
 import platform
 import shutil
 
-from debug import setupFolders
+from debug import setupFolders, writeLog, printLog
 
 setupFolders()
 
@@ -86,6 +86,11 @@ def update():
 
 while True:
     if process is None or process.poll() is not None:
+        if fromrestart:
+            stdout, stderr = process.communicate()
+            if process.returncode!=0:
+                printLog("starter","Bot crashed!")
+                printLog("error",stderr) #Python traceback
         with open(pause_file,"r") as f:
             pauseStart=int(f.readline().strip())
             pauseEnd=int(f.readline().strip())
@@ -116,5 +121,6 @@ while True:
                     exit()
                 else:
                     subprocess.run(["sudo","shutdown","-h","now"])
+
 
     time.sleep(1)

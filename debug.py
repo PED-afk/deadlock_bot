@@ -5,6 +5,10 @@ import datetime
 import os
 #import traceback
 from pathlib import Path
+import shutil
+from discord.ext import commands
+
+from dc_ids import BOT_DEBUG_CHANNEL
 
 class Colors:
     """ ANSI color codes """
@@ -49,21 +53,14 @@ def setupFolders():
 
 def writeLog(type:str, content:any, fileName:str, addNumber:bool=True, addDate:bool=True, writeType:str="w", fromFile:str="UNKNOWN", fromFunc:str="UNKNOWN"):
     """
-        type: "crash"/"error", "log" ("log_e" is not for you)
-
-        content: what to write into the file (may be anything, if not supported: will be)
-
-        fileName: the name of the file !!!Without the extention!!!
-
-        addNumber: add 0,1,2,3,.. to end of file (can only write; can't append) (can only add number or date)
-
-        addDate: add date and time at end of file (can only add number or date)
-
-        writeType: "w", "a"
-
-        fromFile: please include file name where this log originates from, for easier trace
-
-        fromFunc: please include function name where this log originates from, for easier trace
+        type: "crash"/"error", "log" ("log_e" is not for you)\n
+        content: what to write into the file (may be anything, if not supported: will be)\n
+        fileName: the name of the file !!!Without the extention!!!\n
+        addNumber: add 0,1,2,3,.. to end of file (can only write; can't append) (can only add number or date)\n
+        addDate: add date and time at end of file (can only add number or date)\n
+        writeType: "w", "a"\n
+        fromFile: please include file name where this log originates from, for easier trace\n
+        fromFunc: please include function name where this log originates from, for easier trace\n
     """
     ROOT_PATH=os.path.dirname(os.path.abspath(__file__))
     folderPath=ROOT_PATH
@@ -110,7 +107,6 @@ def printLog(type:str, content:any, colorAll:bool=False):
     """
 
         type can also be the function the print is from
-    
     """
     extra=''
     if type=="warning" or type=="error":
@@ -126,6 +122,58 @@ def printLog(type:str, content:any, colorAll:bool=False):
     extra+=Colors.BOLD
     print(extra+f"[{type.upper()}]"+(Colors.END if not colorAll else "")+f"  {content}"+Colors.END,flush=True)
 
+def printLogToDc(bot:commands.Bot,type:str, content:any):
+    """
 
+        type can also be the function the print is from
+    """
+    
+    bot.get_channel(BOT_DEBUG_CHANNEL).send(f"[{type.upper()}]  {content}")
+
+def readback(what:str="all",deleteAfter:bool=False)->str:
+    """
+
+    gives back a str of all the file contents in the specified debug folder(s)
+    <what>:
+    all: errors, logs and loging errors
+    error
+    log
+    log_error
+    """
+
+    contents=""
+    ROOT_PATH=os.path.dirname(os.path.abspath(__file__))
+    
+    if what in ["all","error"]:
+        all_contents+="------------\nErrors/crashes:\n"
+        for file in sorted(ROOT_PATH+"\\debug\\crash_reports".glob("*.txt")):
+            all_contents+=f"{file.name}\n"+file.read_text(encoding="utf-8")+"\n\n"
+
+    if what in ["all","log"]:
+        all_contents+="------------\nLogs/Debug:\n"
+        for file in sorted(ROOT_PATH+"\\debug\\logs".glob("*.txt")):
+            all_contents+=f"{file.name}\n"+file.read_text(encoding="utf-8")+"\n\n"
+
+    if what in ["all","log"]:
+        all_contents+="------------\nErrors during logging:\n"
+        for file in sorted(ROOT_PATH+"\\debug\\logs\\log_errors".glob("*.txt")):
+            all_contents+=f"{file.name}\n"+file.read_text(encoding="utf-8")+"\n\n"
+    
+    if deleteAfter:
+        clean(what)
+    
+    return contents
+
+def clean(what):
+    """
+
+    cleans out the specified folder in the debug folder\n
+    <what>:\n
+    all: errors, logs and loging errors\n
+    error\n
+    log\n
+    log_error\n
+    """
+    pass
 
 setupFolders()
