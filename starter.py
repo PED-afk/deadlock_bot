@@ -8,9 +8,10 @@ from pathlib import Path
 import platform
 import shutil
 
-from debug import setupFolders, writeLog, printLog
+from debug import setupFolders, writeLog, printLog, clean, readback
 
 setupFolders()
+clean()
 
 process = None
 shouldrestart=1
@@ -84,13 +85,9 @@ def update():
         except Exception as e:
             print(f"Update error {e}",flush=True)
 
+
 while True:
     if process is None or process.poll() is not None:
-        if fromrestart:
-            stdout, stderr = process.communicate()
-            if process.returncode!=0:
-                printLog("starter","Bot crashed!")
-                printLog("error",stderr) #Python traceback
         with open(pause_file,"r") as f:
             pauseStart=int(f.readline().strip())
             pauseEnd=int(f.readline().strip())
@@ -109,11 +106,20 @@ while True:
                     f.write(str(fromrestart))
                 
                 if lindistr==None:
-                    process = subprocess.Popen(["python", bot_file])
+                    process = subprocess.Popen(["python", bot_file],stderr=subprocess.PIPE,text=True)
                 else:
                     update()
                     install_requirements()
-                    process = subprocess.Popen(["python3", bot_file])
+                    process = subprocess.Popen(["python3", bot_file],stderr=subprocess.PIPE,text=True)
+
+
+                stdout, stderr = process.communicate()
+                printLog("debug",stdout)
+                printLog("debug",stderr)
+                if process.returncode != 0:
+                    printLog("starter","Bot crashed!")
+                    printLog("error",stderr) #Python traceback
+                    writeLog("error",stderr,"crash",False,True,"w","starter.py")
 
                 fromrestart=1
             else:

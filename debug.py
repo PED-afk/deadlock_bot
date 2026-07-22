@@ -12,43 +12,43 @@ from dc_ids import BOT_DEBUG_CHANNEL
 
 class Colors:
     """ ANSI color codes """
-    BLACK = "\033[0;30m"
-    RED = "\033[0;31m"
-    GREEN = "\033[0;32m"
-    BROWN = "\033[0;33m"
-    BLUE = "\033[0;34m"
-    PURPLE = "\033[0;35m"
-    CYAN = "\033[0;36m"
-    LIGHT_GRAY = "\033[0;37m"
-    DARK_GRAY = "\033[1;30m"
-    LIGHT_RED = "\033[1;31m"
-    LIGHT_GREEN = "\033[1;32m"
-    YELLOW = "\033[1;33m"
-    LIGHT_BLUE = "\033[1;34m"
-    LIGHT_PURPLE = "\033[1;35m"
-    LIGHT_CYAN = "\033[1;36m"
-    LIGHT_WHITE = "\033[1;37m"
+    BLACK="\033[0;30m"
+    RED="\033[0;31m"
+    GREEN="\033[0;32m"
+    BROWN="\033[0;33m"
+    BLUE="\033[0;34m"
+    PURPLE="\033[0;35m"
+    CYAN="\033[0;36m"
+    LIGHT_GRAY="\033[0;37m"
+    DARK_GRAY="\033[1;30m"
+    LIGHT_RED="\033[1;31m"
+    LIGHT_GREEN="\033[1;32m"
+    YELLOW="\033[1;33m"
+    LIGHT_BLUE="\033[1;34m"
+    LIGHT_PURPLE="\033[1;35m"
+    LIGHT_CYAN="\033[1;36m"
+    LIGHT_WHITE="\033[1;37m"
 
-    BOLD = "\033[1m"
-    FAINT = "\033[2m"
-    ITALIC = "\033[3m"
-    UNDERLINE = "\033[4m"
-    BLINK = "\033[5m"
-    NEGATIVE = "\033[7m"
-    CROSSED = "\033[9m"
+    BOLD="\033[1m"
+    FAINT="\033[2m"
+    ITALIC="\033[3m"
+    UNDERLINE="\033[4m"
+    BLINK="\033[5m"
+    NEGATIVE="\033[7m"
+    CROSSED="\033[9m"
 
-    END = "\033[0m"
+    END="\033[0m"
 
 
 def setupFolders():
     ROOT_PATH=os.path.dirname(os.path.abspath(__file__))
-    folder = Path(ROOT_PATH+"\\debug")
+    folder=Path(ROOT_PATH+"\\debug")
     folder.mkdir(parents=True, exist_ok=True)
-    folder = Path(ROOT_PATH+"\\debug\\crash_reports")
+    folder=Path(ROOT_PATH+"\\debug\\crash_reports")
     folder.mkdir(parents=True, exist_ok=True)
-    folder = Path(ROOT_PATH+"\\debug\\logs")
+    folder=Path(ROOT_PATH+"\\debug\\logs")
     folder.mkdir(parents=True, exist_ok=True)
-    folder = Path(ROOT_PATH+"\\debug\\logs\\log_errors")
+    folder=Path(ROOT_PATH+"\\debug\\logs\\log_errors")
     folder.mkdir(parents=True, exist_ok=True)
 
 def writeLog(type:str, content:any, fileName:str, addNumber:bool=True, addDate:bool=True, writeType:str="w", fromFile:str="UNKNOWN", fromFunc:str="UNKNOWN"):
@@ -62,6 +62,8 @@ def writeLog(type:str, content:any, fileName:str, addNumber:bool=True, addDate:b
         fromFile: please include file name where this log originates from, for easier trace\n
         fromFunc: please include function name where this log originates from, for easier trace\n
     """
+    if content==None:
+        return
     ROOT_PATH=os.path.dirname(os.path.abspath(__file__))
     folderPath=ROOT_PATH
     fileExtention=".txt"
@@ -80,12 +82,12 @@ def writeLog(type:str, content:any, fileName:str, addNumber:bool=True, addDate:b
 
 
     if addNumber:
-        folder = Path(folderPath)
+        folder=Path(folderPath)
         folder.mkdir(exist_ok=True)
-        i = 0
+        i=0
         while True:
-            filename = f"{fileName}{i}.{fileExtention}"
-            filepath = folder / filename
+            filename=f"{fileName}{i}.{fileExtention}"
+            filepath=folder / filename
             if not filepath.exists():
                 if isinstance(content,list):
                     filepath.write_text("\n".join(str(i) for i in content)+"\nFrom file: "+fromFile+"; From function: "+fromFunc)
@@ -141,30 +143,33 @@ def readback(what:str="all",deleteAfter:bool=False)->str:
     log_error
     """
 
-    contents=""
+    if what not in ["all","error","log","log_error"]:
+        return f"Bad argument: {what}"
+
+    all_contents=""
     ROOT_PATH=os.path.dirname(os.path.abspath(__file__))
     
     if what in ["all","error"]:
         all_contents+="------------\nErrors/crashes:\n"
-        for file in sorted(ROOT_PATH+"\\debug\\crash_reports".glob("*.txt")):
+        for file in sorted(Path(ROOT_PATH+"\\debug\\crash_reports").glob("*.txt")):
             all_contents+=f"{file.name}\n"+file.read_text(encoding="utf-8")+"\n\n"
 
     if what in ["all","log"]:
         all_contents+="------------\nLogs/Debug:\n"
-        for file in sorted(ROOT_PATH+"\\debug\\logs".glob("*.txt")):
+        for file in sorted(Path(ROOT_PATH+"\\debug\\logs").glob("*.txt")):
             all_contents+=f"{file.name}\n"+file.read_text(encoding="utf-8")+"\n\n"
 
     if what in ["all","log"]:
         all_contents+="------------\nErrors during logging:\n"
-        for file in sorted(ROOT_PATH+"\\debug\\logs\\log_errors".glob("*.txt")):
+        for file in sorted(Path(ROOT_PATH+"\\debug\\logs\\log_errors").glob("*.txt")):
             all_contents+=f"{file.name}\n"+file.read_text(encoding="utf-8")+"\n\n"
     
     if deleteAfter:
         clean(what)
     
-    return contents
+    return all_contents
 
-def clean(what):
+def clean(what:str="all"):
     """
 
     cleans out the specified folder in the debug folder\n
@@ -174,6 +179,25 @@ def clean(what):
     log\n
     log_error\n
     """
-    pass
+    ROOT_PATH=os.path.dirname(os.path.abspath(__file__))
+
+    if what=="all":
+        folder_path=Path(ROOT_PATH+"\\debug")
+        if folder_path.exists():
+            shutil.rmtree(folder_path)
+        return
+    
+    if what=="error":
+        folder_path=Path(ROOT_PATH+"\\debug\\crash_reports")
+        if folder_path.exists():
+            shutil.rmtree(folder_path)
+    elif what=="log":
+        folder_path=Path(ROOT_PATH+"\\debug\\logs")
+        if folder_path.exists():
+            shutil.rmtree(folder_path)
+    elif what=="log_error":
+        folder_path=Path(ROOT_PATH+"\\debug\\logs\\log_errors")
+        if folder_path.exists():
+            shutil.rmtree(folder_path)
 
 setupFolders()
