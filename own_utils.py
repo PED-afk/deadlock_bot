@@ -30,9 +30,10 @@ async def canUseCommand(ctx:commands.Context, level:int=2, inVoice:bool=False):
     <inVoice>\n
     If True, user must be in a voice channel
     """
-    
-    if ctx.channel.id!=BOTS_CHANNEL_ID:
-        return False
+
+    #obsolete but later might return
+    #if ctx.channel.id!=BOTS_CHANNEL_ID:
+        #return False
 
     if level==0 and ctx.author.id!=ME:
         await ctx.reply("You do not have permission to use this command.")
