@@ -263,8 +263,9 @@ async def on_message(message):
                 if bot.user_data[idSTR]["XP"]>=100+2**(level/4)+level:
                     bot.user_data[idSTR]["XP"]-=100+2**(level/4)+level
                     bot.user_data[idSTR]["lvl"]+=1
-    
-    await bot.process_commands(message)
+
+    if ctx.channel.id!=BOTS_CHANNEL_ID:
+        await bot.process_commands(message)
 
 
 
