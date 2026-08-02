@@ -33,3 +33,8 @@ HERO_ID_MAP = {
     62: "Nano", 63: "Fathom", 64: "Slork", 70: "Viscous", 71: "Yamato",
     80: "Kali", 81: "The Doorman",
 }
+
+
+APP_NAME="FUNLOCK_BOT"
+
+

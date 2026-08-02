@@ -149,13 +149,14 @@ class Unorganized(commands.Cog):
     async def status(self,ctx):
         senderID=ctx.author.id
         if ctx.channel.id==BOTS_CHANNEL_ID:
-            if senderID==ME:
-                face=chooseFaceFromCategory(self.bot,"annoyed")
-                l="."
-                for i in face:
-                    l+=" "
-                l+="(Why do you want to know?)"
-                await ctx.reply(l+"\n"+face)
+            if random.randint(0,9)==0:
+                if senderID==ME:
+                    face=chooseFaceFromCategory(self.bot,"annoyed")
+                    l="."
+                    for i in face:
+                        l+=" "
+                    l+="(Why do you want to know?)"
+                    await ctx.reply(l+"\n"+face)
             winlin=platform.system()
             cpu=platform.machine()
             try:
@@ -172,7 +173,7 @@ class Unorganized(commands.Cog):
             extra=""
             if hours>2:
                 extra="\nI'm tired. "+chooseFaceFromCategory(self.bot,"tired")
-            await ctx.reply("Bot version: "+self.bot.version+"\nOS:"+winlin+"\nHardware I'm living on:"+cpu+"\nI've been running for: "+str(hours)+" hours, "+str(minutes)+" minutes and "+str(seconds)+" seconds."+extra)
+            await ctx.reply("Bot version: "+self.bot.version+self.bot.versionSTR+"\nOS:"+winlin+"\nHardware I'm living on:"+cpu+"\nI've been running for: "+str(hours)+" hours, "+str(minutes)+" minutes and "+str(seconds)+" seconds."+extra)
             if lindistr!=None:
                 await ctx.send("Fun fact: Most likely I'm running on a rasberry pi 5. :D\nLinux dist: "+lindistr["PRETTY_NAME"],delete_after=30)
 

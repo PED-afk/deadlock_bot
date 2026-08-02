@@ -1,4 +1,14 @@
+
+
+
+from constants import APP_NAME
+
+from pathlib import Path
+from platformdirs import user_data_dir
 import json
+
+
+
 
 def save_json(path:str,data:dict):
     with open(path,"w", encoding="utf-8") as f:
@@ -7,6 +17,27 @@ def save_json(path:str,data:dict):
 def load_json(filePath:str):
     with open(filePath,"r", encoding="utf-8") as f:
         return json.load(f)
+
+def deep_save_json(data:dict,this:str):
+    data_dir = Path(user_data_dir(APP_NAME))
+    data_dir.mkdir(parents=True, exist_ok=True)
+    file_path = data_dir / this+".json"
+    file_path.write_text(data, encoding="utf-8")
+
+def deep_load_json(this:str):
+    data_dir = Path(user_data_dir(APP_NAME))
+    file_path = data_dir / this+"json"
+
+    # Load
+    if file_path.exists():
+        data = json.loads(file_path.read_text(encoding="utf-8"))
+    else:
+        data = {}
+    return data
+
+
+
+    
 
 def load_txt(filePath:str):
     contents=[]

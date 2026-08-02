@@ -15,7 +15,7 @@ class Debug(commands.Cog):
         self.bot=bot
 
     @commands.command()
-    async def check_cogs(self, ctx, cog_name):
+    async def check_cog(self, ctx, cog_name):
         if canUseCommand(ctx):
             try:
                 await self.bot.load_extension(f"cogs.{cog_name}")
