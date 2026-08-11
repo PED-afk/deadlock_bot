@@ -8,7 +8,7 @@ from pathlib import Path
 import shutil
 from discord.ext import commands
 
-from dc_ids import BOT_DEBUG_CHANNEL
+from constants import BOT_DEBUG_CHANNEL, BASE
 
 class Colors:
     """ ANSI color codes """
@@ -41,7 +41,7 @@ class Colors:
 
 
 def setupFolders():
-    ROOT_PATH=os.path.dirname(os.path.abspath(__file__))
+    ROOT_PATH=str(BASE)
     folder=Path(ROOT_PATH+"\\debug")
     folder.mkdir(parents=True, exist_ok=True)
     folder=Path(ROOT_PATH+"\\debug\\crash_reports")
@@ -124,13 +124,13 @@ def printLog(type:str, content:any, colorAll:bool=False):
     extra+=Colors.BOLD
     print(extra+f"[{type.upper()}]"+(Colors.END if not colorAll else "")+f"  {content}"+Colors.END,flush=True)
 
-def printLogToDc(bot:commands.Bot,type:str, content:any):
+async def printLogToDc(bot:commands.Bot,type:str, content:str):
     """
 
         type can also be the function the print is from
     """
     
-    bot.get_channel(BOT_DEBUG_CHANNEL).send(f"[{type.upper()}]  {content}")
+    await bot.get_channel(BOT_DEBUG_CHANNEL).send(f"[{type.upper()}]  {content}")
 
 def readback(what:str="all",deleteAfter:bool=False)->str:
     """

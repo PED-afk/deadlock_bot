@@ -8,11 +8,12 @@ import random
 
 from own_utils import chooseFaceFromCategory, activeTimerExists, canUseCommand
 from data_manage import save_json, load_json, load_txt
-from dc_ids import ME,BOT_ROLE,BOTS_CHANNEL_ID
+from constants import ME, BOT_ROLE, BOTS_CHANNEL_ID
 
 from classes.button import Button, MultButton
 from classes.find_rem import FindRem
 from classes.run_home import runHome
+from classes.file_paths import BotPaths
 
 
 #there should be no commands here
@@ -262,7 +263,7 @@ class Unorganized(commands.Cog):
         senderID=ctx.author.id
         if ctx.channel.id==BOTS_CHANNEL_ID:
             if senderID==ME or any(role.id == BOT_ROLE for role in ctx.author.roles):
-                save_json(self.bot.user_data_path,self.bot.user_data)
+                save_json(BotPaths.user_data_path,self.bot.user_data)
                 await ctx.reply("Saving some stuff. "+chooseFaceFromCategory(self.bot,"concentrate"),delete_after=10)
 
     @commands.command()
@@ -279,7 +280,7 @@ class Unorganized(commands.Cog):
         if ctx.channel.id==BOTS_CHANNEL_ID:
             if senderID==ME:
                 self.bot.user_data={}
-                save_json(self.bot.user_data_path,{})
+                save_json(BotPaths.user_data_path,{})
         await ctx.reply("I forgor. Head empty...\n"+chooseFaceFromCategory(self.bot,"big_eyes"))
 
     @commands.command()

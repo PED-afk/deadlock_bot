@@ -2,9 +2,9 @@
 import random
 from discord.ext import commands
 
-from dc_ids import ME, BOT_ROLE, BOTS_CHANNEL_ID
+from constants import ME, BOT_ROLE, BOTS_CHANNEL_ID
 
-def chooseFaceFromCategory(bot,category:str):
+def chooseFaceFromCategory(bot:commands.Bot,category:str):
     if category in bot.faces:
         faces=bot.faces[category]
     else:

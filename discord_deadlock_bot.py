@@ -16,11 +16,12 @@ load_json and save_json loads from and saves to json files
 
 neither does anything else other than open the file on the filepath and load the data from it
 """
-from dc_ids import ME, BOT_ROLE, BOTS_CHANNEL_ID
 from own_utils import chooseFaceFromCategory
-from constants import HERO_ID_MAP, RANK_NAMES, RANK_COLORS, BASE
+from debug import printLog, printLogToDc
+from constants import HERO_ID_MAP, RANK_NAMES, RANK_COLORS, BASE, ME, BOT_ROLE, BOTS_CHANNEL_ID, MESSAGE_CD
 
 from classes.item import Item
+from classes.file_paths import BotPaths
 
 
 #Set up the bot with a command prefix
@@ -172,7 +173,8 @@ def loadItemsProper(items):
 
 @bot.event
 async def on_ready():
-    print(f"Bot connected as {bot.user}")
+    printLog("info",f"Bot connected as {bot.user}")
+    #await printLogToDc(bot,"debug","Bot started")
     """
     if "priority_cog" not in bot.extensions:
         await bot.load_extension("priority_cog")
@@ -194,7 +196,7 @@ async def on_ready():
     
     face=chooseFaceFromCategory(bot,"big_eyes")
 
-    with open(bot.hotboot_file,"r") as f:
+    with open(BotPaths.hotboot_file,"r") as f:
         if int(f.readline().strip())==0:
             await bot.get_channel(BOTS_CHANNEL_ID).send("I'm awake!\nGood morning!\n"+face)
         else:
@@ -264,7 +266,7 @@ async def on_message(message):
                     bot.user_data[idSTR]["XP"]-=100+2**(level/4)+level
                     bot.user_data[idSTR]["lvl"]+=1
 
-    if message.channel.id!=BOTS_CHANNEL_ID:
+    if message.channel.id==BOTS_CHANNEL_ID:
         await bot.process_commands(message)
 
 
@@ -405,39 +407,24 @@ async def tick():
 bot.startTimers={"A":11*60,"B":11*60}
 bot.timers={"A":None,"B":None}
 bot.bootTime=time.time()//1
-bot.version="0.6.4"
-bot.versionSTR="safer saves"
+bot.version="0.6.5"
+bot.versionSTR="centralized paths"
 
 
 
-bot.messageCD=60*60*0.1 #6 minutes
+bot.messageCD=MESSAGE_CD #6 minutes
 
-bot.hotboot_file = BASE / "hotBoot.txt"
-bot.restart_file = BASE / "restart.txt"
-bot.user_data_path = BASE / "user_data.json"
-bot.pause_file = BASE / "pauseTimes.txt"
+bot.faces=load_json(BotPaths.face_file)
+bot.user_data=load_json(BotPaths.user_data_path)
 
-bot.characters_file = BASE / "characters.txt"
-bot.characters_file_json = BASE / "characters.json"
-bot.items_file = BASE / "items.txt"
-bot.map_graph_file = BASE / "map_graph.json"
-
-bot.face_file = BASE / "faces.json"
-bot.ranks_file=BASE / "ranks.json"
-
-bot.sounds_folder=BASE / "sounds"
-
-bot.faces=load_json(bot.face_file)
-bot.user_data=load_json(bot.user_data_path)
-
-bot.characters=load_txt(bot.characters_file)
-bot.characters=load_json(bot.characters_file_json)
+bot.characters=load_txt(BotPaths.characters_file)
+bot.characters=load_json(BotPaths.characters_file_json)
 bot.maxLevel=bot.characters[list(bot.characters.keys())[0]]["maxLvl"]
 
-bot.items=loadItemsProper(load_txt(bot.items_file))
-bot.map_graph=load_json(bot.map_graph_file)
+bot.items=loadItemsProper(load_txt(BotPaths.items_file))
+bot.map_graph=load_json(BotPaths.map_graph_file)
 
-bot.ranks=load_json(bot.ranks_file)
+bot.ranks=load_json(BotPaths.ranks_file)
 
 load_dotenv()
 bot.run(os.getenv("DISCORD_TOKEN"))

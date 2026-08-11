@@ -5,8 +5,8 @@ import asyncio
 
 from own_utils import chooseFaceFromCategory, activeTimerExists, canUseCommand
 from data_manage import save_json, load_json, load_txt
-from dc_ids import ME,BOT_ROLE,BOTS_CHANNEL_ID
-from debug import readback, clean
+from constants import ME, BOT_ROLE, BOTS_CHANNEL_ID
+from debug import readback, clean, printLog, printLogToDc
 
 #
 
@@ -15,8 +15,8 @@ class Debug(commands.Cog):
         self.bot=bot
 
     @commands.command()
-    async def check_cog(self, ctx, cog_name):
-        if canUseCommand(ctx):
+    async def check_cog(self, ctx, cog_name:str):
+        if await canUseCommand(ctx):
             try:
                 await self.bot.load_extension(f"cogs.{cog_name}")
             except commands.ExtensionAlreadyLoaded:
@@ -37,8 +37,13 @@ class Debug(commands.Cog):
                 "`!get_logs log_error`: Errors while triing to log.",
             ]
             await ctx.reply('\n'.join(botcommands))
-        if canUseCommand(ctx,1):
+        if await canUseCommand(ctx,1):
             readback(what,delAfter)
+
+    @commands.command()
+    async def ping(self, ctx):
+        if await canUseCommand(ctx,2):
+            await ctx.reply("Pong!",delete_after=5)
                 
     
 

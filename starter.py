@@ -120,6 +120,10 @@ while True:
                     printLog("starter","Bot crashed!")
                     printLog("error",stderr) #Python traceback
                     writeLog("error",stderr,"crash",False,True,"w","starter.py")
+                else:
+                    printLog("starter","Bot info")
+                    printLog("error",stderr) #Python traceback
+                    writeLog("error",stderr,"crash",False,True,"w","starter.py")
 
                 fromrestart=1
             else:

@@ -4,7 +4,7 @@ from discord.ext import commands, tasks
 import asyncio
 
 from own_utils import chooseFaceFromCategory, canUseCommand
-from dc_ids import ME,BOT_ROLE,BOTS_CHANNEL_ID
+from constants import ME, BOT_ROLE, BOTS_CHANNEL_ID
 
 #"hidden" commands (they are not listed in bot_help; KEEP IT THIS WAY)
 #"a secret for everyone"
@@ -15,7 +15,7 @@ class Hiddens(commands.Cog):
         self.bot=bot
 
     async def play_sound(self,ctx,path:str):
-        if canUseCommand(ctx):
+        if await canUseCommand(ctx):
             def after_playing(error):
                 if error:
                     print(f"Playback error: {error}")
@@ -51,12 +51,12 @@ class Hiddens(commands.Cog):
 
     @commands.command()
     async def cogTest(self,ctx):
-        if canUseCommand(ctx):
+        if await canUseCommand(ctx):
             await ctx.reply("cog works")
 
     @commands.command()
     async def pat(self,ctx):
-        if canUseCommand(ctx):
+        if await canUseCommand(ctx):
             await ctx.reply(chooseFaceFromCategory(self.bot,"pat"))
 
     @commands.command()
