@@ -5,6 +5,8 @@ import asyncio
 import time
 
 from own_utils import chooseFaceFromCategory, canUseCommand
+from debug import printLog
+from constants import VOICE_CHANNEL_CAT_NAME_PREFIX
 
 #commands to control the timer function
 #moved here from main file
@@ -18,7 +20,7 @@ class Timer(commands.Cog):
         if await canUseCommand(ctx,1,True):
             if self.bot.timers[ctx.author.voice.channel.category.name[-2]]["time"]!=None and self.bot.timers[ctx.author.voice.channel.category.name[-2]]["paused"]==False:
                 self.bot.timers[ctx.author.voice.channel.category.name[-2]]["paused"]=True
-                await ctx.reply("Paused timer for the ["+ctx.author.voice.channel.category.name[-2]+"] category.")
+                await ctx.reply("Paused timer for the "+VOICE_CHANNEL_CAT_NAME_PREFIX+"["+ctx.author.voice.channel.category.name[-2]+"] category.")
             else:
                 await ctx.reply("There isn't an active timer in this voice channel category or it's already paused.")
                         
@@ -27,7 +29,7 @@ class Timer(commands.Cog):
         if await canUseCommand(ctx,1,True):
             if self.bot.timers[ctx.author.voice.channel.category.name[-2]]["time"]!=None and self.bot.timers[ctx.author.voice.channel.category.name[-2]]["paused"]==True:
                 self.bot.timers[ctx.author.voice.channel.category.name[-2]]["paused"]=False
-                await ctx.reply("Unpaused timer for the ["+ctx.author.voice.channel.category.name[-2]+"] category.")
+                await ctx.reply("Unpaused timer for the "+VOICE_CHANNEL_CAT_NAME_PREFIX+"["+ctx.author.voice.channel.category.name[-2]+"] category.")
             else:
                 await ctx.reply("There isn't an active timer in this voice channel category or it's already running.")
     
@@ -36,12 +38,12 @@ class Timer(commands.Cog):
         if await canUseCommand(ctx,1,True):
             if self.bot.timers[ctx.author.voice.channel.category.name[-2]]["time"]==None:
                 self.bot.timers[ctx.author.voice.channel.category.name[-2]]["time"]=time.time()+self.bot.startTimers[ctx.author.voice.channel.category.name[-2]]
-                await ctx.reply("Started timer for the ["+ctx.author.voice.channel.category.name[-2]+"] category.")
+                await ctx.reply("Started timer for the "+VOICE_CHANNEL_CAT_NAME_PREFIX+"["+ctx.author.voice.channel.category.name[-2]+"] category.")
                 
                 name=ctx.author.voice.channel.name[-2]
                 names=[]
                 for guild in self.bot.guilds:
-                    for channel in discord.utils.get(guild.categories, name="["+name+"]").voice_channels:
+                    for channel in discord.utils.get(guild.categories, name=VOICE_CHANNEL_CAT_NAME_PREFIX+"["+name+"]").voice_channels:
                         for member in channel.members:
                             if member.global_name=="PurpleEarthDragon":
                                 names.append(member.global_name+chooseFaceFromCategory(self.bot,"love"))

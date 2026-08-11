@@ -37,7 +37,9 @@ HERO_ID_MAP = {
 
 APP_NAME="FUNLOCK_BOT"
 
-MESSAGE_CD=60*60*0.1
+MESSAGE_CD=60*60*0.1  #6 minutes
+
+VOICE_CHANNEL_CAT_NAME_PREFIX="Standard Matches "
 
 #dc_ids
 

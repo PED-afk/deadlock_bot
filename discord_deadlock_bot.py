@@ -18,7 +18,7 @@ neither does anything else other than open the file on the filepath and load the
 """
 from own_utils import chooseFaceFromCategory
 from debug import printLog, printLogToDc
-from constants import HERO_ID_MAP, RANK_NAMES, RANK_COLORS, BASE, ME, BOT_ROLE, BOTS_CHANNEL_ID, MESSAGE_CD
+from constants import HERO_ID_MAP, RANK_NAMES, RANK_COLORS, BASE, ME, BOT_ROLE, BOTS_CHANNEL_ID, MESSAGE_CD, VOICE_CHANNEL_CAT_NAME_PREFIX
 
 from classes.item import Item
 from classes.file_paths import BotPaths
@@ -373,14 +373,17 @@ async def profile(ctx, member: discord.Member = None):
 
 @tasks.loop(seconds=1)
 async def tick():
-    for i, (name,timerTime) in enumerate(bot.timers.items()):
+    for i, (name,timerData) in enumerate(bot.timers.items()):
+        timerTime=timerData["time"]
         if timerTime!=None:
+            if timerData["paused"]:
+                bot.timers[name]["time"]+=1
             curTime=time.time()//1
             timerTime=timerTime//1
             if timerTime-curTime==60:
-                await bot.get_channel(BOTS_CHANNEL_ID).send("1 minute remaining on the ["+name+"] timer.",delete_after=60)
+                await bot.get_channel(BOTS_CHANNEL_ID).send("1 minute remaining on the "+VOICE_CHANNEL_CAT_NAME_PREFIX+"["+name+"] timer.",delete_after=60)
             elif timerTime<=curTime:
-                await bot.get_channel(BOTS_CHANNEL_ID).send("Moving people in category ["+name+"].",delete_after=60)
+                await bot.get_channel(BOTS_CHANNEL_ID).send("Moving people in category "+VOICE_CHANNEL_CAT_NAME_PREFIX+"["+name+"].",delete_after=60)
                 for guild in bot.guilds:
                     category = discord.utils.get(guild.categories, name="["+name+"]")
                     TARGET=discord.utils.get(category.voice_channels, name="Deadlock ["+name+"]").id
@@ -401,18 +404,18 @@ async def tick():
                                 await bot.get_channel(BOTS_CHANNEL_ID).send("Can't move "+member.display_name)
                             except discord.HTTPException:
                                 pass
-                bot.timers[name]=None
+                bot.timers[name]["timer"]=None
 
 
 bot.startTimers={"A":11*60,"B":11*60}
-bot.timers={"A":None,"B":None}
+bot.timers={"A":{"time":None},"B":{"time":None}}
 bot.bootTime=time.time()//1
-bot.version="0.6.5"
-bot.versionSTR="centralized paths"
+bot.version="0.6.6"
+bot.versionSTR="timer should work before i leave"
 
 
 
-bot.messageCD=MESSAGE_CD #6 minutes
+bot.messageCD=MESSAGE_CD
 
 bot.faces=load_json(BotPaths.face_file)
 bot.user_data=load_json(BotPaths.user_data_path)
