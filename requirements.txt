@@ -4,6 +4,5 @@ aiohttp
 asyncio
 PyNaCl
 aiosqlite
-shutil
 platformdirs
 pathlib
