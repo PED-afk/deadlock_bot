@@ -31,8 +31,10 @@ class Power(commands.Cog):
         else:
             me=await self.bot.fetch_user(ME)
             await ctx.send("Sorry only `"+str(me)+"` can shut me down.\n(Because then he knows I'm not running.)",delete_after=10)
-                
-    @commands.command(aliases=["reload"])
+
+    #aliases=["reload"] THIS DOESNT WORK
+    #DO NOT PUT IT BACK
+    @commands.command()
     async def restart(self,ctx,save:str="save"):
         if await canUseCommand(ctx,1):
             if activeTimerExists(self.bot):
