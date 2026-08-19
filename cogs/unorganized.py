@@ -179,7 +179,7 @@ class Unorganized(commands.Cog):
             extra=""
             if hours>24:
                 extra="\nI'm tired. "+chooseFaceFromCategory(self.bot,"tired")
-            await ctx.reply("Bot version: "+self.bot.version+"\nOS: "+winlin+"\nHardware I'm living on: "+cpu+"\nI've been running for: "+str(hours)+" hours, "+str(minutes)+" minutes and "+str(seconds)+" seconds."+extra)
+            await ctx.reply("Bot version: "+self.bot.version+" "+self.bot.versionSTR+"\nOS: "+winlin+"\nHardware I'm living on: "+cpu+"\nI've been running for: "+str(hours)+" hours, "+str(minutes)+" minutes and "+str(seconds)+" seconds."+extra)
             if lindistr!=None:
                 await ctx.reply(getAll()+lindistr["PRETTY_NAME"],delete_after=30)
                 #await ctx.send("Fun fact: Most likely I'm running on a rasberry pi 5. :D\nLinux dist: "+lindistr["PRETTY_NAME"],delete_after=30)
@@ -188,7 +188,7 @@ class Unorganized(commands.Cog):
     async def version(self,ctx):
         senderID=ctx.author.id
         if ctx.channel.id==BOTS_CHANNEL_ID:
-            await ctx.reply("Bot version: "+self.bot.version)
+            await ctx.reply("Bot version: "+self.bot.version+" "+self.bot.versionSTR)
 
     @commands.command()
     async def join(self,ctx):
