@@ -16,3 +16,5 @@ class BotPaths():
     ranks_file=BASE / "ranks.json"
 
     sounds_folder=BASE / "sounds"
+
+    pfp_folder=BASE / "images" / "pfp"
