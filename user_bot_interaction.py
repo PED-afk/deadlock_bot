@@ -11,26 +11,37 @@ def checkPastInteractions(data):
   for type in data:
     times=[]
     for time in type:
-      if time+BOT_INTERACTION_TIMEOUT>time.time():
+      if int(time)+BOT_INTERACTION_TIMEOUT>time.time():
         times.append(time)
     if len(times)>0:
       newTimes[type]=times
   return newTimes
 
-def interact(bot:commands.Bot,value:int,type:str,id:int):
+def interact(bot:commands.Bot,value:float,type:str,id:int):
   userData=bot.user_data
   userData[id]=checkPastInteractions(userData[id])
   if type not in userData[id].keys():
     userData[id][type]=[]
-  for i in range(value):
-    UserData[id][type].append(time.time())
+  userData[id][type].append({str(time.time()):value})
+  userData["global"][type].append({str(time.time()):value/4})
   bot.user_data=userData
 
 def getInteractValue(bot:commands.Bot,type:str,id:int):
+  userData=bot.user_data
   userData[id]=checkPastInteractions(userData[id])
   bot.user_data=userData
-  return len(userData[id][type])
+  value=0
+  for i in userData[id][type]:
+    value+=userData[id][type][i]
+  return value
 
-
+def getGlobalInteractValue(bot:commands.Bot,type:str):
+  userData=bot.user_data
+  userData["global"]=checkPastInteractions(userData["global"])
+  bot.user_data=userData
+  value=0
+  for i in userData["global"][type]:
+    value+=userData["global"][type][i]
+  return value
 
 
