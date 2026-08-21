@@ -5,6 +5,7 @@ import asyncio
 
 from own_utils import chooseFaceFromCategory, canUseCommand
 from constants import ME, BOT_ROLE, BOTS_CHANNEL_ID
+from user_bot_interaction import interact, getInteractValue, getGlobalInteractValue
 
 #"hidden" commands (they are not listed in bot_help; KEEP IT THIS WAY)
 #"a secret for everyone"
@@ -57,7 +58,16 @@ class Hiddens(commands.Cog):
     @commands.command()
     async def pat(self,ctx):
         if await canUseCommand(ctx):
-            await ctx.reply(chooseFaceFromCategory(self.bot,"pat"))
+            interact(self,2,"happy",int(ctx.author.id))
+            curVal=max(getInteractValue(self,"happy",int(ctx.author.id)),getGlobalInteractValue(self,"happy"))
+            if curVal<10:
+                await ctx.reply(chooseFaceFromCategory(self.bot,"pat"))
+            if curVal<15:
+                await ctx.reply(chooseFaceFromCategory(self.bot,"concerned")+"\nStawp")
+            elif curVal<20:
+                await ctx.reply(chooseFaceFromCategory(self.bot,"annoyed")+"\nStop.")
+            else:
+                await ctx.reply(chooseFaceFromCategory(self.bot,"neutral"))
 
     @commands.command()
     async def silly(self,ctx):
