@@ -18,11 +18,11 @@ neither does anything else other than open the file on the filepath and load the
 """
 from own_utils import chooseFaceFromCategory
 from debug import printLog, printLogToDc
-from constants import HERO_ID_MAP, RANK_NAMES, RANK_COLORS, BASE, ME, BOT_ROLE, BOTS_CHANNEL_ID, MESSAGE_CD, VOICE_CHANNEL_CAT_NAME_PREFIX, BOT_SECRET_NICKNAMES
+from constants import HERO_ID_MAP, RANK_NAMES, RANK_COLORS, BASE, ME, BOT_ROLE, BOTS_CHANNEL_ID, MESSAGE_CD, VOICE_CHANNEL_CAT_NAME_PREFIX, BOT_SECRET_NICKNAMES, GREET_CD
 
 from classes.item import Item
 from classes.file_paths import BotPaths
-from user_bot_interaction import interact, getGlobalInteractValue, getInteractValue
+from user_bot_interaction import interact, getGlobalInteractValue, getInteractValue, botWasGreeted, botGreets
 
 
 #Set up the bot with a command prefix
@@ -174,9 +174,20 @@ def loadItemsProper(items):
 
 @bot.event
 async def on_ready():
-    guild = bot.get_guild(123456789012345678)
+    guild=bot.get_guild(123456789012345678)
     if guild:
         await guild.me.edit(nick=bot.name)
+
+    pfp_files=list(BotPaths.pfp_folder.glob("*.jpg"))
+    if pfp_files:
+        pfp_path=random.choice(pfp_files)
+        with pfp_path.open("rb") as f:
+            await bot.user.edit(avatar=f.read())
+        printLog("info",f"Changed PFP to {pfp_path.name}")
+    else:
+        printLog("error",f"No .jpg files found in {BotPaths.pfp_folder}")
+
+
     printLog("info",f"Bot connected as {bot.user}")
     #await printLogToDc(bot,"debug","Bot started")
     """
@@ -255,6 +266,7 @@ async def on_message(message):
         bot.user_data[idSTR]["wins"]=0
         bot.user_data[idSTR]["hidden"]={}
         bot.user_data[idSTR]["hidden"]["messageCD"]=0
+        bot.user_data[idSTR]["hidden"]["greetMessageCD"]=0
         bot.user_data[idSTR]["rank"]="None"
     else:
         if message.content[0]!="!" and time.time()>=bot.user_data[idSTR]["hidden"]["messageCD"]:
@@ -286,6 +298,10 @@ async def on_message(message):
                 if bot.user_data[idSTR]["XP"]>=100+2**(level/4)+level:
                     bot.user_data[idSTR]["XP"]-=100+2**(level/4)+level
                     bot.user_data[idSTR]["lvl"]+=1
+
+    if botWasGreeted(message.content) and time.time()>=bot.user_data[idSTR]["hidden"]["greetMessageCD"]:
+        bot.user_data[idSTR]["hidden"]["messageCD"]=time.time()+bot.greetCD
+        await message.reply(botGreets())
 
     if message.channel.id==BOTS_CHANNEL_ID:
         await bot.process_commands(message)
@@ -439,6 +455,7 @@ bot.name="FUNLOCK BOT" #Not yet decided
 
 
 bot.messageCD=MESSAGE_CD
+bot.greetCD=GREET_CD
 
 bot.faces=load_json(BotPaths.face_file)
 bot.user_data=load_json(BotPaths.user_data_path)
