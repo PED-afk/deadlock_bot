@@ -45,3 +45,15 @@ def getGlobalInteractValue(bot:commands.Bot,type:str):
   return value
 
 
+def botWasGreeted(message:str):
+  acceptPrefix=[]
+  greet=[]
+  
+  return False
+
+async def botGreets():
+  return ""
+
+
+
+
