@@ -20,3 +20,6 @@ Only the before last category/thing is needed in the command. Eg.: if path is X/
 Code will find the path to Z
 If <!tipp X/Z> the code will look for Z on a path containing X
 
+
+do this:
+just !tipp <thing>
