@@ -18,10 +18,11 @@ neither does anything else other than open the file on the filepath and load the
 """
 from own_utils import chooseFaceFromCategory
 from debug import printLog, printLogToDc
-from constants import HERO_ID_MAP, RANK_NAMES, RANK_COLORS, BASE, ME, BOT_ROLE, BOTS_CHANNEL_ID, MESSAGE_CD, VOICE_CHANNEL_CAT_NAME_PREFIX
+from constants import HERO_ID_MAP, RANK_NAMES, RANK_COLORS, BASE, ME, BOT_ROLE, BOTS_CHANNEL_ID, MESSAGE_CD, VOICE_CHANNEL_CAT_NAME_PREFIX, BOT_SECRET_NICKNAMES
 
 from classes.item import Item
 from classes.file_paths import BotPaths
+from user_bot_interaction import interact, getGlobalInteractValue, getInteractValue
 
 
 #Set up the bot with a command prefix
@@ -212,16 +213,33 @@ async def on_ready():
 async def on_message(message):
     if message.author.bot or message.webhook_id is not None or message.author == bot.user:
         return
-    idSTR=str(message.author.id)
+    idINT=message.author.id
+    idSTR=str(idINT)
     if message.reference:
         repliedTo=await message.channel.fetch_message(message.reference.message_id)
         if repliedTo.author.id == bot.user.id:
             thankingMessages=["thank you!","thank you","thanks!","thanks"]
-            if message.content.lower() in thankingMessages:
-                if "My brain" in repliedTo.content:
-                    await message.reply("You're welcome!\n"+chooseFaceFromCategory(bot,"brain_hurt"))
+            if any(t in message.content.lower() for t in thankingMessages):
+                if any(t in message.content.lower() for t in BOT_SECRET_NICKNAMES):
+                    interact(bot,3,"thank",idINT)
+                    intVal=max(getInteractValue(bot,"thank",idINT),getGlobalInteractValue(bot,"thank"))
+                    if intVal<=10:
+                        if "My brain" in repliedTo.content:
+                            await message.reply("You're welcome!\n"+chooseFaceFromCategory(bot,"brain_hurt"))
+                        else:
+                            await message.reply("You're welcome!\n"+chooseFaceFromCategory(bot,"spark"))
+                    else:
+                        await message.reply("You're welcome.\n"+chooseFaceFromCategory(bot,"neutral"))
                 else:
-                    await message.reply("You're welcome!\n"+chooseFaceFromCategory(bot,"pat"))
+                    interact(bot,1,"thank",idINT)
+                    intVal=max(getInteractValue(bot,"thank",idINT),getGlobalInteractValue(bot,"thank"))
+                    if intVal<=10:
+                        if "My brain" in repliedTo.content:
+                            await message.reply("You're welcome!\n"+chooseFaceFromCategory(bot,"brain_hurt"))
+                        else:
+                            await message.reply("You're welcome!\n"+chooseFaceFromCategory(bot,"pat"))
+                    else:
+                        await message.reply("You're welcome.\n"+chooseFaceFromCategory(bot,"neutral"))
     if str(message.author.id) not in bot.user_data.keys():
         bot.user_data[idSTR]={}
         bot.user_data[idSTR]["main"]="None"
