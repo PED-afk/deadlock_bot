@@ -173,6 +173,9 @@ def loadItemsProper(items):
 
 @bot.event
 async def on_ready():
+    guild = bot.get_guild(123456789012345678)
+    if guild:
+        await guild.me.edit(nick=bot.name)
     printLog("info",f"Bot connected as {bot.user}")
     #await printLogToDc(bot,"debug","Bot started")
     """
@@ -410,8 +413,10 @@ async def tick():
 bot.startTimers={"A":11*60,"B":11*60}
 bot.timers={"A":{"time":None},"B":{"time":None}}
 bot.bootTime=time.time()//1
-bot.version="0.7"
-bot.versionSTR="Update function restore"
+bot.version="0.7.1"
+bot.versionSTR="Nickname prep"
+
+bot.name="FUNLOCK BOT" #Not yet decided
 
 
 
