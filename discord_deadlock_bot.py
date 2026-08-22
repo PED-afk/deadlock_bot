@@ -181,6 +181,8 @@ async def on_ready():
     pfp_files=list(BotPaths.pfp_folder.glob("*.jpg"))
     if pfp_files:
         pfp_path=random.choice(pfp_files)
+        pfp_path=pfp_files[0]
+        printLog("info",f"Chosen pfp: {pfp_path}")
         with pfp_path.open("rb") as f:
             await bot.user.edit(avatar=f.read())
         printLog("info",f"Changed PFP to {pfp_path.name}")
@@ -251,53 +253,62 @@ async def on_message(message):
                             await message.reply("You're welcome!\n"+chooseFaceFromCategory(bot,"pat"))
                     else:
                         await message.reply("You're welcome.\n"+chooseFaceFromCategory(bot,"neutral"))
+
+
     if str(message.author.id) not in bot.user_data.keys():
         bot.user_data[idSTR]={}
         bot.user_data[idSTR]["main"]="None"
         bot.user_data[idSTR]["steamID"]="None"
         bot.user_data[idSTR]["steamID3"]="None"
         bot.user_data[idSTR]["steamID64"]="None"
-        bot.user_data[idSTR]["money"]={}
-        bot.user_data[idSTR]["money"]["unsecured"]=0
-        bot.user_data[idSTR]["money"]["secured"]=0
-        bot.user_data[idSTR]["items"]=[]
+        bot.user_data[idSTR]["rank"]="None"
         bot.user_data[idSTR]["lvl"]=1
         bot.user_data[idSTR]["XP"]=0
         bot.user_data[idSTR]["wins"]=0
+    if "money" not in bot.user_data[idSTR].keys():
+        bot.user_data[idSTR]["money"]={}
+        bot.user_data[idSTR]["money"]["unsecured"]=0
+        bot.user_data[idSTR]["money"]["secured"]=0
+    if "items" not in bot.user_data[idSTR].keys():
+        bot.user_data[idSTR]["items"]=[]
+    if "hidden" not in bot.user_data[idSTR].keys():
         bot.user_data[idSTR]["hidden"]={}
         bot.user_data[idSTR]["hidden"]["messageCD"]=0
         bot.user_data[idSTR]["hidden"]["greetMessageCD"]=0
-        bot.user_data[idSTR]["rank"]="None"
-    else:
-        if message.content[0]!="!" and time.time()>=bot.user_data[idSTR]["hidden"]["messageCD"]:
-            bot.user_data[idSTR]["hidden"]["messageCD"]=time.time()+bot.messageCD
-            bonusM=1
+    if "interact" not in bot.user_data[idSTR]["hidden"].keys():
+        bot.user_data[idSTR]["hidden"]["interact"]={}
 
-            users_in_voice = []
 
-            for guild in bot.guilds:
-                for voice_channel in guild.voice_channels:
-                    for member in voice_channel.members:
-                        users_in_voice.append(str(member.id)+" in "+voice_channel.name)
-            if len(users_in_voice)!=0:
-                givesBonus={
-                    "good luck":{"bonus":0.5,"alias":{"name":" gl ","bonus":0.25}},
-                    "have fun":{"bonus":0.5,"alias":{"name":" hf ","bonus":0.25}},
-                }
-                for i,key in enumerate(givesBonus):
-                    if key in message.content:
-                        bonusM+=givesBonus[key]["bonus"]
-                    elif givesBonus[key]["alias"]["name"] in message.content:
-                        bonusM+=givesBonus[key]["alias"]["bonus"]
+    
+    if message.content[0]!="!" and time.time()>=bot.user_data[idSTR]["hidden"]["messageCD"]:
+        bot.user_data[idSTR]["hidden"]["messageCD"]=time.time()+bot.messageCD
+        bonusM=1
 
-            lenght=len(message.content)//10
-            bot.user_data[idSTR]["money"]["unsecured"]+=100+random.randint(0,lenght)*bonusM
-            bot.user_data[idSTR]["XP"]+=1+random.randint(0,lenght)*bonusM
-            level=bot.user_data[idSTR]["lvl"]
-            if level<bot.maxLevel:
-                if bot.user_data[idSTR]["XP"]>=100+2**(level/4)+level:
-                    bot.user_data[idSTR]["XP"]-=100+2**(level/4)+level
-                    bot.user_data[idSTR]["lvl"]+=1
+        users_in_voice = []
+
+        for guild in bot.guilds:
+            for voice_channel in guild.voice_channels:
+                for member in voice_channel.members:
+                    users_in_voice.append(str(member.id)+" in "+voice_channel.name)
+        if len(users_in_voice)!=0:
+            givesBonus={
+                "good luck":{"bonus":0.5,"alias":{"name":" gl ","bonus":0.25}},
+                "have fun":{"bonus":0.5,"alias":{"name":" hf ","bonus":0.25}},
+            }
+            for i,key in enumerate(givesBonus):
+                if key in message.content:
+                    bonusM+=givesBonus[key]["bonus"]
+                elif givesBonus[key]["alias"]["name"] in message.content:
+                    bonusM+=givesBonus[key]["alias"]["bonus"]
+
+        lenght=len(message.content)//10
+        bot.user_data[idSTR]["money"]["unsecured"]+=100+random.randint(0,lenght)*bonusM
+        bot.user_data[idSTR]["XP"]+=1+random.randint(0,lenght)*bonusM
+        level=bot.user_data[idSTR]["lvl"]
+        if level<bot.maxLevel:
+            if bot.user_data[idSTR]["XP"]>=100+2**(level/4)+level:
+                bot.user_data[idSTR]["XP"]-=100+2**(level/4)+level
+                bot.user_data[idSTR]["lvl"]+=1
 
     if botWasGreeted(message.content) and time.time()>=bot.user_data[idSTR]["hidden"]["greetMessageCD"]:
         bot.user_data[idSTR]["hidden"]["messageCD"]=time.time()+bot.greetCD
@@ -459,6 +470,29 @@ bot.greetCD=GREET_CD
 
 bot.faces=load_json(BotPaths.face_file)
 bot.user_data=load_json(BotPaths.user_data_path)
+idSTR="global"
+if idSTR not in bot.user_data.keys():
+    bot.user_data[idSTR]={}
+    bot.user_data[idSTR]["main"]="None"
+    bot.user_data[idSTR]["steamID"]="None"
+    bot.user_data[idSTR]["steamID3"]="None"
+    bot.user_data[idSTR]["steamID64"]="None"
+    bot.user_data[idSTR]["rank"]="None"
+    bot.user_data[idSTR]["lvl"]=1
+    bot.user_data[idSTR]["XP"]=0
+    bot.user_data[idSTR]["wins"]=0
+if "money" not in bot.user_data[idSTR].keys():
+    bot.user_data[idSTR]["money"]={}
+    bot.user_data[idSTR]["money"]["unsecured"]=0
+    bot.user_data[idSTR]["money"]["secured"]=0
+if "items" not in bot.user_data[idSTR].keys():
+    bot.user_data[idSTR]["items"]=[]
+if "hidden" not in bot.user_data[idSTR].keys():
+    bot.user_data[idSTR]["hidden"]={}
+    bot.user_data[idSTR]["hidden"]["messageCD"]=0
+    bot.user_data[idSTR]["hidden"]["greetMessageCD"]=0
+if "interact" not in bot.user_data[idSTR]["hidden"].keys():
+    bot.user_data[idSTR]["hidden"]["interact"]={}
 
 bot.characters=load_txt(BotPaths.characters_file)
 bot.characters=load_json(BotPaths.characters_file_json)
