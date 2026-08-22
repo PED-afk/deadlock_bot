@@ -7,6 +7,7 @@ import os
 from pathlib import Path
 import shutil
 from discord.ext import commands
+import inspect
 
 from constants import BOT_DEBUG_CHANNEL, BASE
 
@@ -122,7 +123,10 @@ def printLog(type:str, content:any, colorAll:bool=False):
     elif type=="info":
         extra=Colors.BLUE
     extra+=Colors.BOLD
-    print(extra+f"[{type.upper()}]"+(Colors.END if not colorAll else "")+f"  {content}"+Colors.END,flush=True)
+    #print(extra+f"[{type.upper()}]"+(Colors.END if not colorAll else "")+f"  {content}"+Colors.END,flush=True)
+    fromFunction = inspect.currentframe().f_back.f_code.co_name
+    print(extra+f"[{type.upper()}]"+f" [{fromFunction.upper()}]"+(Colors.END if not colorAll else "")+f"  {content}"+(Colors.END if colorAll else ""),flush=True)
+
 
 async def printLogToDc(bot:commands.Bot,type:str, content:str):
     """
