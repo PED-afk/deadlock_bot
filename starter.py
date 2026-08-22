@@ -11,7 +11,7 @@ import shutil
 from debug import setupFolders, writeLog, printLog, clean, readback
 
 setupFolders()
-clean()
+
 
 process = None
 shouldrestart=1
