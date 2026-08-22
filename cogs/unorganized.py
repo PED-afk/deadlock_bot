@@ -237,63 +237,43 @@ class Unorganized(commands.Cog):
 
     @commands.command()
     async def my_data(self,ctx):
-        def getDictStr(d:dict):
-            inData=""
-            for j, (innerKey,innerData) in enumerate(data.items()):
-                if isinstance(innerData,dict):
-                    inData+="\t"+innerKey+": "+getDictStr(innerData)+"\n"
+        def getDictStr(d: dict, indent=0):
+            inData = ""
+            for innerKey, innerData in d.items():
+                if innerKey=="hidden":
+                    continue
+                if innerKey=="items" and len(innerData)==0:
+                    continue
+                if innerKey=="steamID3" or innerKey=="steamID64":
+                    continue
+                if innerKey=="rank" and innerData=="None":
+                    continue
+                if isinstance(innerData, dict):
+                    inData += "\t" * indent + str(innerKey) + ":\n"
+                    inData += getDictStr(innerData, indent + 1)
                 else:
-                    inData+="\t"+innerKey+": "+str(innerData)+"\n"
+                    inData += "\t" * indent + str(innerKey) + ": " + str(innerData) + "\n"
             return inData
         senderID=ctx.author.id
         if ctx.channel.id==BOTS_CHANNEL_ID:
-            message=""
-            for i, (key,data) in enumerate(self.bot.user_data[str(senderID)].items()):
-                if key=="hidden":
-                    continue
-                if key=="items" and len(data)==0:
-                    continue
-                if key=="steamID3" or key=="steamID64":
-                    continue
-                if key=="rank" and data=="None":
-                    continue
-                if isinstance(data,dict):
-                    inData=""
-                    for j, (innerKey,innerData) in enumerate(data.items()):
-                        if isinstance(innerData,dict):
-                            inData+="\t"+innerKey+": "+getDictStr(innerData)+"\n"
-                        else:
-                            inData+="\t"+innerKey+": "+str(innerData)+"\n"
-                    message+=key+":\n"+inData+"\n"
-                else:
-                    message+=key+": "+str(data)+"\n"
+            message=getDictStr(self.bot.user_data[str(senderID)])
             await ctx.reply(message,delete_after=30)
 
 
     @commands.command()
     async def my_data_admin(self,ctx):
-        def getDictStr(d:dict):
-            inData=""
-            for j, (innerKey,innerData) in enumerate(data.items()):
-                if isinstance(innerData,dict):
-                    inData+="\t"+innerKey+": "+getDictStr(innerData)+"\n"
+        def getDictStr(d: dict, indent=0):
+            inData = ""
+            for innerKey, innerData in d.items():
+                if isinstance(innerData, dict):
+                    inData += "\t" * indent + str(innerKey) + ":\n"
+                    inData += getDictStr(innerData, indent + 1)
                 else:
-                    inData+="\t"+innerKey+": "+str(innerData)+"\n"
+                    inData += "\t" * indent + str(innerKey) + ": " + str(innerData) + "\n"
             return inData
         senderID=ctx.author.id
         if await canUseCommand(ctx,1):
-            message=""
-            for i, (key,data) in enumerate(self.bot.user_data[str(senderID)].items()):
-                if isinstance(data,dict):
-                    inData=""
-                    for j, (innerKey,innerData) in enumerate(data.items()):
-                        if isinstance(innerData,dict):
-                            inData+="\t"+innerKey+": "+getDictStr(innerData)+"\n"
-                        else:
-                            inData+="\t"+innerKey+": "+str(innerData)+"\n"
-                    message+=key+":\n"+inData+"\n"
-                else:
-                    message+=key+": "+str(data)+"\n"
+            message=getDictStr(self.bot.user_data[str(senderID)])
             await ctx.reply(message,delete_after=30)
             
     @commands.command()
