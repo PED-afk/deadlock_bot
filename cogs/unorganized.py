@@ -241,7 +241,6 @@ class Unorganized(commands.Cog):
         if ctx.channel.id==BOTS_CHANNEL_ID:
             message=""
             for i, (key,data) in enumerate(self.bot.user_data[str(senderID)].items()):
-                print(key, data)
                 if key=="hidden":
                     continue
                 if key=="items" and len(data)==0:
@@ -250,6 +249,22 @@ class Unorganized(commands.Cog):
                     continue
                 if key=="rank" and data=="None":
                     continue
+                if isinstance(data,dict):
+                    inData=""
+                    for j, (innerKey,innerData) in enumerate(data.items()):
+                        inData+="\t"+innerKey+": "+str(innerData)+"\n"
+                    message+=key+":\n"+inData+"\n"
+                else:
+                    message+=key+": "+str(data)+"\n"
+            await ctx.reply(message,delete_after=30)
+
+
+    @commands.command()
+    async def my_data_admin(self,ctx):
+        senderID=ctx.author.id
+        if await canUseCommand(ctx,1):
+            message=""
+            for i, (key,data) in enumerate(self.bot.user_data[str(senderID)].items()):
                 if isinstance(data,dict):
                     inData=""
                     for j, (innerKey,innerData) in enumerate(data.items()):
