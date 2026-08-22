@@ -237,6 +237,14 @@ class Unorganized(commands.Cog):
 
     @commands.command()
     async def my_data(self,ctx):
+        def getDictStr(d:dict):
+            inData=""
+            for j, (innerKey,innerData) in enumerate(data.items()):
+                if isinstance(innerData,dict):
+                    inData+="\t"+innerKey+": "+getDictStr(innerData)+"\n"
+                else:
+                    inData+="\t"+innerKey+": "+str(innerData)+"\n"
+            return inData
         senderID=ctx.author.id
         if ctx.channel.id==BOTS_CHANNEL_ID:
             message=""
@@ -252,7 +260,10 @@ class Unorganized(commands.Cog):
                 if isinstance(data,dict):
                     inData=""
                     for j, (innerKey,innerData) in enumerate(data.items()):
-                        inData+="\t"+innerKey+": "+str(innerData)+"\n"
+                        if isinstance(innerData,dict):
+                            inData+="\t"+innerKey+": "+getDictStr(innerData)+"\n"
+                        else:
+                            inData+="\t"+innerKey+": "+str(innerData)+"\n"
                     message+=key+":\n"+inData+"\n"
                 else:
                     message+=key+": "+str(data)+"\n"
@@ -261,6 +272,14 @@ class Unorganized(commands.Cog):
 
     @commands.command()
     async def my_data_admin(self,ctx):
+        def getDictStr(d:dict):
+            inData=""
+            for j, (innerKey,innerData) in enumerate(data.items()):
+                if isinstance(innerData,dict):
+                    inData+="\t"+innerKey+": "+getDictStr(innerData)+"\n"
+                else:
+                    inData+="\t"+innerKey+": "+str(innerData)+"\n"
+            return inData
         senderID=ctx.author.id
         if await canUseCommand(ctx,1):
             message=""
@@ -268,7 +287,10 @@ class Unorganized(commands.Cog):
                 if isinstance(data,dict):
                     inData=""
                     for j, (innerKey,innerData) in enumerate(data.items()):
-                        inData+="\t"+innerKey+": "+str(innerData)+"\n"
+                        if isinstance(innerData,dict):
+                            inData+="\t"+innerKey+": "+getDictStr(innerData)+"\n"
+                        else:
+                            inData+="\t"+innerKey+": "+str(innerData)+"\n"
                     message+=key+":\n"+inData+"\n"
                 else:
                     message+=key+": "+str(data)+"\n"
