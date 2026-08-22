@@ -6,6 +6,7 @@ import asyncio
 from own_utils import chooseFaceFromCategory, canUseCommand
 from constants import ME, BOT_ROLE, BOTS_CHANNEL_ID
 from user_bot_interaction import interact, getInteractValue, getGlobalInteractValue
+from debug import printLogToDc
 
 #"hidden" commands (they are not listed in bot_help; KEEP IT THIS WAY)
 #"a secret for everyone"
