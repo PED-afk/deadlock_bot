@@ -273,6 +273,7 @@ class Unorganized(commands.Cog):
             return inData
         senderID=ctx.author.id
         if await canUseCommand(ctx,1):
+            printLogToDc(self.bot,"debug",self.bot.user_data[str(senderID)])
             message=getDictStr(self.bot.user_data[str(senderID)])
             await ctx.reply(message,delete_after=30)
             
