@@ -51,13 +51,7 @@ class Hiddens(commands.Cog):
                 if not was_in and vc.is_connected():
                     await vc.disconnect()
 
-    @commands.command()
-    async def cogTest(self,ctx):
-        if await canUseCommand(ctx):
-            await ctx.reply("cog works")
-
-    @commands.command()
-    async def pat(self,ctx):
+    async def pet(self,ctx):
         if await canUseCommand(ctx):
             interact(self.bot,2,"happy",int(ctx.author.id))
             curVal=max(getInteractValue(self.bot,"happy",int(ctx.author.id)),getGlobalInteractValue(self.bot,"happy"))
@@ -69,6 +63,18 @@ class Hiddens(commands.Cog):
                 await ctx.reply(chooseFaceFromCategory(self.bot,"annoyed")+"\nStop.")
             else:
                 await ctx.reply(chooseFaceFromCategory(self.bot,"neutral"))
+
+    @commands.command()
+    async def pat(self,ctx):
+        await self.pet(ctx)
+    @commands.command()
+    async def pet(self,ctx):
+        await self.pet(ctx)
+
+    @commands.command()
+    async def cogTest(self,ctx):
+        if await canUseCommand(ctx):
+            await ctx.reply("cog works")
 
     @commands.command()
     async def silly(self,ctx):

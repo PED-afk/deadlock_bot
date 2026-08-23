@@ -10,6 +10,7 @@ from own_utils import chooseFaceFromCategory, activeTimerExists, canUseCommand
 from data_manage import save_json, load_json, load_txt
 from constants import ME, BOT_ROLE, BOTS_CHANNEL_ID
 from pi_specific import getAll
+from debug import printLog, printLogToDc
 
 from classes.button import Button, MultButton
 from classes.find_rem import FindRem
