@@ -36,12 +36,12 @@ class Power(commands.Cog):
     #DO NOT PUT IT BACK
     @commands.command()
     async def restart(self,ctx,save:str="save"):
-        self.restart(ctx,save)
+        self.restartFunc(ctx,save)
     @commands.command()
     async def reload(self,ctx,save:str="save"):
-        self.restart(ctx,save)
+        self.restartFunc(ctx,save)
 
-    async def restart(self,ctx,save:str="save"):
+    async def restartFunc(self,ctx,save:str="save"):
         if await canUseCommand(ctx,1):
             if activeTimerExists(self.bot):
                 ctx.reply("Sorry, I restart now, there is at least 1 active timer.")

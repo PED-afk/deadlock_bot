@@ -51,7 +51,7 @@ class Hiddens(commands.Cog):
                 if not was_in and vc.is_connected():
                     await vc.disconnect()
 
-    async def pet(self,ctx):
+    async def petFunc(self,ctx):
         if await canUseCommand(ctx):
             interact(self.bot,2,"happy",int(ctx.author.id))
             curVal=max(getInteractValue(self.bot,"happy",int(ctx.author.id)),getGlobalInteractValue(self.bot,"happy"))
@@ -66,10 +66,10 @@ class Hiddens(commands.Cog):
 
     @commands.command()
     async def pat(self,ctx):
-        await self.pet(ctx)
+        await self.petFunc(ctx)
     @commands.command()
     async def pet(self,ctx):
-        await self.pet(ctx)
+        await self.petFunc(ctx)
 
     @commands.command()
     async def cogTest(self,ctx):
