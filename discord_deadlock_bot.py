@@ -181,7 +181,6 @@ async def on_ready():
     pfp_files=list(BotPaths.pfp_folder.glob("*.jpg"))
     if pfp_files:
         pfp_path=random.choice(pfp_files)
-        pfp_path=pfp_files[0]
         printLog("info",f"Chosen pfp: {pfp_path}")
         with pfp_path.open("rb") as f:
             await bot.user.edit(avatar=f.read())
