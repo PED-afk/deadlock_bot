@@ -18,7 +18,7 @@ neither does anything else other than open the file on the filepath and load the
 """
 from own_utils import chooseFaceFromCategory
 from debug import printLog, printLogToDc
-from constants import HERO_ID_MAP, RANK_NAMES, RANK_COLORS, BASE, ME, BOT_ROLE, BOTS_CHANNEL_ID, MESSAGE_CD, VOICE_CHANNEL_CAT_NAME_PREFIX, BOT_SECRET_NICKNAMES, GREET_CD
+from constants import HERO_ID_MAP, RANK_NAMES, RANK_COLORS, BASE, ME, BOT_ROLE, BOTS_CHANNEL_ID, BOT_DEBUG_CHANNEL, MESSAGE_CD, VOICE_CHANNEL_CAT_NAME_PREFIX, BOT_SECRET_NICKNAMES, GREET_CD
 
 from classes.item import Item
 from classes.file_paths import BotPaths
@@ -190,11 +190,6 @@ async def on_ready():
 
 
     printLog("info",f"Bot connected as {bot.user}")
-    #await printLogToDc(bot,"debug","Bot started")
-    """
-    if "priority_cog" not in bot.extensions:
-        await bot.load_extension("priority_cog")
-    """
 
     guild = bot.get_channel(BOTS_CHANNEL_ID).guild
     bot.tree.copy_global_to(guild=guild)
@@ -217,6 +212,8 @@ async def on_ready():
             await bot.get_channel(BOTS_CHANNEL_ID).send("I'm awake!\nGood morning!\n"+face)
         else:
             await bot.get_channel(BOTS_CHANNEL_ID).send("Back online! "+face)
+
+    await bot.get_channel(BOT_DEBUG_CHANNEL).send(load_txt(BotPaths.update_check_file))
 
     if not tick.is_running():
         tick.start()
@@ -457,8 +454,8 @@ async def tick():
 bot.startTimers={"A":11*60,"B":11*60}
 bot.timers={"A":{"time":None},"B":{"time":None}}
 bot.bootTime=time.time()//1
-bot.version="0.7.3"
-bot.versionSTR="Credits"
+bot.version="0.7.4"
+bot.versionSTR="Credits and debug print"
 
 bot.name="FUNLOCK BOT" #Not yet decided
 

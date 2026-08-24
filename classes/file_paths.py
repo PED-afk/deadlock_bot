@@ -4,6 +4,8 @@ from constants import BASE
 class BotPaths():
     hotboot_file = BASE / "hotBoot.txt"
     restart_file = BASE / "restart.txt"
+    update_check_file= BASE / "update_check.txt"
+    
     user_data_path = BASE / "user_data.json"
     pause_file = BASE / "pauseTimes.txt"
 
