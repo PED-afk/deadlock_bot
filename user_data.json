@@ -29,7 +29,8 @@
         "XP": 2,
         "wins": 0,
         "hidden": {
-            "messageCD": 1784139347.123488
+            "messageCD": 1784139347.123488,
+            "interact": {}
         },
         "rank": "None"
     },
@@ -68,5 +69,25 @@
             "messageCD": 0
         },
         "rank": "None"
+    },
+    "global": {
+        "main": "None",
+        "steamID": "None",
+        "steamID3": "None",
+        "steamID64": "None",
+        "rank": "None",
+        "lvl": 1,
+        "XP": 0,
+        "wins": 0,
+        "money": {
+            "unsecured": 0,
+            "secured": 0
+        },
+        "items": [],
+        "hidden": {
+            "messageCD": 0,
+            "greetMessageCD": 0,
+            "interact": {}
+        }
     }
 }

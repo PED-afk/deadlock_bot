@@ -47,3 +47,61 @@ async def canUseCommand(ctx:commands.Context, level:int=2, inVoice:bool=False):
         return False
 
     return True
+
+async def getDictStr(d: dict, hideSome:bool=False, hideThese:dict={"hidden":"normal","items":"len=#0","steamID3":"normal","steamID64":"normal","rank":"value=#None"}, indent=0):
+    """
+
+    Creates a str from a dict <key>:<value> format\n\n
+    hideSome: skips specific keys specified in hideThese\n
+    hideThese: a dict containing the keys to hide and when to hide them.
+
+    """
+    inData = ""
+    for innerKey, innerData in d.items():
+        if hideSome:
+            if innerKey=="hidden":
+                continue
+            if innerKey=="items" and len(innerData)==0:
+                continue
+            if innerKey=="steamID3" or innerKey=="steamID64":
+                continue
+            if innerKey=="rank" and innerData=="None":
+                continue
+            for i,(key,data) in enumerate(hideThese.items()):
+                if innerKey==key:
+                    if data=="normal":
+                        continue
+                    if "len" in data:
+                        inDataLen=len(innerData)
+                        if "!=" in data:
+                            if inDataLen!=int(data.split("#")[1]):
+                                continue
+                        if "=" in data:
+                            if inDataLen==int(data.split("#")[1]):
+                                continue
+                        if ">" in data:
+                            if inDataLen>int(data.split("#")[1]):
+                                continue
+                        if "<" in data:
+                            if inDataLen<int(data.split("#")[1]):
+                                continue
+                    if "value" in data:
+                        inDataLen=len(innerData)
+                        if "!=" in data:
+                            if inDataLen!=data.split("#")[1]:
+                                continue
+                        if "=" in data:
+                            if inDataLen==data.split("#")[1]:
+                                continue
+                        if ">" in data:
+                            if inDataLen>data.split("#")[1]:
+                                continue
+                        if "<" in data:
+                            if inDataLen<data.split("#")[1]:
+                                continue
+        if isinstance(innerData, dict):
+            inData += "\t" * indent + str(innerKey) + ":\n"
+            inData += getDictStr(innerData, hideSome, indent + 1)
+        else:
+            inData += "\t" * indent + str(innerKey) + ": " + str(innerData) + "\n"
+    return inData

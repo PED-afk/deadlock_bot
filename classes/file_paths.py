@@ -18,3 +18,5 @@ class BotPaths():
     sounds_folder=BASE / "sounds"
 
     pfp_folder=BASE / "images" / "pfp"
+
+    credits_file=BASE / "data" / "3rd_party_credits.json"

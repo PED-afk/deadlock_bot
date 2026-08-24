@@ -6,11 +6,12 @@ import platform
 from pathlib import Path
 import random
 
-from own_utils import chooseFaceFromCategory, activeTimerExists, canUseCommand
+from own_utils import chooseFaceFromCategory, activeTimerExists, canUseCommand, getDictStr
 from data_manage import save_json, load_json, load_txt
 from constants import ME, BOT_ROLE, BOTS_CHANNEL_ID
 from pi_specific import getAll
 from debug import printLog, printLogToDc
+from data_manage import load_json
 
 from classes.button import Button, MultButton
 from classes.find_rem import FindRem
@@ -132,7 +133,8 @@ class Unorganized(commands.Cog):
                 anyView=True
                 botcommands=[
                     "`!minigame`: Play some games while you wait for matchmaking.",
-                    "`!source`: Lobotomy (source code)"
+                    "`!source`: Lobotomy (source code).",
+                    "`!credit`: Give credit to people we use the works of."
                 ]
             elif section=="tools":
                 anyView=True
@@ -221,9 +223,14 @@ class Unorganized(commands.Cog):
 
     @commands.command()
     async def source(self,ctx):
-        if ctx.channel.id==BOTS_CHANNEL_ID:
+        if await canUseCommand(ctx,2):
             file=discord.File(Path(__file__))
-            await ctx.reply("My brain:",file=file)
+            await ctx.reply("My brain: `https://github.com/PED-afk/deadlock_bot`",file=file)
+
+    @commands.command()
+    async def credit(self,ctx):
+        if await canUseCommand(ctx,2):
+            ctx.reply(await getDictStr(load_json(BotPaths.credits_file)))
 
     @commands.command()
     async def set_main(self, ctx,main:str):
@@ -238,44 +245,18 @@ class Unorganized(commands.Cog):
 
     @commands.command()
     async def my_data(self,ctx):
-        def getDictStr(d: dict, indent=0):
-            inData = ""
-            for innerKey, innerData in d.items():
-                if innerKey=="hidden":
-                    continue
-                if innerKey=="items" and len(innerData)==0:
-                    continue
-                if innerKey=="steamID3" or innerKey=="steamID64":
-                    continue
-                if innerKey=="rank" and innerData=="None":
-                    continue
-                if isinstance(innerData, dict):
-                    inData += "\t" * indent + str(innerKey) + ":\n"
-                    inData += getDictStr(innerData, indent + 1)
-                else:
-                    inData += "\t" * indent + str(innerKey) + ": " + str(innerData) + "\n"
-            return inData
         senderID=ctx.author.id
         if ctx.channel.id==BOTS_CHANNEL_ID:
-            message=getDictStr(self.bot.user_data[str(senderID)])
+            message=await getDictStr(self.bot.user_data[str(senderID)],True)
             await ctx.reply(message,delete_after=30)
 
 
     @commands.command()
     async def my_data_admin(self,ctx):
-        def getDictStr(d: dict, indent=0):
-            inData = ""
-            for innerKey, innerData in d.items():
-                if isinstance(innerData, dict):
-                    inData += "\t" * indent + str(innerKey) + ":\n"
-                    inData += getDictStr(innerData, indent + 1)
-                else:
-                    inData += "\t" * indent + str(innerKey) + ": " + str(innerData) + "\n"
-            return inData
         senderID=ctx.author.id
         if await canUseCommand(ctx,1):
             await printLogToDc(self.bot,"debug",self.bot.user_data[str(senderID)])
-            message=getDictStr(self.bot.user_data[str(senderID)])
+            message=await getDictStr(self.bot.user_data[str(senderID)])
             await ctx.reply(message,delete_after=30)
             
     @commands.command()
