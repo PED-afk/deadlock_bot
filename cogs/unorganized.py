@@ -230,7 +230,7 @@ class Unorganized(commands.Cog):
     @commands.command()
     async def credit(self,ctx):
         if await canUseCommand(ctx,2):
-            ctx.reply(await getDictStr(load_json(BotPaths.credits_file)))
+            await ctx.reply(await getDictStr(load_json(BotPaths.credits_file)))
 
     @commands.command()
     async def set_main(self, ctx,main:str):

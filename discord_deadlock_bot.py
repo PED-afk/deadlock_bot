@@ -213,7 +213,9 @@ async def on_ready():
         else:
             await bot.get_channel(BOTS_CHANNEL_ID).send("Back online! "+face)
 
-    await bot.get_channel(BOT_DEBUG_CHANNEL).send(load_txt(BotPaths.update_check_file))
+    tempData=load_txt(BotPaths.update_check_file)
+    if len(tempData)!=0:
+        await bot.get_channel(BOT_DEBUG_CHANNEL).send(tempData)
 
     if not tick.is_running():
         tick.start()

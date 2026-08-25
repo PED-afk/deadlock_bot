@@ -3,6 +3,7 @@ import random
 from discord.ext import commands
 
 from constants import ME, BOT_ROLE, BOTS_CHANNEL_ID
+from debug import printLog
 
 def chooseFaceFromCategory(bot:commands.Bot,category:str):
     if category in bot.faces:
@@ -59,14 +60,6 @@ async def getDictStr(d: dict, hideSome:bool=False, hideThese:dict={"hidden":"nor
     inData = ""
     for innerKey, innerData in d.items():
         if hideSome:
-            if innerKey=="hidden":
-                continue
-            if innerKey=="items" and len(innerData)==0:
-                continue
-            if innerKey=="steamID3" or innerKey=="steamID64":
-                continue
-            if innerKey=="rank" and innerData=="None":
-                continue
             for i,(key,data) in enumerate(hideThese.items()):
                 if innerKey==key:
                     if data=="normal":
@@ -99,9 +92,15 @@ async def getDictStr(d: dict, hideSome:bool=False, hideThese:dict={"hidden":"nor
                         if "<" in data:
                             if inDataLen<data.split("#")[1]:
                                 continue
+        if indent==0:
+            inData+="# "
         if isinstance(innerData, dict):
-            inData += "\t" * indent + str(innerKey) + ":\n"
-            inData += getDictStr(innerData, hideSome, indent + 1)
+            inData+="\t"*indent+str(innerKey)+":\n"
+            inData+="\t"*indent+await getDictStr(innerData, hideSome, hideThese, indent+1)
         else:
-            inData += "\t" * indent + str(innerKey) + ": " + str(innerData) + "\n"
+            inData+="\t"*indent+str(innerKey)+":\n"+str(innerData)+"\n"
     return inData
+
+
+
+
