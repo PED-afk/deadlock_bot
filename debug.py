@@ -134,7 +134,8 @@ async def printLogToDc(bot:commands.Bot,type:str, content:str):
         type can also be the function the print is from
     """
     
-    await bot.get_channel(BOT_DEBUG_CHANNEL).send(f"[{type.upper()}]  {content}")
+    fromFunction = inspect.currentframe().f_back.f_code.co_name
+    await bot.get_channel(BOT_DEBUG_CHANNEL).send(f"[{type.upper()}]"+f" [{fromFunction.upper()}]"+f"  {content}")
 
 def readback(what:str="all",deleteAfter:bool=False)->str:
     """

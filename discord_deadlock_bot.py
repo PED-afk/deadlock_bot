@@ -316,6 +316,12 @@ async def on_message(message):
     if message.content.lower() in ["reset the timer","reset timer","!reset_the_timer"]:
         message.content = "!reset_the_timer"
         await bot.process_commands(message)
+        return
+
+    if message.content.lower() in ["the timer","what's the time","!the_timer"]:
+        message.content = "!the_timer"
+        await bot.process_commands(message)
+        return
 
     if message.channel.id==BOTS_CHANNEL_ID:
         await bot.process_commands(message)
@@ -461,8 +467,8 @@ async def tick():
 bot.startTimers={"A":11*60,"B":11*60}
 bot.timers={"A":{"time":None},"B":{"time":None}}
 bot.bootTime=time.time()//1
-bot.version="0.7.6"
-bot.versionSTR="Joke feature"
+bot.version="0.7.7"
+bot.versionSTR="Joke feature #2"
 
 bot.name="FUNLOCK BOT" #Not yet decided
 

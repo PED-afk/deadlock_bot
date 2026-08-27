@@ -101,6 +101,9 @@ class Hiddens(commands.Cog):
     async def reset_the_timer(self,ctx):
         await ctx.reply(f"The Degenerate Timer has been reset.\nTime before reset: {format_duration(time.time()-self.bot.degenTimer)}")
         self.bot.degenTimer=time.time()
+    @commands.command()
+    async def the_timer(self,ctx):
+        await ctx.reply(f"The Degenerate Timer's time: {format_duration(time.time()-self.bot.degenTimer)}")
 
 async def setup(bot):
     await bot.add_cog(Hiddens(bot))

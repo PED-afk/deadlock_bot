@@ -38,7 +38,7 @@ class Debug(commands.Cog):
             ]
             await ctx.reply('\n'.join(botcommands))
         if await canUseCommand(ctx,1):
-            readback(what,delAfter)
+            await printLogToDc(self.bot,"dump",readback(what,delAfter))
 
     @commands.command()
     async def ping(self, ctx):
