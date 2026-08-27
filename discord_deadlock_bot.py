@@ -462,7 +462,7 @@ bot.startTimers={"A":11*60,"B":11*60}
 bot.timers={"A":{"time":None},"B":{"time":None}}
 bot.bootTime=time.time()//1
 bot.version="0.7.6"
-bot.versionSTR="degen timer"
+bot.versionSTR="Joke feature"
 
 bot.name="FUNLOCK BOT" #Not yet decided
 
