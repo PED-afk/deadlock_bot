@@ -6,8 +6,11 @@ class BotPaths():
     restart_file = BASE / "restart.txt"
     update_check_file= BASE / "update_check.txt"
     
-    user_data_path = BASE / "user_data.json"
+    user_data_file = "user_data.json"
+    user_data_path = BASE / user_data_file
+
     pause_file = BASE / "pauseTimes.txt"
+    degen_timer_file=BASE / "degen_timer.txt"
 
     characters_file = BASE / "characters.txt"
     characters_file_json = BASE / "characters.json"

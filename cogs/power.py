@@ -4,7 +4,7 @@ from discord.ext import commands, tasks
 import asyncio
 
 from own_utils import chooseFaceFromCategory, activeTimerExists, canUseCommand
-from data_manage import save_json, load_json, load_txt
+from data_manage import save_json, load_json, load_txt, deep_save_json
 from constants import ME, BOT_ROLE, BOTS_CHANNEL_ID
 
 from classes.file_paths import BotPaths
@@ -24,6 +24,7 @@ class Power(commands.Cog):
                 if ctx.guild.voice_client:
                     await ctx.guild.voice_client.disconnect()
                 save_json(BotPaths.user_data_path,self.bot.user_data)
+                deep_save_json(BotPaths.user_data_file,self.bot.user_data)
                 await ctx.reply("Shuting down.\nGood night!\nᴗ˳ᴗ",delete_after=10)
                 with open(BotPaths.restart_file,"w") as f:
                     f.write("0")
@@ -50,6 +51,7 @@ class Power(commands.Cog):
                     await ctx.guild.voice_client.disconnect()
                 if save=="save":
                     save_json(BotPaths.user_data_path,self.bot.user_data)
+                    deep_save_json(BotPaths.user_data_file,self.bot.user_data)
                 with open(BotPaths.restart_file,"w") as f:
                     f.write("1")
                 await ctx.reply("Shuting down.\nBe right back!\n"+chooseFaceFromCategory(self.bot,"blush_happy"),delete_after=20)
@@ -65,6 +67,7 @@ class Power(commands.Cog):
                     await ctx.guild.voice_client.disconnect()
                 if save=="save":
                     save_json(BotPaths.user_data_path,self.bot.user_data)
+                    deep_save_json(BotPaths.user_data_file,self.bot.user_data)
                 
                 with open(BotPaths.restart_file,"w") as f:
                     f.write("2")

@@ -1,75 +1,4 @@
 {
-    "dc id as str": {
-        "main": "None",
-        "steamID": "None",
-        "steamID3": "None",
-        "steamID64": "None",
-        "money": {
-            "unsecured": 0,
-            "secured": 0
-        },
-        "items": [],
-        "lvl": 0,
-        "XP": 0,
-        "hidden": {
-            "messageCD": 0
-        }
-    },
-    "616710497378631709": {
-        "main": "None",
-        "steamID": "None",
-        "steamID3": "None",
-        "steamID64": "None",
-        "money": {
-            "unsecured": 101,
-            "secured": 0
-        },
-        "items": [],
-        "lvl": 1,
-        "XP": 2,
-        "wins": 0,
-        "hidden": {
-            "messageCD": 1784139347.123488,
-            "interact": {}
-        },
-        "rank": "None"
-    },
-    "534796790105505794": {
-        "main": "None",
-        "steamID": "None",
-        "steamID3": "None",
-        "steamID64": "None",
-        "money": {
-            "unsecured": 0,
-            "secured": 0
-        },
-        "items": [],
-        "lvl": 1,
-        "XP": 0,
-        "wins": 0,
-        "hidden": {
-            "messageCD": 0
-        },
-        "rank": "None"
-    },
-    "674177700545560606": {
-        "main": "None",
-        "steamID": "None",
-        "steamID3": "None",
-        "steamID64": "None",
-        "money": {
-            "unsecured": 0,
-            "secured": 0
-        },
-        "items": [],
-        "lvl": 1,
-        "XP": 0,
-        "wins": 0,
-        "hidden": {
-            "messageCD": 0
-        },
-        "rank": "None"
-    },
     "global": {
         "main": "None",
         "steamID": "None",
@@ -86,6 +15,26 @@
         "items": [],
         "hidden": {
             "messageCD": 0,
+            "greetMessageCD": 0,
+            "interact": {}
+        }
+    },
+    "616710497378631709": {
+        "main": "None",
+        "steamID": "None",
+        "steamID3": "None",
+        "steamID64": "None",
+        "rank": "None",
+        "lvl": 1,
+        "XP": 1,
+        "wins": 0,
+        "money": {
+            "unsecured": 100,
+            "secured": 0
+        },
+        "items": [],
+        "hidden": {
+            "messageCD": 1787831866.3135107,
             "greetMessageCD": 0,
             "interact": {}
         }

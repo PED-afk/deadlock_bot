@@ -2,8 +2,9 @@
 import discord
 from discord.ext import commands, tasks
 import asyncio
+import time
 
-from own_utils import chooseFaceFromCategory, canUseCommand
+from own_utils import chooseFaceFromCategory, canUseCommand, format_duration
 from constants import ME, BOT_ROLE, BOTS_CHANNEL_ID
 from user_bot_interaction import interact, getInteractValue, getGlobalInteractValue
 from debug import printLogToDc
@@ -96,6 +97,10 @@ class Hiddens(commands.Cog):
     async def portal(self,ctx):
         await self.play_sound(ctx,str(self.bot.sounds_folder / "voicechat" / "portal.pcm"))
 
+    @commands.command()
+    async def reset_the_timer(self,ctx):
+        await ctx.reply(f"The Degenerate Timer has been reset.\nTime before reset: {format_duration(time.time()-self.bot.degenTimer)}")
+        self.bot.degenTimer=time.time()
 
 async def setup(bot):
     await bot.add_cog(Hiddens(bot))

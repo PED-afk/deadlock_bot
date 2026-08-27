@@ -9,7 +9,7 @@ import time
 import random
 import aiohttp
 
-from data_manage import save_json, load_json, load_txt
+from data_manage import save_json, load_json, load_txt, deep_load_json, deep_load_txt
 """
 load_txt returns a list of str from the filepath
 load_json and save_json loads from and saves to json files
@@ -312,6 +312,11 @@ async def on_message(message):
         bot.user_data[idSTR]["hidden"]["messageCD"]=time.time()+bot.greetCD
         await message.reply(botGreets())
 
+
+    if message.content.lower() in ["reset the timer","reset timer","!reset_the_timer"]:
+        message.content = "!reset_the_timer"
+        await bot.process_commands(message)
+
     if message.channel.id==BOTS_CHANNEL_ID:
         await bot.process_commands(message)
 
@@ -456,8 +461,8 @@ async def tick():
 bot.startTimers={"A":11*60,"B":11*60}
 bot.timers={"A":{"time":None},"B":{"time":None}}
 bot.bootTime=time.time()//1
-bot.version="0.7.5"
-bot.versionSTR="Credits, debug print, gitignore"
+bot.version="0.7.6"
+bot.versionSTR="degen timer"
 
 bot.name="FUNLOCK BOT" #Not yet decided
 
@@ -465,9 +470,10 @@ bot.name="FUNLOCK BOT" #Not yet decided
 
 bot.messageCD=MESSAGE_CD
 bot.greetCD=GREET_CD
+bot.degenTimer=deep_load_txt(BotPaths.degen_timer_file)
 
 bot.faces=load_json(BotPaths.face_file)
-bot.user_data=load_json(BotPaths.user_data_path)
+bot.user_data=deep_load_json(BotPaths.user_data_file)
 idSTR="global"
 if idSTR not in bot.user_data.keys():
     bot.user_data[idSTR]={}

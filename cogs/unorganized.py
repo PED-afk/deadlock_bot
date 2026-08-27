@@ -7,7 +7,7 @@ from pathlib import Path
 import random
 
 from own_utils import chooseFaceFromCategory, activeTimerExists, canUseCommand, getDictStr
-from data_manage import save_json, load_json, load_txt
+from data_manage import save_json, load_json, load_txt, deep_save_json
 from constants import ME, BOT_ROLE, BOTS_CHANNEL_ID
 from pi_specific import getAll
 from debug import printLog, printLogToDc
@@ -271,11 +271,13 @@ class Unorganized(commands.Cog):
             await ctx.reply("Who are you?\n"+face)
 
     @commands.command()
-    async def save(self,ctx):
+    async def save(self,ctx,deep:str=""):
         senderID=ctx.author.id
         if ctx.channel.id==BOTS_CHANNEL_ID:
             if senderID==ME or any(role.id == BOT_ROLE for role in ctx.author.roles):
                 save_json(BotPaths.user_data_path,self.bot.user_data)
+                if deep=="deep":
+                    deep_save_json(BotPaths.user_data_file,self.bot.user_data)
                 await ctx.reply("Saving some stuff. "+chooseFaceFromCategory(self.bot,"concentrate"),delete_after=10)
 
     @commands.command()

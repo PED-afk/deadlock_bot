@@ -57,7 +57,7 @@ async def getDictStr(d: dict, hideSome:bool=False, hideThese:dict={"hidden":"nor
     hideThese: a dict containing the keys to hide and when to hide them.
 
     """
-    inData = ""
+    inData=""
     for innerKey, innerData in d.items():
         if hideSome:
             for i,(key,data) in enumerate(hideThese.items()):
@@ -101,6 +101,21 @@ async def getDictStr(d: dict, hideSome:bool=False, hideThese:dict={"hidden":"nor
             inData+="\t"*indent+str(innerKey)+":\n"+str(innerData)+"\n"
     return inData
 
-
+def format_duration(seconds: int) -> str:
+    units=[
+        ("year", 365 * 24 * 60 * 60),
+        ("month", 30 * 24 * 60 * 60),
+        ("day", 24 * 60 * 60),
+        ("hour", 60 * 60),
+        ("minute", 60),
+        ("second", 1),
+    ]
+    parts=[]
+    for name, size in units:
+        value, seconds=divmod(seconds, size)
+        # Don't show leading zeros
+        if value or parts:
+            parts.append(f"{value} {name}{'s' if value!=1 else ''}")
+    return ", ".join(parts)
 
 
