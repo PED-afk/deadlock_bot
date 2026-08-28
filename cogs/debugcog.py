@@ -3,7 +3,7 @@ import discord
 from discord.ext import commands, tasks
 import asyncio
 
-from own_utils import chooseFaceFromCategory, activeTimerExists, canUseCommand
+from own_utils import canUseCommand
 from data_manage import save_json, load_json, load_txt
 from constants import ME, BOT_ROLE, BOTS_CHANNEL_ID
 from debug import readback, clean, printLog, printLogToDc

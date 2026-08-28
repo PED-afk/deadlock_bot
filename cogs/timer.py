@@ -46,11 +46,11 @@ class Timer(commands.Cog):
                     for channel in discord.utils.get(guild.categories, name=VOICE_CHANNEL_CAT_NAME_PREFIX+"["+name+"]").voice_channels:
                         for member in channel.members:
                             if member.global_name=="PurpleEarthDragon":
-                                names.append(member.global_name+chooseFaceFromCategory(self.bot,"love"))
+                                names.append(member.global_name+chooseFaceFromCategory("love"))
                             else:
                                 names.append(member.global_name)
                 
-                await ctx.send("__Good luck, and Have fun!__\n"+'\n'.join(names)+"\n"+chooseFaceFromCategory(self.bot,"happy"),delete_after=self.bot.startTimers[ctx.author.voice.channel.category.name[-2]])
+                await ctx.send("__Good luck, and Have fun!__\n"+'\n'.join(names)+"\n"+chooseFaceFromCategory("happy"),delete_after=self.bot.startTimers[ctx.author.voice.channel.category.name[-2]])
             else:
                 await ctx.reply("There is already an active timer in this voice channel category.")
               

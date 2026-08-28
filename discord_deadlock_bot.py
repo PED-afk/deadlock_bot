@@ -205,7 +205,7 @@ async def on_ready():
         except discord.HTTPException:
             pass
     
-    face=chooseFaceFromCategory(bot,"big_eyes")
+    face=chooseFaceFromCategory("big_eyes")
 
     with open(BotPaths.hotboot_file,"r") as f:
         if int(f.readline().strip())==0:
@@ -236,21 +236,21 @@ async def on_message(message):
                     intVal=max(getInteractValue(bot,"thank",idINT),getGlobalInteractValue(bot,"thank"))
                     if intVal<=10:
                         if "My brain" in repliedTo.content:
-                            await message.reply("You're welcome!\n"+chooseFaceFromCategory(bot,"brain_hurt"))
+                            await message.reply("You're welcome!\n"+chooseFaceFromCategory("brain_hurt"))
                         else:
-                            await message.reply("You're welcome!\n"+chooseFaceFromCategory(bot,"spark"))
+                            await message.reply("You're welcome!\n"+chooseFaceFromCategory("spark"))
                     else:
-                        await message.reply("You're welcome.\n"+chooseFaceFromCategory(bot,"neutral"))
+                        await message.reply("You're welcome.\n"+chooseFaceFromCategory("neutral"))
                 else:
                     interact(bot,1,"thank",idINT)
                     intVal=max(getInteractValue(bot,"thank",idINT),getGlobalInteractValue(bot,"thank"))
                     if intVal<=10:
                         if "My brain" in repliedTo.content:
-                            await message.reply("You're welcome!\n"+chooseFaceFromCategory(bot,"brain_hurt"))
+                            await message.reply("You're welcome!\n"+chooseFaceFromCategory("brain_hurt"))
                         else:
-                            await message.reply("You're welcome!\n"+chooseFaceFromCategory(bot,"pat"))
+                            await message.reply("You're welcome!\n"+chooseFaceFromCategory("pat"))
                     else:
-                        await message.reply("You're welcome.\n"+chooseFaceFromCategory(bot,"neutral"))
+                        await message.reply("You're welcome.\n"+chooseFaceFromCategory("neutral"))
 
 
     if str(message.author.id) not in bot.user_data.keys():
@@ -336,13 +336,13 @@ async def set_steam_id(self, ctx, id: int):
         account_id = id - 76561197960265728
         self.bot.user_data[str(senderID)]["steamID"] = str(account_id)
         self.bot.user_data[str(senderID)]["steamID64"] = str(id)
-        await ctx.reply("Steam ID saved! Fetching your rank and most played heroes... " + chooseFaceFromCategory(bot,"concentrate"))
+        await ctx.reply("Steam ID saved! Fetching your rank and most played heroes... " + chooseFaceFromCategory("concentrate"))
         result = await fetch_rank_from_api(id)
         if result:
             rank, division_tier = result
             self.bot.user_data[str(senderID)]["rank"] = rank
             await assign_rank_role(ctx.author, rank)
-            await ctx.reply("Your rank has been automatically set to: **" + rank.capitalize() + " " + str(division_tier) + "** " + chooseFaceFromCategory(bot,"happy"))
+            await ctx.reply("Your rank has been automatically set to: **" + rank.capitalize() + " " + str(division_tier) + "** " + chooseFaceFromCategory("happy"))
         else:
             await ctx.reply("Couldn't fetch your rank automatically. Make sure your Steam profile is public and you have played ranked matches. You can set it manually with `!set_rank`.")
         heroes = await fetch_most_played(id)
@@ -351,7 +351,7 @@ async def set_steam_id(self, ctx, id: int):
             self.bot.user_data[str(senderID)]["main"] = top["name"]
             await assign_hero_role(ctx.author, top["name"])
             heroes_str = ", ".join(f"**{h['name']}** ({h['matches']} games)" for h in heroes)
-            await ctx.reply(f"Most played: {heroes_str}\nMain automatically set to **{top['name']}** " + chooseFaceFromCategory(bot,"happy"))
+            await ctx.reply(f"Most played: {heroes_str}\nMain automatically set to **{top['name']}** " + chooseFaceFromCategory("happy"))
 
 @bot.command()
 async def update_rank(ctx):
@@ -361,13 +361,13 @@ async def update_rank(ctx):
         if steam_id_64 == "None" or not steam_id_64:
             await ctx.reply("You haven't set your Steam ID yet. Use `!set_steam_id <your_steamid64>` first.")
             return
-        await ctx.reply("Fetching your latest rank... " + chooseFaceFromCategory(bot,"concentrate"))
+        await ctx.reply("Fetching your latest rank... " + chooseFaceFromCategory("concentrate"))
         result = await fetch_rank_from_api(int(steam_id_64))
         if result:
             rank, division_tier = result
             bot.user_data[str(senderID)]["rank"] = rank
             await assign_rank_role(ctx.author, rank)
-            await ctx.reply("Your rank has been updated to: **" + rank.capitalize() + " " + str(division_tier) + "** " + chooseFaceFromCategory(bot,"happy"))
+            await ctx.reply("Your rank has been updated to: **" + rank.capitalize() + " " + str(division_tier) + "** " + chooseFaceFromCategory("happy"))
         else:
             await ctx.reply("Couldn't fetch your rank. Make sure your Steam profile is public and you have played ranked matches.")
 
@@ -384,7 +384,7 @@ async def profile(ctx, member: discord.Member = None):
     data = bot.user_data[senderID]
     steam_id_64 = data.get("steamID64", "None")
 
-    msg = await ctx.reply("Loading profile... " + chooseFaceFromCategory(bot,"concentrate"))
+    msg = await ctx.reply("Loading profile... " + chooseFaceFromCategory("concentrate"))
 
     rank_str = "Unknown"
     rank_color = discord.Color.blurple()
@@ -478,7 +478,6 @@ bot.messageCD=MESSAGE_CD
 bot.greetCD=GREET_CD
 bot.degenTimer=deep_load_txt(BotPaths.degen_timer_file)
 
-bot.faces=load_json(BotPaths.face_file)
 bot.user_data=deep_load_json(BotPaths.user_data_file)
 idSTR="global"
 if idSTR not in bot.user_data.keys():

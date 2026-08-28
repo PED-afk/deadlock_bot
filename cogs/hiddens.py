@@ -57,13 +57,13 @@ class Hiddens(commands.Cog):
             interact(self.bot,2,"happy",int(ctx.author.id))
             curVal=max(getInteractValue(self.bot,"happy",int(ctx.author.id)),getGlobalInteractValue(self.bot,"happy"))
             if curVal<10:
-                await ctx.reply(chooseFaceFromCategory(self.bot,"pat"))
+                await ctx.reply(chooseFaceFromCategory("pat"))
             elif curVal<15:
-                await ctx.reply(chooseFaceFromCategory(self.bot,"concerned")+"\nStawp")
+                await ctx.reply(chooseFaceFromCategory("concerned")+"\nStawp")
             elif curVal<20:
-                await ctx.reply(chooseFaceFromCategory(self.bot,"annoyed")+"\nStop.")
+                await ctx.reply(chooseFaceFromCategory("annoyed")+"\nStop.")
             else:
-                await ctx.reply(chooseFaceFromCategory(self.bot,"neutral"))
+                await ctx.reply(chooseFaceFromCategory("neutral"))
 
     @commands.command()
     async def pat(self,ctx):

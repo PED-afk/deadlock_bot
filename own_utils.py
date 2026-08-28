@@ -4,14 +4,20 @@ from discord.ext import commands
 
 from constants import ME, BOT_ROLE, BOTS_CHANNEL_ID
 from debug import printLog
+from classes.bot_faces import Faces
 
-def chooseFaceFromCategory(bot:commands.Bot,category:str):
-    if category in bot.faces:
-        faces=bot.faces[category]
-    else:
-        faces=["(face category not found)"]
-    r=random.randint(0,len(faces)-1)
-    return faces[r]
+BOTFACES=Faces
+
+def chooseFaceFromCategory(category:str):
+    """
+    
+    Randomly selects a face from the given category
+    """
+    if category not in BOTFACES:
+        return f"(face category {category} not found)"
+    curFaces=BOTFACES[category]
+    r=random.randint(0,len(curFaces)-1)
+    return curFaces[r]
 
 def activeTimerExists(bot:commands.Bot):
     for i, (timerName,timerData) in enumerate(bot.timers.items()):

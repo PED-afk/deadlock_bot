@@ -68,7 +68,7 @@ class Unorganized(commands.Cog):
                     view=runHome(ctx,"before start",userData,self.bot)
                     await ctx.reply("Get back to the base!\nYou have: "+str(self.bot.user_data[str(senderID)]["money"]["unsecured"])+" unsecured souls!", view=view)
             else:
-                await ctx.reply("No minigame exists with that name."+chooseFaceFromCategory(self.bot,"nervous"))
+                await ctx.reply("No minigame exists with that name."+chooseFaceFromCategory("nervous"))
 
 
     @commands.command()
@@ -97,7 +97,7 @@ class Unorganized(commands.Cog):
                     "`!remaining:` Tells you how much time remains on the timer.",
                 ]
             elif section=="voice":
-                face=chooseFaceFromCategory(self.bot,"annoyed")
+                face=chooseFaceFromCategory("annoyed")
                 anyView=True
                 botcommands=[
                     "`!join`: I will join `Deadlock [#]` and will use an experimental feature to automate my timer functionality.",
@@ -156,7 +156,7 @@ class Unorganized(commands.Cog):
         if ctx.channel.id==BOTS_CHANNEL_ID:
             if random.randint(0,9)==0:
                 if senderID==ME:
-                    face=chooseFaceFromCategory(self.bot,"annoyed")
+                    face=chooseFaceFromCategory("annoyed")
                     #WATCH OUT!!!
                     #DO NOT DELETE OR REPLACE
                     l="‎ " #this is not a 'space' character (that wouldn't work) this is an invisible character different from a 'space'
@@ -181,7 +181,7 @@ class Unorganized(commands.Cog):
             seconds=diff
             extra=""
             if hours>24:
-                extra="\nI'm tired. "+chooseFaceFromCategory(self.bot,"tired")
+                extra="\nI'm tired. "+chooseFaceFromCategory("tired")
             await ctx.reply("Bot version: "+self.bot.version+" "+self.bot.versionSTR+"\nOS: "+winlin+"\nHardware I'm living on: "+cpu+"\nI've been running for: "+str(hours)+" hours, "+str(minutes)+" minutes and "+str(seconds)+" seconds."+extra)
             if lindistr!=None:
                 await ctx.reply(getAll()+lindistr["PRETTY_NAME"],delete_after=30)
@@ -199,7 +199,7 @@ class Unorganized(commands.Cog):
         if ctx.channel.id==BOTS_CHANNEL_ID:
             if senderID==ME or any(role.id == BOT_ROLE for role in ctx.author.roles):
                 if ctx.guild.voice_client!=None:
-                    await ctx.reply("Sorry I'm busy in another channel. "+chooseFaceFromCategory(self.bot,"nervous"))
+                    await ctx.reply("Sorry I'm busy in another channel. "+chooseFaceFromCategory("nervous"))
                 else:
                     if ctx.author.voice==None:
                         await ctx.reply("You must be in a voice channel so I know which channel to join.")
@@ -265,9 +265,9 @@ class Unorganized(commands.Cog):
         if ctx.channel.id==BOTS_CHANNEL_ID:
             self.bot.user_data.pop(str(senderID),None)
             if random.randint(0,1)==0:
-                face=chooseFaceFromCategory(self.bot,"nervous")
+                face=chooseFaceFromCategory("nervous")
             else:
-                face=chooseFaceFromCategory(self.bot,"question")
+                face=chooseFaceFromCategory("question")
             await ctx.reply("Who are you?\n"+face)
 
     @commands.command()
@@ -276,9 +276,11 @@ class Unorganized(commands.Cog):
         if ctx.channel.id==BOTS_CHANNEL_ID:
             if senderID==ME or any(role.id == BOT_ROLE for role in ctx.author.roles):
                 save_json(BotPaths.user_data_path,self.bot.user_data)
+                face=chooseFaceFromCategory("concentrate")
                 if deep=="deep":
+                    face=chooseFaceFromCategory("deep_concentrate")
                     deep_save_json(BotPaths.user_data_file,self.bot.user_data)
-                await ctx.reply("Saving some stuff. "+chooseFaceFromCategory(self.bot,"concentrate"),delete_after=10)
+                await ctx.reply("Saving some stuff. "+face,delete_after=10)
 
     @commands.command()
     async def clear_loaded(self,ctx):
@@ -286,7 +288,7 @@ class Unorganized(commands.Cog):
         if ctx.channel.id==BOTS_CHANNEL_ID:
             if senderID==ME:
                 self.bot.user_data={}
-        await ctx.reply("I forgor. Head empty...\n"+chooseFaceFromCategory(self.bot,"big_eyes"))
+        await ctx.reply("I forgor. Head empty...\n"+chooseFaceFromCategory("big_eyes"))
 
     @commands.command()
     async def clear_user_data(self,ctx):
@@ -295,7 +297,7 @@ class Unorganized(commands.Cog):
             if senderID==ME:
                 self.bot.user_data={}
                 save_json(BotPaths.user_data_path,{})
-        await ctx.reply("I forgor. Head empty...\n"+chooseFaceFromCategory(self.bot,"big_eyes"))
+        await ctx.reply("I forgor. Head empty...\n"+chooseFaceFromCategory("big_eyes"))
 
     @commands.command()
     async def rand(self, ctx,sub:str=None, num:int=1):
@@ -421,7 +423,7 @@ class Unorganized(commands.Cog):
                     oItems.pop(r)
                 await ctx.reply(returnChars)
             else:
-                await ctx.reply("I can't give you a random thing in that category."+chooseFaceFromCategory(self.bot,"nervous"))
+                await ctx.reply("I can't give you a random thing in that category."+chooseFaceFromCategory("nervous"))
 
     @commands.command()
     async def set_rank(self, ctx,rank:str=None):
@@ -465,9 +467,9 @@ class Unorganized(commands.Cog):
                 await ctx.reply("These people have rank simmilar to what you are looking for:\n"+'\n'.join(lookedForPeople))
             else:
                 if online:
-                    await ctx.reply("No online people are in that rank. "+chooseFaceFromCategory(self.bot,"sad"))
+                    await ctx.reply("No online people are in that rank. "+chooseFaceFromCategory("sad"))
                 else:
-                    await ctx.reply("No people found. "+chooseFaceFromCategory(self.bot,"sad"))
+                    await ctx.reply("No people found. "+chooseFaceFromCategory("sad"))
 
 
 

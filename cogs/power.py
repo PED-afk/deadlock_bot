@@ -54,7 +54,7 @@ class Power(commands.Cog):
                     deep_save_json(BotPaths.user_data_file,self.bot.user_data)
                 with open(BotPaths.restart_file,"w") as f:
                     f.write("1")
-                await ctx.reply("Shuting down.\nBe right back!\n"+chooseFaceFromCategory(self.bot,"blush_happy"),delete_after=20)
+                await ctx.reply("Shuting down.\nBe right back!\n"+chooseFaceFromCategory("blush_happy"),delete_after=20)
                 await self.bot.close()
     
     @commands.command()
@@ -75,7 +75,7 @@ class Power(commands.Cog):
                     pauseStart=f.readline().strip()
                     pauseEnd=f.readline().strip()
                 
-                await ctx.reply("Going to sleep\nI will be unavailable between "+pauseStart+" and "+pauseEnd+" CEST\n"+chooseFaceFromCategory(self.bot,"sleep"),delete_after=20)
+                await ctx.reply("Going to sleep\nI will be unavailable between "+pauseStart+" and "+pauseEnd+" CEST\n"+chooseFaceFromCategory("sleep"),delete_after=20)
                 await self.bot.close()
 
 async def setup(bot):
