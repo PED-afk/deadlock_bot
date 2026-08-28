@@ -313,7 +313,7 @@ async def on_message(message):
         await message.reply(botGreets())
 
 
-    if message.content.lower() in ["reset the timer","reset timer","!reset_the_timer"]:
+    if message.content.lower() in ["reset the timer","reset timer","!reset_the_timer","0 days without degenerate nonsense","0 days without degeneracy"]:
         message.content = "!reset_the_timer"
         await bot.process_commands(message)
         return
