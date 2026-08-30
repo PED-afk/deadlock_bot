@@ -14,11 +14,11 @@ def chooseFaceFromCategory(category:str|list[str]) -> str:
     Randomly selects a face from the given category
     """
     if isinstance(category,list):
-        category=random.choices(category)
-    if category not in BOTFACES:
+        category=random.choice(category)
+    if category not in BOTFACES.faces:
         return f"(face category {category} not found)"
-    curFaces=BOTFACES[category]
-    return random.choices(curFaces)
+    curFaces=BOTFACES.faces[category]
+    return random.choice(curFaces)
 
 def activeTimerExists(bot:commands.Bot):
     for i, (timerName,timerData) in enumerate(bot.timers.items()):
@@ -39,7 +39,6 @@ async def canUseCommand(ctx:commands.Context, level:int=2, inVoice:bool=False):
     If True, user must be in a voice channel
     """
 
-    #obsolete but later might return
     #if ctx.channel.id!=BOTS_CHANNEL_ID:
         #return False
 
@@ -99,11 +98,12 @@ async def getDictStr(d: dict, hideSome:bool=False, hideThese:dict={"hidden":"nor
                         if "<" in data:
                             if inDataLen<data.split("#")[1]:
                                 continue
-        if indent==0 and format:
-            inData+="# "
+        if indent==0:
+            if format:
+                inData+="# "
         if isinstance(innerData, dict):
             inData+="\t"*indent+str(innerKey)+":\n"
-            inData+="\t"*indent+await getDictStr(innerData, hideSome, hideThese, indent+1)
+            inData+="\t"*indent+await getDictStr(innerData, hideSome, hideThese, format, indent+1)
         else:
             inData+="\t"*indent+str(innerKey)+":\n"+str(innerData)+"\n"
     return inData

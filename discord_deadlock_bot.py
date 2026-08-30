@@ -16,7 +16,7 @@ load_json and save_json loads from and saves to json files
 
 neither does anything else other than open the file on the filepath and load the data from it
 """
-from own_utils import chooseFaceFromCategory
+from own_utils import chooseFaceFromCategory, canUseCommand
 from debug import printLog, printLogToDc
 from constants import HERO_ID_MAP, RANK_NAMES, RANK_COLORS, BASE, ME, BOT_ROLE, BOTS_CHANNEL_ID, BOT_DEBUG_CHANNEL, MESSAGE_CD, VOICE_CHANNEL_CAT_NAME_PREFIX, BOT_SECRET_NICKNAMES, GREET_CD
 
@@ -325,7 +325,13 @@ async def on_message(message):
         return
 
     if message.channel.id==BOTS_CHANNEL_ID:
-        await bot.process_commands(message)
+        if message.content.count("!")>1 and await canUseCommand(message,0):
+            for content in message.content.split("!"):
+                if content.strip():
+                    message.content="!"+content.strip()
+                    await bot.process_commands(message)
+        else:
+            await bot.process_commands(message)
 
 
 
@@ -468,8 +474,8 @@ async def tick():
 bot.startTimers={"A":11*60,"B":11*60}
 bot.timers={"A":{"time":None},"B":{"time":None}}
 bot.bootTime=time.time()//1
-bot.version="0.7.8"
-bot.versionSTR="Faces"
+bot.version="0.8.0"
+bot.versionSTR="Interactions test"
 
 bot.name="FUNLOCK BOT" #Not yet decided
 

@@ -7,55 +7,58 @@ import random
 from constants import BOT_INTERACTION_TIMEOUT, ACCEPTED_GREETS, GREET_RESPONSES, GREET_SEARCH_LIMIT, BOT_SECRET_NICKNAMES
 from own_utils import chooseFaceFromCategory
 from debug import printLog
+from classes.bot_faces import Faces
 
-def checkPastInteractions(data):
+def checkPastInteractions(data:dict) -> dict:
     newTimes={}
-    for type in data:
-        times=[]
-        for iTime in data[type]:
-            if int(data[type][iTime])+BOT_INTERACTION_TIMEOUT>time.time():
-                times.append(data[type][iTime])
-        if len(times)>0:
-            newTimes[type]=times
+    for interact_type in data:
+        times={}
+        for iTime,value in data[interact_type].items():
+            if int(iTime)+BOT_INTERACTION_TIMEOUT>time.time():
+                times[iTime]=value
+        if times:
+            newTimes[interact_type]=times
     return newTimes
 
-def interact(bot:commands.Bot,value:float,type:str,id:int):
+def interact(bot:commands.Bot,value:float,interact_type:str,userID:int):
     userData=bot.user_data
-    id=str(id)
-    userData[id]["hidden"]["interact"]=checkPastInteractions(userData[id]["hidden"]["interact"])
+    userID=str(userID)
+    userData[userID]["hidden"]["interact"]=checkPastInteractions(userData[userID]["hidden"]["interact"])
     userData["global"]["hidden"]["interact"]=checkPastInteractions(userData["global"]["hidden"]["interact"])
 
-    if type not in userData[id]["hidden"]["interact"].keys():
-        userData[id]["hidden"]["interact"][type]={}
-    userData[id]["hidden"]["interact"][type][str(time.time())]=value
+    curTime=str(int(time.time()))
 
-    if type not in userData["global"]["hidden"]["interact"].keys():
-        userData["global"]["hidden"]["interact"][type]={}
-    userData["global"]["hidden"]["interact"][type][str(time.time())]=value/4
+    if interact_type not in userData[userID]["hidden"]["interact"]:
+        userData[userID]["hidden"]["interact"][interact_type]={}
+    userData[userID]["hidden"]["interact"][interact_type][curTime]=value
+
+    if interact_type not in userData["global"]["hidden"]["interact"]:
+        userData["global"]["hidden"]["interact"][interact_type]={}
+    userData["global"]["hidden"]["interact"][interact_type][curTime]=value/4
 
     bot.user_data=userData
 
-def getInteractValue(bot:commands.Bot,type:str,id:int):
+def getInteractValue(bot:commands.Bot,interact_type:str,userID:int) -> int:
     userData=bot.user_data
-    id=str(id)
-    userData[id]["hidden"]["interact"]=checkPastInteractions(userData[id]["hidden"]["interact"])
+    userID=str(userID)
+    userData[userID]["hidden"]["interact"]=checkPastInteractions(userData[userID]["hidden"]["interact"])
     bot.user_data=userData
-    if type not in userData[id]["hidden"]["interact"].keys():
+    if interact_type not in userData[userID]["hidden"]["interact"]:
         return 0
     value=0
-    for i in userData[id]["hidden"]["interact"][type]:
-        value+=userData[id]["hidden"]["interact"][type][i]
+    for i in userData[userID]["hidden"]["interact"][interact_type]:
+        value+=userData[userID]["hidden"]["interact"][interact_type][i]
     return value
 
-def getGlobalInteractValue(bot:commands.Bot,type:str):
+def getGlobalInteractValue(bot:commands.Bot,interact_type:str) -> int:
     userData=bot.user_data
     userData["global"]["hidden"]["interact"]=checkPastInteractions(userData["global"]["hidden"]["interact"])
     bot.user_data=userData
-    if type not in userData["global"]["hidden"]["interact"].keys():
+    if interact_type not in userData["global"]["hidden"]["interact"]:
         return 0
     value=0
-    for i in userData["global"]["hidden"]["interact"][type]:
-        value+=userData["global"]["hidden"]["interact"][type][i]
+    for i in userData["global"]["hidden"]["interact"][interact_type]:
+        value+=userData["global"]["hidden"]["interact"][interact_type][i]
     return value
 
 
@@ -70,7 +73,11 @@ async def wasGreeted(message,id) -> int:
         async for msg in message.channel.history(limit=GREET_SEARCH_LIMIT, before=message):
             previous_message=msg.content
             printLog("info",previous_message)
-    if previous_message in ACCEPTED_GREETS:
+    #if any(i in ACCEPTED_GREETS for i in previous_message.split(" ")):
+    #dont use
+    #message can contain stuff we check for but is not a great
+    #this is important to when we check for not referenced images
+    if " ".join(i.removesuffix("!") for i in previous_message.split(" ")[:-2]).lower() in ACCEPTED_GREETS: #this checks for if the message is: [greet] [secret name (optional)]
         if any(i in previous_message for i in BOT_SECRET_NICKNAMES):
             return 2
         else:
@@ -80,10 +87,10 @@ async def wasGreeted(message,id) -> int:
 async def botGreets(greetAmount:int) -> str:
     resp=GREET_RESPONSES[random.randint(0,len(GREET_RESPONSES)-1)]
     if greetAmount==1:
-        face=chooseFaceFromCategory(["happy"])
+        face=chooseFaceFromCategory(Faces.happy)
     else:
-        face=chooseFaceFromCategory(["love","blush_happy","pat","spark","excited"])
-    return ""
+        face=chooseFaceFromCategory(Faces.FaceBigCategory.happies)
+    return resp+" :wave:"+face
 
 
 

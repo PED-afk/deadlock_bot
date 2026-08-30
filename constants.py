@@ -61,7 +61,7 @@ BOT_SECRET_NICKNAMES=["Remling"]
 
 
 #greets and responses
-ACCEPTED_GREETS=[]
+ACCEPTED_GREETS=["hello","hi","good morning","good evening","good afternoon","hey","hey there","hoi","hoy",]
 #empty str is intentional
 GREET_RESPONSES=["Hello!","Hewwo!","","Hi!","Hiiiii!","Hoi!","Hoy!"]
 GREET_SEARCH_LIMIT=10
