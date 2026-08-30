@@ -8,16 +8,17 @@ from classes.bot_faces import Faces
 
 BOTFACES=Faces
 
-def chooseFaceFromCategory(category:str):
+def chooseFaceFromCategory(category:str|list[str]) -> str:
     """
     
     Randomly selects a face from the given category
     """
+    if isinstance(category,list):
+        category=random.choices(category)
     if category not in BOTFACES:
         return f"(face category {category} not found)"
     curFaces=BOTFACES[category]
-    r=random.randint(0,len(curFaces)-1)
-    return curFaces[r]
+    return random.choices(curFaces)
 
 def activeTimerExists(bot:commands.Bot):
     for i, (timerName,timerData) in enumerate(bot.timers.items()):
@@ -55,7 +56,7 @@ async def canUseCommand(ctx:commands.Context, level:int=2, inVoice:bool=False):
 
     return True
 
-async def getDictStr(d: dict, hideSome:bool=False, hideThese:dict={"hidden":"normal","items":"len=#0","steamID3":"normal","steamID64":"normal","rank":"value=#None"}, indent=0):
+async def getDictStr(d: dict, hideSome:bool=False, hideThese:dict={"hidden":"normal","items":"len=#0","steamID3":"normal","steamID64":"normal","rank":"value=#None"}, format:bool=True, indent=0):
     """
 
     Creates a str from a dict <key>:<value> format\n\n
@@ -98,7 +99,7 @@ async def getDictStr(d: dict, hideSome:bool=False, hideThese:dict={"hidden":"nor
                         if "<" in data:
                             if inDataLen<data.split("#")[1]:
                                 continue
-        if indent==0:
+        if indent==0 and format:
             inData+="# "
         if isinstance(innerData, dict):
             inData+="\t"*indent+str(innerKey)+":\n"

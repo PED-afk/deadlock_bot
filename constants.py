@@ -60,6 +60,11 @@ BOT_INTERACTION_TIMEOUT=60*15
 BOT_SECRET_NICKNAMES=["Remling"]
 
 
+#greets and responses
+ACCEPTED_GREETS=[]
+#empty str is intentional
+GREET_RESPONSES=["Hello!","Hewwo!","","Hi!","Hiiiii!","Hoi!","Hoy!"]
+GREET_SEARCH_LIMIT=10
 
 
 

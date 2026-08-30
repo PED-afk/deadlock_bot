@@ -22,7 +22,7 @@ from constants import HERO_ID_MAP, RANK_NAMES, RANK_COLORS, BASE, ME, BOT_ROLE, 
 
 from classes.item import Item
 from classes.file_paths import BotPaths
-from user_bot_interaction import interact, getGlobalInteractValue, getInteractValue, botWasGreeted, botGreets
+from user_bot_interaction import interact, getGlobalInteractValue, getInteractValue, wasGreeted, botGreets
 
 
 #Set up the bot with a command prefix
@@ -308,9 +308,10 @@ async def on_message(message):
                 bot.user_data[idSTR]["XP"]-=100+2**(level/4)+level
                 bot.user_data[idSTR]["lvl"]+=1
 
-    if botWasGreeted(message.content) and time.time()>=bot.user_data[idSTR]["hidden"]["greetMessageCD"]:
+    greetAmount=await wasGreeted(message,bot.user.id)
+    if greetAmount!=0 and time.time()>=bot.user_data[idSTR]["hidden"]["greetMessageCD"]:
         bot.user_data[idSTR]["hidden"]["messageCD"]=time.time()+bot.greetCD
-        await message.reply(botGreets())
+        await message.reply(botGreets(greetAmount))
 
 
     if message.content.lower() in ["reset the timer","reset timer","!reset_the_timer","0 days without degenerate nonsense","0 days without degeneracy"]:

@@ -247,7 +247,7 @@ class Unorganized(commands.Cog):
     async def my_data(self,ctx):
         senderID=ctx.author.id
         if ctx.channel.id==BOTS_CHANNEL_ID:
-            message=await getDictStr(self.bot.user_data[str(senderID)],True)
+            message=await getDictStr(self.bot.user_data[str(senderID)],True,format=False)
             await ctx.reply(message,delete_after=30)
 
 
@@ -256,7 +256,7 @@ class Unorganized(commands.Cog):
         senderID=ctx.author.id
         if await canUseCommand(ctx,1):
             await printLogToDc(self.bot,"debug",self.bot.user_data[str(senderID)])
-            message=await getDictStr(self.bot.user_data[str(senderID)])
+            message=await getDictStr(self.bot.user_data[str(senderID)],format=False)
             await ctx.reply(message,delete_after=30)
             
     @commands.command()
