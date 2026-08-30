@@ -84,13 +84,16 @@ async def wasGreeted(message,id) -> int:
             return 1
     return 0
 
-async def botGreets(greetAmount:int) -> str:
+async def botGreets(greetAmount:int, mention:str) -> str:
     resp=GREET_RESPONSES[random.randint(0,len(GREET_RESPONSES)-1)]
     if greetAmount==1:
         face=chooseFaceFromCategory(Faces.happy)
     else:
         face=chooseFaceFromCategory(Faces.FaceBigCategory.happies)
-    return resp+" :wave:"+face
+    ping_user=""
+    if random.randint(0,3)==0:
+        ping_user=" "+mention
+    return resp+ping_user+" :wave:"+face
 
 
 
