@@ -237,6 +237,25 @@ async def on_ready():
     for i in WHO_AM_I_ROLES:
         await message.add_reaction(WHO_AM_I_ROLES[i]["emoji"])
 
+
+
+
+    forum = bot.get_channel(1544085021156184214)
+
+    if not isinstance(forum, discord.ForumChannel):
+        raise ValueError("The specified channel is not a forum channel.")
+
+    existing = {tag.name for tag in forum.available_tags}
+
+    for name in ["Tank","Support","Spirit Carry","Gun Carry","Spirit focus","Gun focus","Vitality focus","Lane bully","Assasin","Controll"]:
+        if name in existing:
+            continue
+
+        await forum.create_tag(name=name)
+
+
+    
+
     if not tick.is_running():
         tick.start()
 
@@ -297,36 +316,36 @@ async def on_message(message):
         bot.user_data[idSTR]["hidden"]["interact"]={}
 
 
-    
-    if message.content[0]!="!" and time.time()>=bot.user_data[idSTR]["hidden"]["messageCD"]:
-        bot.user_data[idSTR]["hidden"]["messageCD"]=time.time()+bot.messageCD
-        bonusM=1
+    if message.content:
+        if message.content[0]!="!" and time.time()>=bot.user_data[idSTR]["hidden"]["messageCD"]:
+            bot.user_data[idSTR]["hidden"]["messageCD"]=time.time()+bot.messageCD
+            bonusM=1
 
-        users_in_voice = []
+            users_in_voice = []
 
-        for guild in bot.guilds:
-            for voice_channel in guild.voice_channels:
-                for member in voice_channel.members:
-                    users_in_voice.append(str(member.id)+" in "+voice_channel.name)
-        if len(users_in_voice)!=0:
-            givesBonus={
-                "good luck":{"bonus":0.5,"alias":{"name":" gl ","bonus":0.25}},
-                "have fun":{"bonus":0.5,"alias":{"name":" hf ","bonus":0.25}},
-            }
-            for i,key in enumerate(givesBonus):
-                if key in message.content:
-                    bonusM+=givesBonus[key]["bonus"]
-                elif givesBonus[key]["alias"]["name"] in message.content:
-                    bonusM+=givesBonus[key]["alias"]["bonus"]
+            for guild in bot.guilds:
+                for voice_channel in guild.voice_channels:
+                    for member in voice_channel.members:
+                        users_in_voice.append(str(member.id)+" in "+voice_channel.name)
+            if len(users_in_voice)!=0:
+                givesBonus={
+                    "good luck":{"bonus":0.5,"alias":{"name":" gl ","bonus":0.25}},
+                    "have fun":{"bonus":0.5,"alias":{"name":" hf ","bonus":0.25}},
+                }
+                for i,key in enumerate(givesBonus):
+                    if key in message.content:
+                        bonusM+=givesBonus[key]["bonus"]
+                    elif givesBonus[key]["alias"]["name"] in message.content:
+                        bonusM+=givesBonus[key]["alias"]["bonus"]
 
-        lenght=len(message.content)//10
-        bot.user_data[idSTR]["money"]["unsecured"]+=100+random.randint(0,lenght)*bonusM
-        bot.user_data[idSTR]["XP"]+=1+random.randint(0,lenght)*bonusM
-        level=bot.user_data[idSTR]["lvl"]
-        if level<bot.maxLevel:
-            if bot.user_data[idSTR]["XP"]>=100+2**(level/4)+level:
-                bot.user_data[idSTR]["XP"]-=100+2**(level/4)+level
-                bot.user_data[idSTR]["lvl"]+=1
+            lenght=len(message.content)//10
+            bot.user_data[idSTR]["money"]["unsecured"]+=100+random.randint(0,lenght)*bonusM
+            bot.user_data[idSTR]["XP"]+=1+random.randint(0,lenght)*bonusM
+            level=bot.user_data[idSTR]["lvl"]
+            if level<bot.maxLevel:
+                if bot.user_data[idSTR]["XP"]>=100+2**(level/4)+level:
+                    bot.user_data[idSTR]["XP"]-=100+2**(level/4)+level
+                    bot.user_data[idSTR]["lvl"]+=1
 
     greetAmount=await wasGreeted(message,bot.user.id)
     if greetAmount!=0 and time.time()>=bot.user_data[idSTR]["hidden"]["greetMessageCD"]:
