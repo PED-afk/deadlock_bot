@@ -223,6 +223,7 @@ async def on_ready():
     if len(tempData)!=0:
         await bot.get_channel(BOT_DEBUG_CHANNEL).send(tempData)
 
+
     #edit the role select messages
     channel=bot.get_channel(ROLE_CHANNEL_ID)
     message=await channel.fetch_message(COLOR_CHOOSER_MESSAGE_ID)

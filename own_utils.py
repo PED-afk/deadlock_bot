@@ -43,7 +43,7 @@ async def canUseCommand(ctx:commands.Context, level:int=2, inVoice:bool=False):
         #return False
 
     if level==0 and ctx.author.id!=ME:
-        await ctx.reply("You do not have permission to use this command.")
+        await ctx.reply("You are not the main guy.")
         return False
     elif level==1 and not any(role.id==BOT_ROLE for role in ctx.author.roles):
         await ctx.reply("You do not have permission to use this command.")
