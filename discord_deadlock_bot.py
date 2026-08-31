@@ -345,7 +345,7 @@ async def on_message(message):
         return
 
     if message.channel.id==BOTS_CHANNEL_ID:
-        if await canUseCommand(message,0) and message.content.count("!")>1:
+        if await canUseCommand(message,0,tellReason=False) and message.content.count("!")>1:
             for content in message.content.split("!"):
                 if content.strip():
                     message.content="!"+content.strip()
