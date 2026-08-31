@@ -18,8 +18,9 @@ neither does anything else other than open the file on the filepath and load the
 """
 from own_utils import chooseFaceFromCategory, canUseCommand
 from debug import printLog, printLogToDc
-from constants import HERO_ID_MAP, RANK_NAMES, RANK_COLORS, BASE, ME, BOT_ROLE, BOTS_CHANNEL_ID, BOT_DEBUG_CHANNEL, MESSAGE_CD, VOICE_CHANNEL_CAT_NAME_PREFIX, BOT_SECRET_NICKNAMES, GREET_CD
+from constants import HERO_ID_MAP, RANK_NAMES, RANK_COLORS, BOTS_CHANNEL_ID, BOT_DEBUG_CHANNEL, MESSAGE_CD, VOICE_CHANNEL_CAT_NAME_PREFIX, BOT_SECRET_NICKNAMES, GREET_CD
 from constants import ROLE_CHANNEL_ID, WHO_AM_I_ROLES, COLOR_CHOOSER_MESSAGE_ID, IAM_MESSAGE_ID, IAM_MESSAGE_CONTENT, COLOR_CHOOSER_MESSAGE_CONTENT, COLORED_ROLES
+from constants import SUGGESTIONS_NEW_TAG_ID, SUGGESTIONS_ID,SUGGESTIONS_REJ_TAG_ID ,SUGGESTIONS_ACC_TAG_ID
 
 from classes.item import Item
 from classes.file_paths import BotPaths
@@ -206,7 +207,7 @@ async def on_ready():
         try:
             await msg.delete()
         except discord.Forbidden:
-            print("I don't have permission to delete this messages.")
+            printLog("error","I don't have permission to delete this messages.")
             break
         except discord.HTTPException:
             pass
@@ -434,6 +435,69 @@ async def on_raw_reaction_remove(payload):
 
 
 
+@bot.event
+async def on_thread_create(thread: discord.Thread):
+    # Only handle posts created in the target forum
+    if thread.parent_id!=SUGGESTIONS_ID:
+        return
+    forum=thread.parent
+
+    # Find the tag by ID
+    tag=discord.utils.get(forum.available_tags, id=SUGGESTIONS_NEW_TAG_ID)
+
+    if tag is None:
+        printLog("error",f"Tag {SUGGESTIONS_NEW_TAG_ID} not found")
+        return
+
+    try:
+        await thread.edit(applied_tags=[*thread.applied_tags, tag])
+        printLog("info",f"Applied tag {tag.name} to {thread.name}")
+    except discord.Forbidden:
+        printLog("error","Bot does not have permission to edit the post.")
+        printLogToDc(bot,"error","Bot does not have permission to edit the post.")
+    except discord.HTTPException as e:
+        printLog("error",f"Failed to apply tag: {e}")
+        printLogToDc(bot,"error",f"Failed to apply tag: {e}")
+ 
+@bot.event
+async def on_thread_update(before: discord.Thread,after: discord.Thread):
+    # Only handle posts in our forum
+    if after.parent_id != SUGGESTIONS_ID:
+        return
+
+    # Only react when the trigger tag has been added
+    before_tags={tag.id for tag in before.applied_tags}
+    after_tags={tag.id for tag in after.applied_tags}
+    if SUGGESTIONS_REJ_TAG_ID not in after_tags and SUGGESTIONS_ACC_TAG_ID not in after_tags:
+        return
+
+    # Don't repeatedly process an already-triggered post
+    if SUGGESTIONS_REJ_TAG_ID in before_tags and SUGGESTIONS_ACC_TAG_ID in before_tags:
+        return
+
+    forum=after.parent
+    if forum is None:
+        return
+
+    # Find the tags by ID
+    remove_tag=discord.utils.get(forum.available_tags,id=SUGGESTIONS_NEW_TAG_ID)
+    # Remove the other tag if it exists
+    new_tags=[tag for tag in after.applied_tags if tag.id != SUGGESTIONS_NEW_TAG_ID]
+
+    try:
+        # Only edit tags if the other tag was actually present
+        if remove_tag and SUGGESTIONS_NEW_TAG_ID in after_tags:
+            await after.edit(applied_tags=new_tags)
+        # Lock the post
+        await after.edit(locked=True,archived=True)
+        printLog("info",f"Processed post: {after.name}")
+
+    except discord.Forbidden:
+        printLog("error","Bot does not have permission to modify/lock the post.")
+        printLogToDc(bot,"error","Bot does not have permission to modify/lock the post.")
+
+    except discord.HTTPException as e:
+        printLog("error",f"Discord API error: {e}")
 
 
 #move these into cog
@@ -575,8 +639,8 @@ async def tick():
 bot.startTimers={"A":11*60,"B":11*60}
 bot.timers={"A":{"time":None},"B":{"time":None}}
 bot.bootTime=time.time()//1
-bot.version="0.8.2"
-bot.versionSTR=""
+bot.version="0.8.3"
+bot.versionSTR="Suggestion box features"
 
 bot.name="FUNLOCK BOT" #Not yet decided
 
