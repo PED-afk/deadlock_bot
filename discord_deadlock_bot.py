@@ -31,6 +31,11 @@ intents = discord.Intents.default()
 intents.messages = True
 intents.message_content = True
 intents.voice_states = True
+
+intents.reactions = True
+intents.members = True
+intents.guilds = True
+
 class MyBot(commands.Bot):
     async def setup_hook(self):
         await self.load_extension("cogs.hiddens")
@@ -355,30 +360,39 @@ async def on_raw_reaction_add(payload):
     elif payload.message_id==IAM_MESSAGE_ID:
         lookingAt="iam"
     else:
+        printLog("event","User reacted to other message")
         return
 
     # Ignore the bot reacting to the message
     if payload.user_id==bot.user.id:
+        printLog("event","Reaction added by bot")
         return
-
+    
+    role_id=None
     if lookingAt=="color":
-        for i in COLORED_ROLES:
-            if payload.emoji==COLORED_ROLES[i]["emoji"]:
-                role_id=COLORED_ROLES[i]["id"]
+        for role in COLORED_ROLES.values():
+            if payload.emoji.name==role["emoji"]:
+                role_id=role["id"]
+                break
     elif lookingAt=="iam":
-        for i in WHO_AM_I_ROLES:
-            if payload.emoji==WHO_AM_I_ROLES[i]["emoji"]:
-                role_id=WHO_AM_I_ROLES[i]["id"]
+        for role in WHO_AM_I_ROLES.values():
+            if payload.emoji.name==role["emoji"]:
+                role_id=role["id"]
+                break
     if role_id is None:
+        printLog("event","Can't find role ID.")
         return
     guild=bot.get_guild(payload.guild_id)
     if guild is None:
+        printLog("event","Can't find guild.")
         return
     member=guild.get_member(payload.user_id)
     role=guild.get_role(role_id)
     if member is None or role is None:
+        printLog("event","Can't find member or role")
         return
     await member.add_roles(role)
+    printLog("event","Role added successfuly")
 
 
 @bot.event
@@ -394,14 +408,17 @@ async def on_raw_reaction_remove(payload):
     if payload.user_id==bot.user.id:
         return
 
+    role_id=None
     if lookingAt=="color":
-        for i in COLORED_ROLES:
-            if payload.emoji==COLORED_ROLES[i]["emoji"]:
-                role_id=COLORED_ROLES[i]["id"]
+        for role in COLORED_ROLES.values():
+            if payload.emoji.name==role["emoji"]:
+                role_id=role["id"]
+                break
     elif lookingAt=="iam":
-        for i in WHO_AM_I_ROLES:
-            if payload.emoji==WHO_AM_I_ROLES[i]["emoji"]:
-                role_id=WHO_AM_I_ROLES[i]["id"]
+        for role in WHO_AM_I_ROLES.values():
+            if payload.emoji.name==role["emoji"]:
+                role_id=role["id"]
+                break
     if role_id is None:
         return
     guild=bot.get_guild(payload.guild_id)
@@ -556,7 +573,7 @@ async def tick():
 bot.startTimers={"A":11*60,"B":11*60}
 bot.timers={"A":{"time":None},"B":{"time":None}}
 bot.bootTime=time.time()//1
-bot.version="0.8.1"
+bot.version="0.8.2"
 bot.versionSTR=""
 
 bot.name="FUNLOCK BOT" #Not yet decided

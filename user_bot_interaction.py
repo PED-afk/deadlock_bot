@@ -63,9 +63,14 @@ def getGlobalInteractValue(bot:commands.Bot,interact_type:str) -> int:
 
 
 async def wasGreeted(message,id) -> int:
-    wasReference=(message.reference and await message.channel.fetch_message(message.reference.message_id).author.id==id)
+    wasReference=False
+    referenced=None
+    if message.reference and message.reference.message_id:
+        referenced=await message.channel.fetch_message(message.reference.message_id)
+        wasReference=referenced.author.id == id
+
     if wasReference:
-        previous_message=message.channel.fetch_message(message.reference.message_id).content.lower()
+        previous_message=referenced.content.lower()
     else:
         return 0
         #return for now

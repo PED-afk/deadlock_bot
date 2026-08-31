@@ -71,7 +71,7 @@ GREET_SEARCH_LIMIT=10
 ROLE_CHANNEL_ID=1543701162581168228
 
 COLOR_CHOOSER_MESSAGE_ID=1543703073992745011
-COLOR_CHOOSER_MESSAGE_CONTENT="React to this message to set your name's color."
+COLOR_CHOOSER_MESSAGE_CONTENT="React to this message to set your name's color.\n You can only have 1."
 COLORED_ROLES={
     "purple":{"id":1543693742031249418,"emoji":"🟣"},
     "blue":{"id":1535060305116401704,"emoji":"🔵"},
@@ -83,7 +83,7 @@ COLORED_ROLES={
 }
 
 IAM_MESSAGE_ID=1543703075758407731
-IAM_MESSAGE_CONTENT="What do you do?\nYou can choose more than 1.\nIf you usualy available to play with:🎮\nIf you know programing:⌨️\nIf you want to edit the bot's code* *2:🤖\n\n-# *We will periodically check this role to give access to the github repository; until we do use `!source` to get the active link to it.\n-# *2 Getting this role won't necessarily mean you get access, we may deny your 'application'"
+IAM_MESSAGE_CONTENT="What do you do?\nYou can choose more than 1.\n\nIf you usualy available to play with:🎮\nIf you know programing:⌨️\nIf you want to edit the bot's code(*)(*2):🤖\n\n-# (*)We will periodically check this role to give access to the github repository; until we do use `!source` to get the active link to it.\n-# (*2)Getting this role won't necessarily mean you get access, we may deny your 'application'"
 WHO_AM_I_ROLES={
     "programer":{
         "id":1543698321279946874,
