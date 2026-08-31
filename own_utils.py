@@ -26,7 +26,7 @@ def activeTimerExists(bot:commands.Bot):
             return True
     return False
 
-async def canUseCommand(ctx:commands.Context, level:int=2, inVoice:bool=False):
+async def canUseCommand(ctx:commands.Context, level:int=2, inVoice:bool=False, tellReason:bool=True):
     """
     
     Check if user can use this command\n
@@ -43,14 +43,17 @@ async def canUseCommand(ctx:commands.Context, level:int=2, inVoice:bool=False):
         #return False
 
     if level==0 and ctx.author.id!=ME:
-        await ctx.reply("You are not the main guy.")
+        if tellReason:
+            await ctx.reply("You are not the main guy.")
         return False
     elif level==1 and not any(role.id==BOT_ROLE for role in ctx.author.roles):
-        await ctx.reply("You do not have permission to use this command.")
+        if tellReason:
+            await ctx.reply("You do not have permission to use this command.")
         return False
 
     if inVoice and ctx.author.voice==None:
-        await ctx.reply("You must be in a voice channel to use this command.")
+        if tellReason:
+            await ctx.reply("You must be in a voice channel to use this command.")
         return False
 
     return True
