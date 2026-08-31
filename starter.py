@@ -9,6 +9,7 @@ import platform
 import shutil
 
 from debug import setupFolders, writeLog, printLog, clean, readback
+from classes.file_paths import BotPaths
 
 setupFolders()
 
@@ -17,18 +18,21 @@ process = None
 shouldrestart=1
 fromrestart=0
 BASE = Path(__file__).parent
+bot_file = BASE / "discord_deadlock_bot.py"
+
+"""
 hotboot_file = BASE / "hotBoot.txt"
 restart_file = BASE / "restart.txt"
 pause_file = BASE / "pauseTimes.txt"
-bot_file = BASE / "discord_deadlock_bot.py"
 update_check_file= BASE / "update_check.txt"
+"""
 
 raspberry_update_name="deadlock_bot_update"
 
-with open(restart_file,"w") as f:
+with open(BotPaths.restart_file,"w") as f:
     f.write("1")
 
-with open(update_check_file,"w") as f:
+with open(BotPaths.update_check_file,"w") as f:
     f.write("")
 
 pauseStart=4
@@ -45,17 +49,17 @@ def update():
         result = subprocess.run(["git", "pull"],cwd=Path(__file__).resolve().parent,capture_output=True, text=True, timeout=30)
         if result.returncode == 0:
             print(f"Git pull successful: {result.stdout.strip()}", flush=True)
-            with open(update_check_file,"a") as f:
+            with open(BotPaths.update_check_file,"a") as f:
                 f.write("An update was found and applied from github.")
             return
         else:
             print(f"Git pull failed: {result.stderr.strip()}", flush=True)
-            with open(update_check_file,"a") as f:
+            with open(BotPaths.update_check_file,"a") as f:
                 f.write(result.stderr.strip())
 
     except Exception as e:
         print(f"Git pull error: {e}\nTrying USB method.", flush=True)
-        with open(update_check_file,"a") as f:
+        with open(BotPaths.update_check_file,"a") as f:
             f.write(e)
     
     # Fall back to USB stick if git pull didn't work
@@ -85,7 +89,7 @@ def update():
     if path:
         try:
             copy_contents(path,Path(__file__).resolve().parent)
-            with open(update_check_file,"a") as f:
+            with open(BotPaths.update_check_file,"a") as f:
                 f.write("An update was found and applied from USB.")
         except Exception as e:
             print(f"Update error {e}",flush=True)
@@ -93,10 +97,10 @@ def update():
 
 while True:
     if process is None or process.poll() is not None:
-        with open(pause_file,"r") as f:
+        with open(BotPaths.pause_file,"r") as f:
             pauseStart=int(f.readline().strip())
             pauseEnd=int(f.readline().strip())
-        with open(restart_file,"r") as f:
+        with open(BotPaths.restart_file,"r") as f:
             shouldrestart=int(f.readline().strip())
         if shouldrestart==2 and pauseStart<=datetime.now(ZoneInfo("Europe/Berlin")).hour<=pauseEnd:
             time.sleep(1*60) #1 minute
@@ -107,7 +111,7 @@ while True:
                 lindistr=None
             
             if shouldrestart:
-                with open(hotboot_file,"w") as f:
+                with open(BotPaths.hotboot_file,"w") as f:
                     f.write(str(fromrestart))
                 
                 if lindistr==None:
