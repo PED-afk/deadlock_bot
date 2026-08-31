@@ -61,12 +61,42 @@ BOT_SECRET_NICKNAMES=["Remling"]
 
 
 #greets and responses
-ACCEPTED_GREETS=["hello","hi","good morning","good evening","good afternoon","hey","hey there","hoi","hoy"]
+ACCEPTED_GREETS=["hello","hi","good morning","good evening","good afternoon","hey","hey there","hoi","hoy"  ]
 #empty str is intentional
 GREET_RESPONSES=["Hello!","Hewwo!","","Hi!","Hiiiii!","Hoi!","Hoy!"]
 GREET_SEARCH_LIMIT=10
 
 
+#personality roles
+ROLE_CHANNEL_ID=1543701162581168228
 
+COLOR_CHOOSER_MESSAGE_ID=1543703073992745011
+COLOR_CHOOSER_MESSAGE_CONTENT="React to this message to set your name's color."
+COLORED_ROLES={
+    "purple":{"id":1543693742031249418,"emoji":"🟣"},
+    "blue":{"id":1535060305116401704,"emoji":"🔵"},
+    "green":{"id":1543685911328460980,"emoji":"🟢"},
+    "pink":{"id":1534677907358879765,"emoji":"🩷"},
+    "yellow":{"id":1543685960292900884,"emoji":"🟡"},
+    "orange":{"id":1543689973117489212,"emoji":"🟠"},
+    "red":{"id":1543686317228167311,"emoji":"🔴"}
+}
+
+IAM_MESSAGE_ID=1543703075758407731
+IAM_MESSAGE_CONTENT="What do you do?\nYou can choose more than 1.\nIf you usualy available to play with:🎮\nIf you know programing:⌨️\nIf you want to edit the bot's code* *2:🤖\n\n-# *We will periodically check this role to give access to the github repository; until we do use `!source` to get the active link to it.\n-# *2 Getting this role won't necessarily mean you get access, we may deny your 'application'"
+WHO_AM_I_ROLES={
+    "programer":{
+        "id":1543698321279946874,
+        "emoji":"⌨️"
+    },
+    "regular_gamer":{
+        "id":1530270967736041712,
+        "emoji":"🎮"
+    },
+    "bot_coder_wannabe":{
+        "id":1543929441225412608,
+        "emoji":"🤖"
+    }
+}
 
 

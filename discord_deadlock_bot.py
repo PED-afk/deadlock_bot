@@ -19,6 +19,7 @@ neither does anything else other than open the file on the filepath and load the
 from own_utils import chooseFaceFromCategory, canUseCommand
 from debug import printLog, printLogToDc
 from constants import HERO_ID_MAP, RANK_NAMES, RANK_COLORS, BASE, ME, BOT_ROLE, BOTS_CHANNEL_ID, BOT_DEBUG_CHANNEL, MESSAGE_CD, VOICE_CHANNEL_CAT_NAME_PREFIX, BOT_SECRET_NICKNAMES, GREET_CD
+from constants import ROLE_CHANNEL_ID, WHO_AM_I_ROLES, COLOR_CHOOSER_MESSAGE_ID, IAM_MESSAGE_ID, IAM_MESSAGE_CONTENT, COLOR_CHOOSER_MESSAGE_CONTENT, COLORED_ROLES
 
 from classes.item import Item
 from classes.file_paths import BotPaths
@@ -217,6 +218,18 @@ async def on_ready():
     if len(tempData)!=0:
         await bot.get_channel(BOT_DEBUG_CHANNEL).send(tempData)
 
+    #edit the role select messages
+    channel=bot.get_channel(ROLE_CHANNEL_ID)
+    message=await channel.fetch_message(COLOR_CHOOSER_MESSAGE_ID)
+    await message.edit(content=COLOR_CHOOSER_MESSAGE_CONTENT)
+    for i in COLORED_ROLES:
+        await message.add_reaction(COLORED_ROLES[i]["emoji"])
+
+    message=await channel.fetch_message(IAM_MESSAGE_ID)
+    await message.edit(content=IAM_MESSAGE_CONTENT)
+    for i in WHO_AM_I_ROLES:
+        await message.add_reaction(WHO_AM_I_ROLES[i]["emoji"])
+
     if not tick.is_running():
         tick.start()
 
@@ -325,13 +338,82 @@ async def on_message(message):
         return
 
     if message.channel.id==BOTS_CHANNEL_ID:
-        if message.content.count("!")>1 and await canUseCommand(message,0):
+        if await canUseCommand(message,0) and message.content.count("!")>1:
             for content in message.content.split("!"):
                 if content.strip():
                     message.content="!"+content.strip()
                     await bot.process_commands(message)
         else:
             await bot.process_commands(message)
+
+
+
+@bot.event
+async def on_raw_reaction_add(payload):
+    if payload.message_id==COLOR_CHOOSER_MESSAGE_ID:
+        lookingAt="color"
+    elif payload.message_id==IAM_MESSAGE_ID:
+        lookingAt="iam"
+    else:
+        return
+
+    # Ignore the bot reacting to the message
+    if payload.user_id==bot.user.id:
+        return
+
+    if lookingAt=="color":
+        for i in COLORED_ROLES:
+            if payload.emoji==COLORED_ROLES[i]["emoji"]:
+                role_id=COLORED_ROLES[i]["id"]
+    elif lookingAt=="iam":
+        for i in WHO_AM_I_ROLES:
+            if payload.emoji==WHO_AM_I_ROLES[i]["emoji"]:
+                role_id=WHO_AM_I_ROLES[i]["id"]
+    if role_id is None:
+        return
+    guild=bot.get_guild(payload.guild_id)
+    if guild is None:
+        return
+    member=guild.get_member(payload.user_id)
+    role=guild.get_role(role_id)
+    if member is None or role is None:
+        return
+    await member.add_roles(role)
+
+
+@bot.event
+async def on_raw_reaction_remove(payload):
+    if payload.message_id==COLOR_CHOOSER_MESSAGE_ID:
+        lookingAt="color"
+    elif payload.message_id==IAM_MESSAGE_ID:
+        lookingAt="iam"
+    else:
+        return
+
+    # Ignore the bot reacting to the message
+    if payload.user_id==bot.user.id:
+        return
+
+    if lookingAt=="color":
+        for i in COLORED_ROLES:
+            if payload.emoji==COLORED_ROLES[i]["emoji"]:
+                role_id=COLORED_ROLES[i]["id"]
+    elif lookingAt=="iam":
+        for i in WHO_AM_I_ROLES:
+            if payload.emoji==WHO_AM_I_ROLES[i]["emoji"]:
+                role_id=WHO_AM_I_ROLES[i]["id"]
+    if role_id is None:
+        return
+    guild=bot.get_guild(payload.guild_id)
+    if guild is None:
+        return
+    member=guild.get_member(payload.user_id)
+    role=guild.get_role(role_id)
+    if member is None or role is None:
+        return
+    await member.remove_roles(role)
+
+
 
 
 
@@ -474,8 +556,8 @@ async def tick():
 bot.startTimers={"A":11*60,"B":11*60}
 bot.timers={"A":{"time":None},"B":{"time":None}}
 bot.bootTime=time.time()//1
-bot.version="0.8.0"
-bot.versionSTR="Interactions test"
+bot.version="0.8.1"
+bot.versionSTR=""
 
 bot.name="FUNLOCK BOT" #Not yet decided
 
