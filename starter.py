@@ -50,16 +50,19 @@ def update():
         if result.returncode == 0:
             print(f"Git pull successful: {result.stdout.strip()}", flush=True)
             with open(BotPaths.update_check_file,"a") as f:
+                f.write("\n")
                 f.write("An update was found and applied from github.")
             return
         else:
             print(f"Git pull failed: {result.stderr.strip()}", flush=True)
             with open(BotPaths.update_check_file,"a") as f:
+                f.write("\n")
                 f.write(result.stderr.strip())
 
     except Exception as e:
         print(f"Git pull error: {e}\nTrying USB method.", flush=True)
         with open(BotPaths.update_check_file,"a") as f:
+            f.write("\n")
             f.write(e)
     
     # Fall back to USB stick if git pull didn't work
@@ -90,6 +93,7 @@ def update():
         try:
             copy_contents(path,Path(__file__).resolve().parent)
             with open(BotPaths.update_check_file,"a") as f:
+                f.write("\n")
                 f.write("An update was found and applied from USB.")
         except Exception as e:
             print(f"Update error {e}",flush=True)

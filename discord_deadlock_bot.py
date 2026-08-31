@@ -222,7 +222,7 @@ async def on_ready():
 
     tempData=load_txt(BotPaths.update_check_file)
     if len(tempData)!=0:
-        await bot.get_channel(BOT_DEBUG_CHANNEL).send(tempData)
+        printLogToDc(bot,"info",tempData[0])
 
 
     #edit the role select messages
