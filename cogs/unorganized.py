@@ -79,12 +79,12 @@ class Unorganized(commands.Cog):
             if section==None:
                 anyView=True
                 botcommands=[
-                    "`!help timer`: Commands about my timer functionality.",
-                    "`!help voice`: Commands about me using voice channels.",
-                    "`!help admin`: Commands that only 'important' people can use.",
-                    "`!help data`: Commands about a minigame that is in development.",
-                    "`!help tools`: Commands about some 'tools' and tools I can provide to spice up your game.",
-                    "`!help extra`: Commands about no particular topic.",
+                    "`!help_me timer`: Commands about my timer functionality.",
+                    "`!help_me voice`: Commands about me using voice channels.",
+                    "`!help_me admin`: Commands that only 'important' people can use.",
+                    "`!help_me data`: Commands about a minigame that is in development.",
+                    "`!help_me tools`: Commands about some 'tools' and tools I can provide to spice up your game.",
+                    "`!help_me extra`: Commands about no particular topic.",
                 ]
             elif section=="timer":
                 anyView=True
