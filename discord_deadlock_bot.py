@@ -331,6 +331,7 @@ async def on_message(message):
     if greetAmount!=0 and time.time()>=bot.user_data[idSTR]["hidden"]["greetMessageCD"]:
         bot.user_data[idSTR]["hidden"]["messageCD"]=time.time()+bot.greetCD
         await message.reply(botGreets(greetAmount,message.author.mention))
+        return
 
 
     if message.content.lower() in ["reset the timer","reset timer","!reset_the_timer","0 days without degenerate nonsense","0 days without degeneracy"]:
