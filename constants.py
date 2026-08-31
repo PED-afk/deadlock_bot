@@ -83,7 +83,7 @@ COLORED_ROLES={
 }
 
 IAM_MESSAGE_ID=1543703075758407731
-IAM_MESSAGE_CONTENT="What do you do?\nYou can choose more than 1.\n\nIf you usualy available to play with:🎮\nIf you know programing:⌨️\nIf you want to edit the bot's code(*)(*2):🤖\n\n-# (*)We will periodically check this role to give access to the github repository; until we do use `!source` to get the active link to it.\n-# (*2)Getting this role won't necessarily mean you get access, we may deny your 'application'"
+IAM_MESSAGE_CONTENT="What do you do?\nYou can choose more than 1.\n\nIf you usualy available to play with:🎮\nIf you know programing:⌨️\nIf you want to edit the bot's code(\*)(\*2):🤖\n\n-# (*)We will periodically check this role to give access to the github repository; until we do use `!source` to get the active link to it.\n-# (*2)Getting this role won't necessarily mean you get access, we may deny your 'application'"
 WHO_AM_I_ROLES={
     "programer":{
         "id":1543698321279946874,
