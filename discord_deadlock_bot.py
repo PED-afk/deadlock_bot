@@ -239,7 +239,8 @@ async def on_ready():
 
 
 
-
+    #thess were needed once
+    """
     forum = bot.get_channel(1544085021156184214)
 
     if not isinstance(forum, discord.ForumChannel):
@@ -252,7 +253,7 @@ async def on_ready():
             continue
 
         await forum.create_tag(name=name)
-
+    """
 
     
 
