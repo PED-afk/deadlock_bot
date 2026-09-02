@@ -634,7 +634,7 @@ async def tick():
             elif timerTime<=curTime:
                 await bot.get_channel(BOTS_CHANNEL_ID).send("Moving people in category "+VOICE_CHANNEL_CAT_NAME_PREFIX+"["+name+"].",delete_after=60)
                 for guild in bot.guilds:
-                    category = discord.utils.get(guild.categories, name="["+name+"]")
+                    category = discord.utils.get(guild.categories, name=VOICE_CHANNEL_CAT_NAME_PREFIX+"["+name+"]")
                     TARGET=discord.utils.get(category.voice_channels, name="Deadlock ["+name+"]").id
                     SOURCES=[]
                     for other in category.voice_channels:
@@ -653,11 +653,11 @@ async def tick():
                                 await bot.get_channel(BOTS_CHANNEL_ID).send("Can't move "+member.display_name)
                             except discord.HTTPException:
                                 pass
-                bot.timers[name]["timer"]=None
+                bot.timers[name]["time"]=None
 
 
 bot.startTimers={"A":11*60,"B":11*60}
-bot.timers={"A":{"time":None},"B":{"time":None}}
+bot.timers={"A":{"time":None,"paused":False},"B":{"time":None,"paused":False}}
 bot.bootTime=time.time()//1
 bot.version="0.8.3"
 bot.versionSTR="Suggestion box features"

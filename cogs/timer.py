@@ -46,7 +46,7 @@ class Timer(commands.Cog):
                     for channel in discord.utils.get(guild.categories, name=VOICE_CHANNEL_CAT_NAME_PREFIX+"["+name+"]").voice_channels:
                         for member in channel.members:
                             if member.global_name=="PurpleEarthDragon":
-                                names.append(member.global_name+chooseFaceFromCategory("love"))
+                                names.append(member.global_name+" "+chooseFaceFromCategory("love"))
                             else:
                                 names.append(member.global_name)
                 
@@ -59,14 +59,14 @@ class Timer(commands.Cog):
         if await canUseCommand(ctx,1,True):
             if self.bot.timers[ctx.author.voice.channel.category.name[-2]]["time"]>time.time()-1:
                 self.bot.timers[ctx.author.voice.channel.category.name[-2]]["time"]=time.time()-1
-                await ctx.reply("Timer stoped.")
+                await ctx.reply("Timer stopped.")
     
     @commands.command()
     async def endit(self,ctx):
         if await canUseCommand(ctx,1,True):
             if self.bot.timers[ctx.author.voice.channel.category.name[-2]]["time"]!=None:
                 self.bot.timers[ctx.author.voice.channel.category.name[-2]]["time"]=None
-                await ctx.reply("Timer stoped. Moving noone.")
+                await ctx.reply("Timer stopped. Moving noone.")
     
     @commands.command()
     async def settimer(self,ctx,x:float):
