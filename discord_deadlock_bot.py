@@ -201,16 +201,6 @@ async def on_ready():
     guild = bot.get_channel(BOTS_CHANNEL_ID).guild
     bot.tree.copy_global_to(guild=guild)
     await bot.tree.sync(guild=guild)
-
-    #cleanup
-    async for msg in bot.get_channel(BOTS_CHANNEL_ID).history(limit=None):
-        try:
-            await msg.delete()
-        except discord.Forbidden:
-            printLog("error","I don't have permission to delete this messages.")
-            break
-        except discord.HTTPException:
-            pass
     
     face=chooseFaceFromCategory("big_eyes")
 
@@ -659,8 +649,8 @@ async def tick():
 bot.startTimers={"A":11*60,"B":11*60}
 bot.timers={"A":{"time":None,"paused":False},"B":{"time":None,"paused":False}}
 bot.bootTime=time.time()//1
-bot.version="0.8.4"
-bot.versionSTR="Timer fix attempt"
+bot.version="0.8.5"
+bot.versionSTR="Timer fix attempt v2"
 
 bot.name="FUNLOCK BOT" #Not yet decided
 
