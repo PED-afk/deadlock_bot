@@ -89,7 +89,7 @@ class Unorganized(commands.Cog):
             elif section=="timer":
                 anyView=True
                 botcommands=[
-                    "`!start` and `!start second`: Start an x minute timer. When the timer ends I put everyone into the `Deadlock [#]` channel (from lane channels).\n(Timer lenght is configureable; only 1 timer can be used at the same time (as right no there is only 1 set of lane channels))",
+                    "`!start`: Start an x minute timer. When the timer ends I put everyone into the `Deadlock [#]` channel (from lane channels).\n(Timer lenght is configureable; only 1 timer can be used at the same time (as right no there is only 1 set of lane channels))",
                     "`!end`: Ends the timer and moves everyone immediately.",
                     "`!endit`: Ends the timer without sending people to the `Deadlock [#]` channel.",
                     "`!settimer x`: Set the timer lenght to x minutes.",
