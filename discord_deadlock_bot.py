@@ -659,8 +659,8 @@ async def tick():
 bot.startTimers={"A":11*60,"B":11*60}
 bot.timers={"A":{"time":None,"paused":False},"B":{"time":None,"paused":False}}
 bot.bootTime=time.time()//1
-bot.version="0.8.3"
-bot.versionSTR="Suggestion box features"
+bot.version="0.8.4"
+bot.versionSTR="Timer fix attempt"
 
 bot.name="FUNLOCK BOT" #Not yet decided
 
