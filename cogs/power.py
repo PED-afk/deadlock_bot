@@ -45,7 +45,7 @@ class Power(commands.Cog):
     async def restartFunc(self,ctx,save:str="save"):
         if await canUseCommand(ctx,1):
             if activeTimerExists(self.bot):
-                ctx.reply("Sorry, I restart now, there is at least 1 active timer.")
+                ctx.reply("Sorry, I can't restart now, there is at least 1 active timer.")
             else:
                 if ctx.guild.voice_client:
                     await ctx.guild.voice_client.disconnect()
