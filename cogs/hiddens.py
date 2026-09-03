@@ -3,11 +3,13 @@ import discord
 from discord.ext import commands, tasks
 import asyncio
 import time
+import random
 
 from own_utils import chooseFaceFromCategory, canUseCommand, format_duration, printLog
 from constants import ME, BOT_ROLE, BOTS_CHANNEL_ID
 from user_bot_interaction import interact, getInteractValue, getGlobalInteractValue
 from debug import printLogToDc
+from classes.file_paths import BotPaths
 
 #"hidden" commands (they are not listed in bot_help; KEEP IT THIS WAY)
 #"a secret for everyone"
@@ -21,7 +23,7 @@ class Hiddens(commands.Cog):
         if await canUseCommand(ctx):
             def after_playing(error):
                 if error:
-                    print(f"Playback error: {error}")
+                    printLog("error",f"Playback error: {error}")
                 self.bot.loop.call_soon_threadsafe(finished.set)
                 
             if ctx.author.voice is None or ctx.author.voice.channel is None:
@@ -42,7 +44,6 @@ class Hiddens(commands.Cog):
                 vc.stop()
 
             finished=asyncio.Event()
-            #source = discord.PCMAudio(str(bot.sounds_folder / "voicechat" / "silly(128k).wav"))
             source=discord.PCMAudio(open(path,"rb"))
             vc.play(source, after=after_playing)
 
@@ -101,23 +102,39 @@ class Hiddens(commands.Cog):
 
     @commands.command()
     async def silly(self,ctx):
-        await self.play_sound(ctx,str(self.bot.sounds_folder / "voicechat" / "silly(128k).pcm"))
+        await self.play_sound(ctx,str(BotPaths.sounds_folder / "voicechat" / "silly(128k).pcm"))
 
     @commands.command()
     async def sillyer(self,ctx):
-        await self.play_sound(ctx,str(self.bot.sounds_folder / "voicechat" / "sillyer(128k).pcm"))
+        await self.play_sound(ctx,str(BotPaths.sounds_folder / "voicechat" / "sillyer(128k).pcm"))
 
     @commands.command()
     async def fish(self,ctx):
-        await self.play_sound(ctx,str(self.bot.sounds_folder / "voicechat" / "FIH(128k).pcm"))
+        await self.play_sound(ctx,str(BotPaths.sounds_folder / "voicechat" / "FIH(128k).pcm"))
 
     @commands.command()
     async def FISH(self,ctx):
-        await self.play_sound(ctx,str(self.bot.sounds_folder / "voicechat" / "FISH.pcm"))
+        await self.play_sound(ctx,str(BotPaths.sounds_folder / "voicechat" / "FISH.pcm"))
 
     @commands.command()
     async def portal(self,ctx):
-        await self.play_sound(ctx,str(self.bot.sounds_folder / "voicechat" / "portal.pcm"))
+        await self.play_sound(ctx,str(BotPaths.sounds_folder / "voicechat" / "portal.pcm"))
+
+    @commands.command()
+    async def dc_ping(self,ctx):
+        await ctx.message.delete()
+        for i in range(random.randint(1,5)):
+            await self.play_sound(ctx,str(BotPaths.sounds_folder / "voicechat" / "dc_ping.pcm"))
+            await asyncio.sleep(round(random.uniform(0.1,1),2))
+
+    @commands.command()
+    async def dc_ping_long(self,ctx):
+        await ctx.message.delete()
+        for i in range(random.randint(3,5)):
+            await self.play_sound(ctx,str(BotPaths.sounds_folder / "voicechat" / "dc_ping.pcm"))
+            await asyncio.sleep(round(random.uniform(10,2*60),2))
+
+
 
     @commands.command()
     async def reset_the_timer(self,ctx):
