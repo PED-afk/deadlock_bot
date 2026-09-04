@@ -20,7 +20,7 @@ from own_utils import chooseFaceFromCategory, canUseCommand
 from debug import printLog, printLogToDc
 from constants import HERO_ID_MAP, RANK_NAMES, RANK_COLORS, BOTS_CHANNEL_ID, BOT_DEBUG_CHANNEL, MESSAGE_CD, VOICE_CHANNEL_CAT_NAME_PREFIX, BOT_SECRET_NICKNAMES, GREET_CD
 from constants import ROLE_CHANNEL_ID, WHO_AM_I_ROLES, COLOR_CHOOSER_MESSAGE_ID, IAM_MESSAGE_ID, IAM_MESSAGE_CONTENT, COLOR_CHOOSER_MESSAGE_CONTENT, COLORED_ROLES
-from constants import SUGGESTIONS_NEW_TAG_ID, SUGGESTIONS_ID,SUGGESTIONS_REJ_TAG_ID ,SUGGESTIONS_ACC_TAG_ID
+from constants import SUGGESTIONS_NEW_TAG_ID, SUGGESTIONS_ID,SUGGESTIONS_REJ_TAG_ID ,SUGGESTIONS_ACC_TAG_ID, SUGGESTIONS_CANT_TAG_ID
 
 from classes.item import Item
 from classes.file_paths import BotPaths
@@ -468,46 +468,69 @@ async def on_thread_create(thread: discord.Thread):
     except discord.HTTPException as e:
         printLog("error",f"Failed to apply tag: {e}")
         printLogToDc(bot,"error",f"Failed to apply tag: {e}")
- 
+
 @bot.event
-async def on_thread_update(before: discord.Thread,after: discord.Thread):
-    # Only handle posts in our forum
+async def on_thread_update(before: discord.Thread, after: discord.Thread):
+    #only posts in correct forum
     if after.parent_id != SUGGESTIONS_ID:
         return
 
-    # Only react when the trigger tag has been added
     before_tags={tag.id for tag in before.applied_tags}
     after_tags={tag.id for tag in after.applied_tags}
-    if SUGGESTIONS_REJ_TAG_ID not in after_tags and SUGGESTIONS_ACC_TAG_ID not in after_tags:
+
+    acc=SUGGESTIONS_ACC_TAG_ID in after_tags
+    rej=SUGGESTIONS_REJ_TAG_ID in after_tags
+    cant=SUGGESTIONS_CANT_TAG_ID in after_tags
+
+    #nothing relevant was added
+    if not (acc or rej or cant):
         return
 
-    # Don't repeatedly process an already-triggered post
-    if SUGGESTIONS_REJ_TAG_ID in before_tags and SUGGESTIONS_ACC_TAG_ID in before_tags:
+    #detect newly added important tags
+    acc_added=acc and SUGGESTIONS_ACC_TAG_ID not in before_tags
+    rej_added=rej and SUGGESTIONS_REJ_TAG_ID not in before_tags
+    cant_added=cant and SUGGESTIONS_CANT_TAG_ID not in before_tags
+
+    #nothing new has happened
+    if not (acc_added or rej_added or cant_added):
         return
 
     forum=after.parent
     if forum is None:
         return
 
-    # Find the tags by ID
-    remove_tag=discord.utils.get(forum.available_tags,id=SUGGESTIONS_NEW_TAG_ID)
-    # Remove the other tag if it exists
-    new_tags=[tag for tag in after.applied_tags if tag.id != SUGGESTIONS_NEW_TAG_ID]
+    #start with current tags
+    new_tags=list(after.applied_tags)
+
+    #always remove NEW when a trigger tag is used
+    new_tags=[tag for tag in new_tags if tag.id!=SUGGESTIONS_NEW_TAG_ID]
+
+    #remove cant do tag if accepted or rejected
+    if acc or rej:
+        new_tags=[tag for tag in new_tags if tag.id != SUGGESTIONS_CANT_TAG_ID]
 
     try:
-        # Only edit tags if the other tag was actually present
-        if remove_tag and SUGGESTIONS_NEW_TAG_ID in after_tags:
+        #tag update
+        if {tag.id for tag in new_tags}!=after_tags:
             await after.edit(applied_tags=new_tags)
-        # Lock the post
-        await after.edit(locked=True,archived=True)
-        printLog("info",f"Processed post: {after.name}")
+
+        #lock and archive if accepted or rejected
+        if acc or rej:
+            await after.edit(locked=True,archived=True)
+
+        if acc_added:
+            printLog("info", f"Suggestion accepted: {after.name}")
+        elif rej_added:
+            printLog("info", f"Suggestion rejected: {after.name}")
+        elif cant_added:
+            printLog("info", f"Suggestion marked \"can't\": {after.name}")
 
     except discord.Forbidden:
         printLog("error","Bot does not have permission to modify/lock the post.")
         printLogToDc(bot,"error","Bot does not have permission to modify/lock the post.")
 
     except discord.HTTPException as e:
-        printLog("error",f"Discord API error: {e}")
+        printLog("error", f"Discord API error: {e}")
 
 
 #move these into cog

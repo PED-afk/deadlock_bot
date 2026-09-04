@@ -42,6 +42,9 @@ class Colors:
 
 
 def setupFolders():
+    """
+    This automatically gets called on startup.\nDO NOT CALL AGAIN!
+    """
     ROOT_PATH=str(BASE)
     folder=Path(ROOT_PATH+"\\debug")
     folder.mkdir(parents=True, exist_ok=True)
@@ -91,26 +94,27 @@ def writeLog(type:str, content:any, fileName:str, addNumber:bool=True, addDate:b
             filepath=folder / filename
             if not filepath.exists():
                 if isinstance(content,list):
-                    filepath.write_text("\n".join(str(i) for i in content)+"\nFrom file: "+fromFile+"; From function: "+fromFunc)
+                    filepath.write_text("From file: "+fromFile+"; From function: "+fromFunc+"\t->\t"+"\n".join(str(i) for i in content))
                 else:
-                    filepath.write_text(content+"\nFrom file: "+fromFile+"; From function: "+fromFunc)
+                    filepath.write_text("From file: "+fromFile+"; From function: "+fromFunc+"\t->\t"+content)
                 break
             i += 1
         return
     if addDate:
         fullPath=folderPath+"\\"+fileName+str(datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S"))+"."+fileExtention
         with open(fullPath,writeType) as f:
-            f.write(content)
-            f.write("\n")
             f.write(fromFile)
             f.write("; ")
             f.write(fromFunc)
+            f.write("\t->\t")
+            f.write(content)
 
 def printLog(type:str, content:any, colorAll:bool=False):
     """
 
         type can also be the function the print is from
     """
+    from own_utils import formatedCurTime
     extra=''
     if type=="warning" or type=="error":
         extra=Colors.RED
@@ -125,7 +129,7 @@ def printLog(type:str, content:any, colorAll:bool=False):
     extra+=Colors.BOLD
     #print(extra+f"[{type.upper()}]"+(Colors.END if not colorAll else "")+f"  {content}"+Colors.END,flush=True)
     fromFunction = inspect.currentframe().f_back.f_code.co_name
-    print(extra+f"[{type.upper()}]"+f" [{fromFunction.upper()}]"+(Colors.END if not colorAll else "")+f"  {content}"+(Colors.END if colorAll else ""),flush=True)
+    print(Colors.DARK_GRAY+formatedCurTime()+" "+extra+f"[{type.upper()}]"+f"\t[{fromFunction.upper()}]"+(Colors.END if not colorAll else "")+f"  {content}"+(Colors.END if colorAll else ""),flush=True)
 
 
 async def printLogToDc(bot:commands.Bot,type:str, content:str):

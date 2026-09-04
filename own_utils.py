@@ -1,6 +1,7 @@
 
 import random
 from discord.ext import commands
+from datetime import datetime
 
 from constants import ME, BOT_ROLE, BOTS_CHANNEL_ID
 from debug import printLog
@@ -21,6 +22,9 @@ def chooseFaceFromCategory(category:str|list[str]) -> str:
     return random.choice(curFaces)
 
 def activeTimerExists(bot:commands.Bot):
+    """
+    Returns True if the bot arg has any timers that are not `None`
+    """
     for i, (timerName,timerData) in enumerate(bot.timers.items()):
         if timerData["time"]!=None:
             return True
@@ -112,6 +116,9 @@ async def getDictStr(d: dict, hideSome:bool=False, hideThese:dict={"hidden":"nor
     return inData
 
 def format_duration(seconds: int) -> str:
+    """
+    Turns a second interval into year month etc format leaving out leading zeros.\nReturns a str
+    """
     units=[
         ("year", 365 * 24 * 60 * 60),
         ("month", 30 * 24 * 60 * 60),
@@ -128,4 +135,8 @@ def format_duration(seconds: int) -> str:
             parts.append(f"{value} {name}{'s' if value!=1 else ''}")
     return ", ".join(parts)
 
-
+def formatedCurTime():
+    """
+    Returns the current time in Year-Month-Day Hour:Minute:Second format
+    """
+    return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
