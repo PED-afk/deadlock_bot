@@ -146,7 +146,7 @@ class Unorganized(commands.Cog):
             elif section=="moderation":
                 anyView=True
                 botcommands=[
-                    "`!shh`: Tell me if a user is misbehaving and if enough people do it I will mute them for a bit.\nUse `!help_me shh` to learn more!"
+                    "`!shh`: Tell me if a user is misbehaving and if enough people do it I will mute them for a bit.\nUse ```!help_me shh``` to learn more!"
                 ]
             elif section=="shh":
                 anyView=True
