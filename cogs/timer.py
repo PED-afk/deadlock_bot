@@ -17,7 +17,7 @@ class Timer(commands.Cog):
 
     @commands.command()
     async def pause(self,ctx):
-        if await canUseCommand(ctx,1,True):
+        if await canUseCommand(ctx,2,inVoice=True):
             if self.bot.timers[ctx.author.voice.channel.category.name[-2]]["time"]!=None and self.bot.timers[ctx.author.voice.channel.category.name[-2]]["paused"]==False:
                 self.bot.timers[ctx.author.voice.channel.category.name[-2]]["paused"]=True
                 await ctx.reply("Paused timer for the "+VOICE_CHANNEL_CAT_NAME_PREFIX+"["+ctx.author.voice.channel.category.name[-2]+"] category.")
@@ -26,7 +26,7 @@ class Timer(commands.Cog):
                         
     @commands.command()
     async def unpause(self,ctx):
-        if await canUseCommand(ctx,1,True):
+        if await canUseCommand(ctx,2,inVoice=True):
             if self.bot.timers[ctx.author.voice.channel.category.name[-2]]["time"]!=None and self.bot.timers[ctx.author.voice.channel.category.name[-2]]["paused"]==True:
                 self.bot.timers[ctx.author.voice.channel.category.name[-2]]["paused"]=False
                 await ctx.reply("Unpaused timer for the "+VOICE_CHANNEL_CAT_NAME_PREFIX+"["+ctx.author.voice.channel.category.name[-2]+"] category.")
@@ -35,7 +35,7 @@ class Timer(commands.Cog):
     
     @commands.command()
     async def start(self,ctx):
-        if await canUseCommand(ctx,1,True):
+        if await canUseCommand(ctx,2,inVoice=True):
             if self.bot.timers[ctx.author.voice.channel.category.name[-2]]["time"]==None:
                 self.bot.timers[ctx.author.voice.channel.category.name[-2]]["time"]=time.time()+self.bot.startTimers[ctx.author.voice.channel.category.name[-2]]
                 await ctx.reply("Started timer for the "+VOICE_CHANNEL_CAT_NAME_PREFIX+"["+ctx.author.voice.channel.category.name[-2]+"] category.")
@@ -56,33 +56,33 @@ class Timer(commands.Cog):
               
     @commands.command()
     async def end(self,ctx):
-        if await canUseCommand(ctx,1,True):
+        if await canUseCommand(ctx,2,inVoice=True):
             if self.bot.timers[ctx.author.voice.channel.category.name[-2]]["time"]>time.time()-1:
                 self.bot.timers[ctx.author.voice.channel.category.name[-2]]["time"]=time.time()-1
                 await ctx.reply("Timer stopped.")
     
     @commands.command()
     async def endit(self,ctx):
-        if await canUseCommand(ctx,1,True):
+        if await canUseCommand(ctx,2,inVoice=True):
             if self.bot.timers[ctx.author.voice.channel.category.name[-2]]["time"]!=None:
                 self.bot.timers[ctx.author.voice.channel.category.name[-2]]["time"]=None
                 await ctx.reply("Timer stopped. Moving noone.")
     
     @commands.command()
     async def settimer(self,ctx,x:float):
-        if await canUseCommand(ctx,1,True):
+        if await canUseCommand(ctx,2,inVoice=True):
             self.bot.startTimers[ctx.author.voice.channel.category.name[-2]]=x*60
             await ctx.reply("Starting time set to "+str(x)+" minutes.")
                 
     @commands.command()
     async def gettimer(self,ctx):
-        if await canUseCommand(ctx,1,True):
+        if await canUseCommand(ctx,2,inVoice=True):
             await ctx.reply("The timer is set to "+str(self.bot.startTimers[ctx.author.voice.channel.category.name[-2]]/60)+" minutes.")
                   
     
     @commands.command()
     async def remaining(self,ctx):
-        if await canUseCommand(ctx,1,True):
+        if await canUseCommand(ctx,2,inVoice=True):
             if self.bot.startTimers[ctx.author.voice.channel.category.name[-2]]!=None:
                 await ctx.reply("Remaining time: "+str(round(abs(self.bot.timers[ctx.author.voice.channel.category.name[-2]]["time"]-time.time())/60,2))+" min(s).")
             else:

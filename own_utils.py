@@ -2,12 +2,42 @@
 import random
 from discord.ext import commands
 from datetime import datetime
+import time
 
-from constants import ME, BOT_ROLE, BOTS_CHANNEL_ID
+from constants import ME, BOT_ROLE, BOTS_CHANNEL_ID, MOD_ROLE, AUTODELETE_TIME_SECONDS
 from debug import printLog
 from classes.bot_faces import Faces
 
 BOTFACES=Faces
+
+def activeTimerExists(bot:commands.Bot):
+    """
+    Returns True if the bot arg has any timers that are not `None`
+    """
+    for i, (timerName,timerData) in enumerate(bot.timers.items()):
+        if timerData["time"]!=None:
+            return True
+    return False
+
+def getShhValue(id:int,data) -> float:
+    finValue=0
+    if str(id) in data:
+        for report in data[str(id)]:
+            #report is a dict
+            finValue+=report["mult"]
+    return finValue
+
+def updateShh(data:dict)->dict:
+    newData={}
+    for key,value in data.items():
+        newData[key]=[]
+        #value is a list of reports
+        for report in value:
+            #report is a dict
+            if report["expires"]>=time.time():
+                newData[key].append(report)
+    return newData
+
 
 def chooseFaceFromCategory(category:str|list[str]) -> str:
     """
@@ -21,43 +51,47 @@ def chooseFaceFromCategory(category:str|list[str]) -> str:
     curFaces=BOTFACES.faces[category]
     return random.choice(curFaces)
 
-def activeTimerExists(bot:commands.Bot):
-    """
-    Returns True if the bot arg has any timers that are not `None`
-    """
-    for i, (timerName,timerData) in enumerate(bot.timers.items()):
-        if timerData["time"]!=None:
-            return True
-    return False
-
-async def canUseCommand(ctx:commands.Context, level:int=2, inVoice:bool=False, tellReason:bool=True):
+async def canUseCommand(ctx:commands.Context, mode:int=3, inChannel:bool=True, inVoice:bool=False, tellReason:bool=True):
     """
     
     Check if user can use this command\n
-    <level>\n
-    0: user id must match ME (and must be in the correct channel)\n
-    1: must have the "can use the bot" role (and must be in the correct channel)\n
-    2: just check for correct channel\n\n
+    <mode>\n
+    0: user id must match ME\n
+    1: check for "Day ones" role\n
+    2: check for "can use the bot" role\n
+    3: anyone (default)\n
     \n
+    <inChannel>\n
+    Must be sent in the correct channel\n\n
     <inVoice>\n
-    If True, user must be in a voice channel
+    If True, user must be in a voice channel\n\n
+    <tellReason>\n
+    Send a reply to tell the user why they CAN'T use the command
     """
-
-    #if ctx.channel.id!=BOTS_CHANNEL_ID:
-        #return False
-
-    if level==0 and ctx.author.id!=ME:
-        if tellReason:
-            await ctx.reply("You are not the main guy.")
+    
+    if inChannel and ctx.channel.id!=BOTS_CHANNEL_ID:
         return False
-    elif level==1 and not any(role.id==BOT_ROLE for role in ctx.author.roles):
-        if tellReason:
-            await ctx.reply("You do not have permission to use this command.")
-        return False
-
     if inVoice and ctx.author.voice==None:
         if tellReason:
             await ctx.reply("You must be in a voice channel to use this command.")
+        return False
+    
+    if mode==0 and ctx.author.id!=ME:
+        if tellReason:
+            await ctx.reply("You are not the main guy.")
+        return False
+
+    if mode==1:
+        if any(role.id == MOD_ROLE for role in ctx.author.roles):
+            return True
+        else:
+            if tellReason:
+                await ctx.reply("You are not a moderator.")
+            return False
+
+    elif mode==2 and not any(role.id==BOT_ROLE for role in ctx.author.roles):
+        if tellReason:
+            await ctx.reply("You do not have permission to use this command.")
         return False
 
     return True

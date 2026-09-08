@@ -81,7 +81,7 @@ async def wasGreeted(message,id) -> int:
     #if any(i in ACCEPTED_GREETS for i in previous_message.split(" ")):
     #dont use
     #message can contain stuff we check for but is not a great
-    #this is important to when we check for not referenced images
+    #this is important to when we check for not referenced messages
     if " ".join(i.removesuffix("!") for i in previous_message.split(" ")[:-2]).lower() in ACCEPTED_GREETS: #this checks for if the message is: [greet] [secret name (optional)]
         if any(i in previous_message for i in BOT_SECRET_NICKNAMES):
             return 2

@@ -16,7 +16,7 @@ class Debug(commands.Cog):
 
     @commands.command()
     async def check_cog(self, ctx, cog_name:str):
-        if await canUseCommand(ctx):
+        if await canUseCommand(ctx,2):
             try:
                 await self.bot.load_extension(f"cogs.{cog_name}")
             except commands.ExtensionAlreadyLoaded:
@@ -37,7 +37,7 @@ class Debug(commands.Cog):
                 "`!get_logs log_error`: Errors while triing to log.",
             ]
             await ctx.reply('\n'.join(botcommands))
-        if await canUseCommand(ctx,1):
+        if await canUseCommand(ctx,2):
             await printLogToDc(self.bot,"dump",readback(what,delAfter))
 
     @commands.command()

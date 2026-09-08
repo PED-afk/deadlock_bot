@@ -43,7 +43,7 @@ class Power(commands.Cog):
         await self.restartFunc(ctx,save)
 
     async def restartFunc(self,ctx,save:str="save"):
-        if await canUseCommand(ctx,1):
+        if await canUseCommand(ctx,2):
             if activeTimerExists(self.bot):
                 ctx.reply("Sorry, I can't restart now, there is at least 1 active timer.")
             else:
@@ -59,7 +59,7 @@ class Power(commands.Cog):
     
     @commands.command()
     async def sleep(self,ctx,save:str="save"):
-        if await canUseCommand(ctx,1):
+        if await canUseCommand(ctx,2):
             if activeTimerExists(self.bot):
                 await ctx.reply("Sorry, I can't go to sleep now, there is at least 1 active timer.")
             else:

@@ -81,6 +81,7 @@ class Unorganized(commands.Cog):
                 botcommands=[
                     "`!help_me timer`: Commands about my timer functionality.",
                     "`!help_me voice`: Commands about me using voice channels.",
+                    "`!help_me moderation`: Commands about moderating what's happening in the server",
                     "`!help_me admin`: Commands that only 'important' people can use.",
                     "`!help_me data`: Commands about a minigame that is in development.",
                     "`!help_me tools`: Commands about some 'tools' and tools I can provide to spice up your game.",
@@ -141,6 +142,19 @@ class Unorganized(commands.Cog):
                 botcommands=[
                     "`!rand X Y`: All sorts of randomly given stuff. (use `!rand` to learn more)",
                     "`!people_at_rank <rank> <radius> <online>`: Give you the names of people who have ranks around `<rank>`(±`<radius>` (if present)). If `<online>` is present and is set to `1`, will only search from people currently online. If `<rank>` is omited I will use your rank as base."
+                ]
+            elif section=="moderation":
+                anyView=True
+                botcommands=[
+                    "`!shh`: Tell me if a user is misbehaving and if enough people do it I will mute them for a bit.\nUse `!help_me shh` to learn more!"
+                ]
+            elif section=="shh":
+                anyView=True
+                botcommands=[
+                    "`!shh`: I will give you a list of predefined user names and their ids to choose from.",
+                    "`!shh <Discord user id>`: You tell me that the user with this is is misbehaving; I will remember that!"
+                    "`!shh`: If you use `!shh` as a reply to the message I will know that that message's author was misbehaving.",
+                    "`!shh clear`: Use this in a reply to a user to clear their \"votes\". -# Moderators only!"
                 ]
             else:
                 await ctx.reply("No command 'folder' exist with that name.")
@@ -223,13 +237,13 @@ class Unorganized(commands.Cog):
 
     @commands.command()
     async def source(self,ctx):
-        if await canUseCommand(ctx,2):
+        if await canUseCommand(ctx):
             file=discord.File(Path(__file__))
             await ctx.reply("My brain: `https://github.com/PED-afk/deadlock_bot`",file=file)
 
     @commands.command()
     async def credit(self,ctx):
-        if await canUseCommand(ctx,2):
+        if await canUseCommand(ctx):
             await ctx.reply(await getDictStr(load_json(BotPaths.credits_file)))
 
     @commands.command()
@@ -254,7 +268,7 @@ class Unorganized(commands.Cog):
     @commands.command()
     async def my_data_admin(self,ctx):
         senderID=ctx.author.id
-        if await canUseCommand(ctx,1):
+        if await canUseCommand(ctx,2):
             await printLogToDc(self.bot,"debug",self.bot.user_data[str(senderID)])
             message=await getDictStr(self.bot.user_data[str(senderID)],format=False)
             await ctx.reply(message,delete_after=30)

@@ -26,6 +26,7 @@ class Faces():
     think="think"
     he="he?"
     excited="excited"
+    wink="wink"
 
     class FaceBigCategory:
         happies=["love","blush_happy","pat","spark","excited"]

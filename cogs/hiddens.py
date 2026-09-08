@@ -20,7 +20,7 @@ class Hiddens(commands.Cog):
         self.bot=bot
 
     async def play_sound(self,ctx,path:str):
-        if await canUseCommand(ctx):
+        if await canUseCommand(ctx,2):
             def after_playing(error):
                 if error:
                     printLog("error",f"Playback error: {error}")

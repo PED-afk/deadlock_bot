@@ -16,11 +16,12 @@ load_json and save_json loads from and saves to json files
 
 neither does anything else other than open the file on the filepath and load the data from it
 """
-from own_utils import chooseFaceFromCategory, canUseCommand
+from own_utils import chooseFaceFromCategory, canUseCommand, getShhValue, updateShh
 from debug import printLog, printLogToDc
 from constants import HERO_ID_MAP, RANK_NAMES, RANK_COLORS, BOTS_CHANNEL_ID, BOT_DEBUG_CHANNEL, MESSAGE_CD, VOICE_CHANNEL_CAT_NAME_PREFIX, BOT_SECRET_NICKNAMES, GREET_CD
 from constants import ROLE_CHANNEL_ID, WHO_AM_I_ROLES, COLOR_CHOOSER_MESSAGE_ID, IAM_MESSAGE_ID, IAM_MESSAGE_CONTENT, COLOR_CHOOSER_MESSAGE_CONTENT, COLORED_ROLES
 from constants import SUGGESTIONS_NEW_TAG_ID, SUGGESTIONS_ID,SUGGESTIONS_REJ_TAG_ID ,SUGGESTIONS_ACC_TAG_ID, SUGGESTIONS_CANT_TAG_ID
+from constants import AUTODELETE_TRESHOLD, MIN_TIME_BETWEEN_SHH_UPDATE_SECONDS
 
 from classes.item import Item
 from classes.file_paths import BotPaths
@@ -44,6 +45,7 @@ class MyBot(commands.Bot):
         await self.load_extension("cogs.power")
         await self.load_extension("cogs.unorganized")
         await self.load_extension("cogs.debugcog")
+        await self.load_extension("cogs.moderator")
         #await self.load_extension("cogs.priority_cog")
 
 #bot=commands.Bot(command_prefix='!', intents=intents)
@@ -252,8 +254,17 @@ async def on_ready():
 
 @bot.event
 async def on_message(message):
+    if bot.lastShhCheck+MIN_TIME_BETWEEN_SHH_UPDATE_SECONDS<time.time()//1:
+        bot.shhMod=updateShh(bot.shhMod)
+        bot.lastShhCheck=time.time()//1
+        
     if message.author.bot or message.webhook_id is not None or message.author == bot.user:
         return
+    
+    if getShhValue(message.author.id,bot.shhMod)>=AUTODELETE_TRESHOLD:
+        await message.delete()
+        
+    
     idINT=message.author.id
     idSTR=str(idINT)
     if message.reference:
@@ -355,14 +366,13 @@ async def on_message(message):
         await bot.process_commands(message)
         return
 
-    if message.channel.id==BOTS_CHANNEL_ID:
-        if await canUseCommand(message,0,tellReason=False) and message.content.count("!")>1:
-            for content in message.content.split("!"):
-                if content.strip():
-                    message.content="!"+content.strip()
-                    await bot.process_commands(message)
-        else:
-            await bot.process_commands(message)
+    if await canUseCommand(message,0,tellReason=False) and message.content.count("!")>1:
+        for content in message.content.split("!"):
+            if content.strip():
+                message.content="!"+content.strip()
+                await bot.process_commands(message)
+    else:
+        await bot.process_commands(message)
 
 
 
@@ -671,9 +681,14 @@ async def tick():
 
 bot.startTimers={"A":11*60,"B":11*60}
 bot.timers={"A":{"time":None,"paused":False},"B":{"time":None,"paused":False}}
+
+bot.shhMod={}
+bot.lastShhCheck=time.time()//1
+
+
 bot.bootTime=time.time()//1
-bot.version="0.8.5"
-bot.versionSTR="Timer fix attempt v2"
+bot.version="0.9"
+bot.versionSTR="Moderation >:3"
 
 bot.name="FUNLOCK BOT" #Not yet decided
 
