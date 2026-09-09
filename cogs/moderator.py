@@ -71,7 +71,7 @@ class Mod(commands.Cog):
                     for i in HANDPICKED_SUP_USER_IDS:
                         member = guild.get_member(i)
                         if member:
-                            names.append("```"+str(i)+"```: "+member.display_name+"\n")
+                            names.append("`"+str(i)+"`: "+member.display_name+"\n")
                     await ctx.reply("Please select a user from the hand-picked list, copy their id and use the command again like the following example: `!shh <id>`\n\nOr use the command again as a reply to one of the messages the user sent you want to \"moderate\".\n"+"\n".join(names))
                 elif id.isnumeric():
                     if id in immune:
