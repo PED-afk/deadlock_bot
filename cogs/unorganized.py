@@ -291,10 +291,12 @@ class Unorganized(commands.Cog):
             if senderID==ME or any(role.id == BOT_ROLE for role in ctx.author.roles):
                 save_json(BotPaths.user_data_path,self.bot.user_data)
                 face=chooseFaceFromCategory("concentrate")
+                extra=" "
                 if deep=="deep":
                     face=chooseFaceFromCategory("deep_concentrate")
                     deep_save_json(BotPaths.user_data_file,self.bot.user_data)
-                await ctx.reply("Saving some stuff. "+face,delete_after=10)
+                    extra=" HARDER "
+                await ctx.reply("Saving some stuff."+extra+face,delete_after=10)
 
     @commands.command()
     async def clear_loaded(self,ctx):
