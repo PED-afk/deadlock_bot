@@ -230,6 +230,13 @@ async def on_ready():
         await message.add_reaction(WHO_AM_I_ROLES[i]["emoji"])
 
 
+    #need a message in a channel? use this:
+    """
+    channel=bot.get_channel(ROLE_CHANNEL_ID)
+    if channel is None:
+        channel=await bot.fetch_channel(ROLE_CHANNEL_ID)
+    await channel.send("New message!")
+    """
 
     #thess were needed once
     """
