@@ -120,4 +120,10 @@ MAX_MODERATABLE_MESSAGE_AGE_HOUR=12
 MIN_TIME_BETWEEN_SHH_UPDATE_SECONDS=60*5 #5 minutes
 
 
+DEGEN_TIMER_RESET_MESSAGES=["reset the timer","reset timer","!reset_the_timer","0 days without degenerate nonsense","0 days without degeneracy","🕰️","⏰","🕐","🕙","🕥","🕚","🕦","🕛","🕧","🕜","🕑","🕝","🕒","🕞","🕓","🕟","🕔","🕠","🕕","🕡","🕖","🕢","🕗","🕣","🕘","🕤","⏱️","⏲️","⌚"]
+DEGEN_TIMER_ASK_MESSAGES=["the timer","what's the time","!the_timer"]
+
+THANKING_MESSAGES=["thank you!","thank you","thanks!","thanks"]
+
+
 

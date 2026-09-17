@@ -22,6 +22,7 @@ from constants import HERO_ID_MAP, RANK_NAMES, RANK_COLORS, BOTS_CHANNEL_ID, BOT
 from constants import ROLE_CHANNEL_ID, WHO_AM_I_ROLES, COLOR_CHOOSER_MESSAGE_ID, IAM_MESSAGE_ID, IAM_MESSAGE_CONTENT, COLOR_CHOOSER_MESSAGE_CONTENT, COLORED_ROLES
 from constants import SUGGESTIONS_NEW_TAG_ID, SUGGESTIONS_ID,SUGGESTIONS_REJ_TAG_ID ,SUGGESTIONS_ACC_TAG_ID, SUGGESTIONS_CANT_TAG_ID
 from constants import AUTODELETE_TRESHOLD, MIN_TIME_BETWEEN_SHH_UPDATE_SECONDS
+from constants import DEGEN_TIMER_RESET_MESSAGES, DEGEN_TIMER_ASK_MESSAGES, THANKING_MESSAGES
 
 from classes.item import Item
 from classes.file_paths import BotPaths
@@ -277,8 +278,7 @@ async def on_message(message):
     if message.reference:
         repliedTo=await message.channel.fetch_message(message.reference.message_id)
         if repliedTo.author.id == bot.user.id:
-            thankingMessages=["thank you!","thank you","thanks!","thanks"]
-            if any(t in message.content.lower() for t in thankingMessages):
+            if any(t in message.content.lower() for t in THANKING_MESSAGES):
                 if any(t in message.content.lower() for t in BOT_SECRET_NICKNAMES):
                     interact(bot,3,"thank",idINT)
                     intVal=max(getInteractValue(bot,"thank",idINT),getGlobalInteractValue(bot,"thank"))
@@ -363,12 +363,12 @@ async def on_message(message):
         return
 
 
-    if message.content.lower() in ["reset the timer","reset timer","!reset_the_timer","0 days without degenerate nonsense","0 days without degeneracy"]:
+    if message.content.lower() in DEGEN_TIMER_RESET_MESSAGES:
         message.content = "!reset_the_timer"
         await bot.process_commands(message)
         return
 
-    if message.content.lower() in ["the timer","what's the time","!the_timer"]:
+    if message.content.lower() in DEGEN_TIMER_ASK_MESSAGES:
         message.content = "!the_timer"
         await bot.process_commands(message)
         return
