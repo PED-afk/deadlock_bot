@@ -64,7 +64,7 @@ class Power(commands.Cog):
                     deep_save_json(BotPaths.user_data_file,self.bot.user_data)
                 with open(BotPaths.restart_file,"w") as f:
                     f.write("1")
-                await ctx.reply("Shuting down.\nBe right back!\n"+chooseFaceFromCategory("blush_happy"),delete_after=20)
+                await ctx.reply("Shuting down.\nBe right back!\n"+chooseFaceFromCategory("blush_happy")+("\n-# Warning! I will not look for updates from any source! (use `!update`)" if tryUpdate!=1 else ""),delete_after=20)
                 await self.bot.close()
     
     @commands.command()
