@@ -25,3 +25,5 @@ class BotPaths():
     pfp_folder=BASE / "images" / "pfp"
 
     credits_file=BASE / "data" / "3rd_party_credits.json"
+
+    lookForUpdates=BASE / "update.txt"

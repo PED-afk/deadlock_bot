@@ -32,6 +32,9 @@ raspberry_update_name="deadlock_bot_update"
 with open(BotPaths.restart_file,"w") as f:
     f.write("1")
 
+with open(BotPaths.lookForUpdates,"w") as f:
+    f.write("1")
+
 with open(BotPaths.update_check_file,"w") as f:
     f.write("")
 
@@ -120,7 +123,10 @@ while True:
                 if lindistr==None:
                     process = subprocess.Popen(["python", bot_file],stderr=subprocess.PIPE,text=True)
                 else:
-                    update()
+                    with open(BotPaths.lookForUpdates,"r") as f:
+                        tryUpdate=int(f.readline().strip())
+                    if tryUpdate==1:
+                        update()
                     install_requirements()
                     process = subprocess.Popen(["python3", bot_file],stderr=subprocess.PIPE,text=True)
 
