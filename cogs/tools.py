@@ -26,7 +26,7 @@ class Tools(commands.Cog):
             if role is None:
                 printLog("error","`ping if online` role not found.")
                 return
-            online_members=[member.mention for member in role.members if member.status == discord.Status.online]
+            online_members=[member.mention for member in role.members if member.status == discord.Status.online and member.id!=ctx.author.id]
             mentions="\n".join(online_members)
 
             if len(online_members)!=0:

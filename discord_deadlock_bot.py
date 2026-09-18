@@ -695,8 +695,8 @@ bot.lastShhCheck=time.time()//1
 
 
 bot.bootTime=time.time()//1
-bot.version="0.9.4.3"
-bot.versionSTR="Ping tool v1 (update logic hotfix 2)"
+bot.version="0.9.5"
+bot.versionSTR="Ping tool v2"
 
 bot.name="FUNLOCK BOT" #Not yet decided
 
