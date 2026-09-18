@@ -46,7 +46,7 @@ class Power(commands.Cog):
     @commands.command()
     async def update(self,ctx,versionNumWasUpdated:str=None):
         if versionNumWasUpdated==None:
-            ctx.reply("Aren't you forgetting something?\n\n-# Did you update the version number?\n-# Use `!update yes` if you did."+chooseFaceFromCategory(Faces.wink))
+            await ctx.reply("Aren't you forgetting something?\n\n-# Did you update the version number?\n-# Use `!update yes` if you did."+chooseFaceFromCategory(Faces.wink))
         else:
             await self.restartFunc(ctx,"save",1)
 
