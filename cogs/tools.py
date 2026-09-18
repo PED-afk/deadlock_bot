@@ -19,7 +19,7 @@ class Tools(commands.Cog):
 
     @commands.command()
     async def onlines(self,ctx):
-        if canUseCommand(ctx,3,inChannel=False):
+        if await canUseCommand(ctx,3,inChannel=False):
             role_id=WHO_AM_I_ROLES["ping_if_online"]["id"]
 
             role=ctx.guild.get_role(role_id)

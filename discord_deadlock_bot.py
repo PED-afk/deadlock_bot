@@ -39,6 +39,8 @@ intents.reactions = True
 intents.members = True
 intents.guilds = True
 
+intents.presences = True
+
 class MyBot(commands.Bot):
     async def setup_hook(self):
         await self.load_extension("cogs.hiddens")
@@ -695,8 +697,8 @@ bot.lastShhCheck=time.time()//1
 
 
 bot.bootTime=time.time()//1
-bot.version="0.9.5"
-bot.versionSTR="Ping tool v2"
+bot.version="0.9.6"
+bot.versionSTR="Ping tool v3"
 
 bot.name="FUNLOCK BOT" #Not yet decided
 

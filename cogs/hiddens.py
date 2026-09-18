@@ -58,7 +58,7 @@ class Hiddens(commands.Cog):
 
     @commands.command()
     async def clean(self,ctx,many:int=None):
-        if canUseCommand(ctx,0):
+        if await canUseCommand(ctx,0):
             #cleanup
             if many==None:
                 await ctx.reply("Range not specified.")
