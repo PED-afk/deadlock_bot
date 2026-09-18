@@ -697,8 +697,8 @@ bot.lastShhCheck=time.time()//1
 
 
 bot.bootTime=time.time()//1
-bot.version="0.9.6"
-bot.versionSTR="Ping tool v3"
+bot.version="0.9.7"
+bot.versionSTR="Save fix"
 
 bot.name="FUNLOCK BOT" #Not yet decided
 
@@ -706,7 +706,7 @@ bot.name="FUNLOCK BOT" #Not yet decided
 
 bot.messageCD=MESSAGE_CD
 bot.greetCD=GREET_CD
-bot.degenTimer=deep_load_txt(BotPaths.degen_timer_file)
+bot.degenTimer=int(deep_load_txt(BotPaths.degen_timer_file))
 
 bot.user_data=deep_load_json(BotPaths.user_data_file)
 idSTR="global"

@@ -7,6 +7,7 @@ from pathlib import Path
 from platformdirs import user_data_dir
 import json
 import time
+from debug import printLog
 
 
 
@@ -50,6 +51,11 @@ def load_txt(filePath:str):
     return contents
 
 def deep_load_txt(fileName:str):
+    """
+    !!!WARNING!!!\n
+    If the file doesn't exist this funtion will return the current time using `time.time()`
+    """
+
     data_dir = Path(user_data_dir(APP_NAME))
     file_path = data_dir / fileName
 
@@ -58,10 +64,11 @@ def deep_load_txt(fileName:str):
         with open(file_path,"r") as f:
             data=f.readline().strip()
     else:
+        printLog("error","File doesn't exist.")
         data = time.time()
     return data
 
-def deep_save_txt(name:str,data:dict):
+def deep_save_txt(name:str,data:str):
     data_dir = Path(user_data_dir(APP_NAME))
     data_dir.mkdir(parents=True, exist_ok=True)
     file_path = data_dir / name

@@ -7,7 +7,7 @@ from pathlib import Path
 import random
 
 from own_utils import chooseFaceFromCategory, activeTimerExists, canUseCommand, getDictStr, colorTextForDc, colorTextForDcRainbow
-from data_manage import save_json, load_json, load_txt, deep_save_json
+from data_manage import save_json, load_json, load_txt, deep_save_json, deep_save_txt
 from constants import ME, BOT_ROLE, BOTS_CHANNEL_ID
 from pi_specific import getAll
 from debug import printLog, printLogToDc
@@ -299,7 +299,8 @@ class Unorganized(commands.Cog):
                 if deep=="deep":
                     face=chooseFaceFromCategory("deep_concentrate")
                     deep_save_json(BotPaths.user_data_file,self.bot.user_data)
-                    extra=" HARDER "
+                    deep_save_txt(BotPaths.degen_timer_file,str(self.bot.degenTimer))
+                    extra=".. HARDER! "
                 await ctx.reply("Saving some stuff."+extra+face,delete_after=10)
 
     @commands.command()

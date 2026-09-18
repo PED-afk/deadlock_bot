@@ -4,7 +4,7 @@ from discord.ext import commands, tasks
 import asyncio
 
 from own_utils import chooseFaceFromCategory, activeTimerExists, canUseCommand
-from data_manage import save_json, load_json, load_txt, deep_save_json
+from data_manage import save_json, load_json, load_txt, deep_save_json, deep_save_txt
 from constants import ME, BOT_ROLE, BOTS_CHANNEL_ID
 
 from classes.file_paths import BotPaths
@@ -26,6 +26,7 @@ class Power(commands.Cog):
                     await ctx.guild.voice_client.disconnect()
                 save_json(BotPaths.user_data_path,self.bot.user_data)
                 deep_save_json(BotPaths.user_data_file,self.bot.user_data)
+                deep_save_txt(BotPaths.degen_timer_file,str(self.bot.degenTimer))
                 await ctx.reply("Shuting down.\nGood night!\nᴗ˳ᴗ",delete_after=10)
                 with open(BotPaths.restart_file,"w") as f:
                     f.write("0")
@@ -62,6 +63,7 @@ class Power(commands.Cog):
                 if save=="save":
                     save_json(BotPaths.user_data_path,self.bot.user_data)
                     deep_save_json(BotPaths.user_data_file,self.bot.user_data)
+                    deep_save_txt(BotPaths.degen_timer_file,str(self.bot.degenTimer))
                 with open(BotPaths.restart_file,"w") as f:
                     f.write("1")
                 await ctx.reply("Shuting down.\nBe right back!\n"+chooseFaceFromCategory("blush_happy")+("\n-# Warning! I will not look for updates from any source! (use `!update`)" if tryUpdate!=1 else ""),delete_after=20)
@@ -77,7 +79,8 @@ class Power(commands.Cog):
                     await ctx.guild.voice_client.disconnect()
                 if save=="save":
                     save_json(BotPaths.user_data_path,self.bot.user_data)
-                    deep_save_json(BotPaths.user_data_file,self.bot.user_data)
+                    deep_save_txt(BotPaths.degen_timer_file,str(self.bot.degenTimer))
+                    #deep_save_json(BotPaths.user_data_file,self.bot.user_data)
                 
                 with open(BotPaths.restart_file,"w") as f:
                     f.write("2")
