@@ -47,6 +47,7 @@ class MyBot(commands.Bot):
         await self.load_extension("cogs.unorganized")
         await self.load_extension("cogs.debugcog")
         await self.load_extension("cogs.moderator")
+        await self.load_extension("cogs.tools")
         #await self.load_extension("cogs.priority_cog")
 
 #bot=commands.Bot(command_prefix='!', intents=intents)
@@ -694,8 +695,8 @@ bot.lastShhCheck=time.time()//1
 
 
 bot.bootTime=time.time()//1
-bot.version="0.9.3"
-bot.versionSTR=""
+bot.version="0.9.4"
+bot.versionSTR="Ping tool v1"
 
 bot.name="FUNLOCK BOT" #Not yet decided
 

@@ -55,18 +55,18 @@ async def canUseCommand(ctx:commands.Context, mode:int=3, inChannel:bool=True, i
     """
     
     Check if user can use this command\n
-    <mode>\n
-    0: user id must match ME\n
-    1: check for "Day ones" role\n
-    2: check for "can use the bot" role\n
-    3: anyone (default)\n
+    `mode`\n
+    - 0: user id must match ME\n
+    - 1: check for "Day ones" role\n
+    - 2: check for "can use the bot" role\n
+    - 3: anyone (default)\n
     \n
-    <inChannel>\n
-    Must be sent in the correct channel\n\n
-    <inVoice>\n
-    If True, user must be in a voice channel\n\n
-    <tellReason>\n
-    Send a reply to tell the user why they CAN'T use the command
+    `inChannel`\n
+    \tMust be sent in the correct channel\n\n
+    `inVoice`\n
+    \tIf True, user must be in a voice channel\n\n
+    `tellReason`\n
+    \tSend a reply to tell the user why they CAN'T use the command
     """
     
     if inChannel and ctx.channel.id!=BOTS_CHANNEL_ID:
