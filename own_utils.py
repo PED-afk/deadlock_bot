@@ -7,6 +7,7 @@ import time
 from constants import ME, BOT_ROLE, BOTS_CHANNEL_ID, MOD_ROLE, AUTODELETE_TIME_SECONDS
 from debug import printLog
 from classes.bot_faces import Faces
+from classes.dc_colors import Colors
 
 BOTFACES=Faces
 
@@ -38,6 +39,32 @@ def updateShh(data:dict)->dict:
                 newData[key].append(report)
     return newData
 
+def colorTextForDc(text:str,color:str,putCodeBlock:bool=True):
+    """
+    color must be something from Colors.`var`
+    """
+    extra=""
+    begin=""
+    if putCodeBlock:
+        extra="\n```"
+        begin="ansi\n"
+    return extra+begin+color+text+Colors.END+extra
+
+def colorTextForDcRainbow(text:str,blockLength:int=1):
+    if blockLength<1:
+        raise ValueError("BlockLength must be at least 1")
+    
+    final=""
+    rainColors=[Colors.RED,Colors.YELLOW,Colors.GREEN,Colors.BLUE,Colors.PURPLE]
+    colorIDX=0
+    for letter in text:
+        if letter==" ":
+            #colorIDX=0 #lookes bad
+            final+=letter
+            continue
+        final+=colorTextForDc(letter,rainColors[(colorIDX//blockLength)%len(rainColors)],False)
+        colorIDX+=1
+    return "```ansi\n"+final+Colors.END+"\n```"
 
 def chooseFaceFromCategory(category:str|list[str]) -> str:
     """

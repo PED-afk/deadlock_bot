@@ -51,19 +51,19 @@ def update():
     try:
         result = subprocess.run(["git", "pull"],cwd=Path(__file__).resolve().parent,capture_output=True, text=True, timeout=30)
         if result.returncode == 0:
-            printLog("log",f"Git pull successful: {result.stdout.strip()}", flush=True)
+            printLog("log",f"Git pull successful: {result.stdout.strip()}")
             with open(BotPaths.update_check_file,"a") as f:
                 f.write("\n")
                 f.write("An update was found and applied from github.")
             return
         else:
-            printLog("warning",f"Git pull failed: {result.stderr.strip()}", flush=True)
+            printLog("warning",f"Git pull failed: {result.stderr.strip()}")
             with open(BotPaths.update_check_file,"a") as f:
                 f.write("\n")
                 f.write(result.stderr.strip())
 
     except Exception as e:
-        printLog("warning",f"Git pull error: {e}\nTrying USB method.", flush=True)
+        printLog("warning",f"Git pull error: {e}\nTrying USB method.")
         with open(BotPaths.update_check_file,"a") as f:
             f.write("\n")
             f.write(e)
@@ -99,7 +99,7 @@ def update():
                 f.write("\n")
                 f.write("An update was found and applied from USB.")
         except Exception as e:
-            printLog("error",f"Update error {e}",flush=True)
+            printLog("error",f"Update error {e}")
 
 while True:
     if process is None or process.poll() is not None:
