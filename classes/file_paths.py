@@ -10,7 +10,9 @@ class BotPaths():
     user_data_path = BASE / user_data_file
 
     pause_file = BASE / "pauseTimes.txt"
-    degen_timer_file=BASE / "degen_timer.txt"
+
+    degen_timer_file="degen_timer.txt"
+    degen_timer_path=BASE / degen_timer_file
 
     characters_file = BASE / "characters.txt"
     characters_file_json = BASE / "characters.json"
@@ -25,3 +27,5 @@ class BotPaths():
     pfp_folder=BASE / "images" / "pfp"
 
     credits_file=BASE / "data" / "3rd_party_credits.json"
+
+    lookForUpdates=BASE / "update.txt"

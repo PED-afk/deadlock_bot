@@ -7,6 +7,7 @@ import time
 from constants import ME, BOT_ROLE, BOTS_CHANNEL_ID, MOD_ROLE, AUTODELETE_TIME_SECONDS
 from debug import printLog
 from classes.bot_faces import Faces
+from classes.dc_colors import Colors
 
 BOTFACES=Faces
 
@@ -38,6 +39,32 @@ def updateShh(data:dict)->dict:
                 newData[key].append(report)
     return newData
 
+def colorTextForDc(text:str,color:str,putCodeBlock:bool=True):
+    """
+    color must be something from Colors.`var`
+    """
+    extra=""
+    begin=""
+    if putCodeBlock:
+        extra="\n```"
+        begin="ansi\n"
+    return extra+begin+color+text+Colors.END+extra
+
+def colorTextForDcRainbow(text:str,blockLength:int=1):
+    if blockLength<1:
+        raise ValueError("BlockLength must be at least 1")
+    
+    final=""
+    rainColors=[Colors.RED,Colors.YELLOW,Colors.GREEN,Colors.BLUE,Colors.PURPLE]
+    colorIDX=0
+    for letter in text:
+        if letter==" ":
+            #colorIDX=0 #lookes bad
+            final+=letter
+            continue
+        final+=colorTextForDc(letter,rainColors[(colorIDX//blockLength)%len(rainColors)],False)
+        colorIDX+=1
+    return "```ansi\n"+final+Colors.END+"\n```"
 
 def chooseFaceFromCategory(category:str|list[str]) -> str:
     """
@@ -55,18 +82,18 @@ async def canUseCommand(ctx:commands.Context, mode:int=3, inChannel:bool=True, i
     """
     
     Check if user can use this command\n
-    <mode>\n
-    0: user id must match ME\n
-    1: check for "Day ones" role\n
-    2: check for "can use the bot" role\n
-    3: anyone (default)\n
+    `mode`\n
+    - 0: user id must match ME\n
+    - 1: check for "Day ones" role\n
+    - 2: check for "can use the bot" role\n
+    - 3: anyone (default)\n
     \n
-    <inChannel>\n
-    Must be sent in the correct channel\n\n
-    <inVoice>\n
-    If True, user must be in a voice channel\n\n
-    <tellReason>\n
-    Send a reply to tell the user why they CAN'T use the command
+    `inChannel`\n
+    \tMust be sent in the correct channel\n\n
+    `inVoice`\n
+    \tIf True, user must be in a voice channel\n\n
+    `tellReason`\n
+    \tSend a reply to tell the user why they CAN'T use the command
     """
     
     if inChannel and ctx.channel.id!=BOTS_CHANNEL_ID:

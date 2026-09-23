@@ -4,9 +4,10 @@ from discord.ext import commands, tasks
 import asyncio
 import time
 
-from own_utils import chooseFaceFromCategory, canUseCommand
+from own_utils import chooseFaceFromCategory, canUseCommand, colorTextForDc
 from debug import printLog
 from constants import VOICE_CHANNEL_CAT_NAME_PREFIX
+from classes.dc_colors import Colors
 
 #commands to control the timer function
 #moved here from main file
@@ -46,7 +47,7 @@ class Timer(commands.Cog):
                     for channel in discord.utils.get(guild.categories, name=VOICE_CHANNEL_CAT_NAME_PREFIX+"["+name+"]").voice_channels:
                         for member in channel.members:
                             if member.global_name=="PurpleEarthDragon":
-                                names.append(member.global_name+" "+chooseFaceFromCategory("love"))
+                                names.append(colorTextForDc(member.global_name,Colors.PURPLE)+" "+chooseFaceFromCategory("love"))
                             else:
                                 names.append(member.global_name)
                 

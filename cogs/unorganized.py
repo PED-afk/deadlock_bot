@@ -6,8 +6,8 @@ import platform
 from pathlib import Path
 import random
 
-from own_utils import chooseFaceFromCategory, activeTimerExists, canUseCommand, getDictStr
-from data_manage import save_json, load_json, load_txt, deep_save_json
+from own_utils import chooseFaceFromCategory, activeTimerExists, canUseCommand, getDictStr, colorTextForDc, colorTextForDcRainbow
+from data_manage import save_json, load_json, load_txt, deep_save_json, deep_save_txt
 from constants import ME, BOT_ROLE, BOTS_CHANNEL_ID
 from pi_specific import getAll
 from debug import printLog, printLogToDc
@@ -17,6 +17,7 @@ from classes.button import Button, MultButton
 from classes.find_rem import FindRem
 from classes.run_home import runHome
 from classes.file_paths import BotPaths
+from classes.dc_colors import Colors
 
 
 #there should be no commands here
@@ -35,11 +36,14 @@ class Unorganized(commands.Cog):
         senderID=ctx.author.id
         if ctx.channel.id == BOTS_CHANNEL_ID:
             if senderID==ME or any(role.id == BOT_ROLE for role in ctx.author.roles):
-                await ctx.send("TEST:\nNothing to test.\n.=.",delete_after=10)
+                #await ctx.send("TEST:\nNothing to test.\n.=.",delete_after=10)
+                await ctx.reply(colorTextForDc("color?",Colors.PURPLE))
+                await ctx.reply(colorTextForDcRainbow("Rainbow with looooooooooooooooooooooooooooong text"))
+                await ctx.reply(colorTextForDcRainbow("Rainbow with looooooooooooooooooooooooooooong text and more letters the same",3))
                 view=Button()
                 view=MultButton(ctx.author)
                 view=FindRem(ctx,self.bot)
-                await ctx.send("Buttons:", view=view)
+                #await ctx.send("Buttons:", view=view)
 
     @commands.command()
     async def minigames(self, ctx, game:str=None):
@@ -295,7 +299,8 @@ class Unorganized(commands.Cog):
                 if deep=="deep":
                     face=chooseFaceFromCategory("deep_concentrate")
                     deep_save_json(BotPaths.user_data_file,self.bot.user_data)
-                    extra=" HARDER "
+                    deep_save_txt(BotPaths.degen_timer_file,str(self.bot.degenTimer))
+                    extra=".. HARDER! "
                 await ctx.reply("Saving some stuff."+extra+face,delete_after=10)
 
     @commands.command()

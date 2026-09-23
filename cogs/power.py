@@ -4,10 +4,11 @@ from discord.ext import commands, tasks
 import asyncio
 
 from own_utils import chooseFaceFromCategory, activeTimerExists, canUseCommand
-from data_manage import save_json, load_json, load_txt, deep_save_json
+from data_manage import save_json, load_json, load_txt, deep_save_json, deep_save_txt
 from constants import ME, BOT_ROLE, BOTS_CHANNEL_ID
 
 from classes.file_paths import BotPaths
+from classes.bot_faces import Faces
 
 #"power setting" commands
 
@@ -25,6 +26,7 @@ class Power(commands.Cog):
                     await ctx.guild.voice_client.disconnect()
                 save_json(BotPaths.user_data_path,self.bot.user_data)
                 deep_save_json(BotPaths.user_data_file,self.bot.user_data)
+                deep_save_txt(BotPaths.degen_timer_file,str(self.bot.degenTimer))
                 await ctx.reply("Shuting down.\nGood night!\nᴗ˳ᴗ",delete_after=10)
                 with open(BotPaths.restart_file,"w") as f:
                     f.write("0")
@@ -37,12 +39,21 @@ class Power(commands.Cog):
     #DO NOT PUT IT BACK
     @commands.command()
     async def restart(self,ctx,save:str="save"):
-        await self.restartFunc(ctx,save)
+        await self.restartFunc(ctx,save,0)
     @commands.command()
     async def reload(self,ctx,save:str="save"):
-        await self.restartFunc(ctx,save)
+        await self.restartFunc(ctx,save,0)
 
-    async def restartFunc(self,ctx,save:str="save"):
+    @commands.command()
+    async def update(self,ctx,versionNumWasUpdated:str=None):
+        if versionNumWasUpdated==None:
+            await ctx.reply("Aren't you forgetting something?\n\n-# Did you update the version number?\n-# Use `!update yes` if you did."+chooseFaceFromCategory(Faces.wink))
+        else:
+            await self.restartFunc(ctx,"save",1)
+
+    async def restartFunc(self,ctx,save:str="save",tryUpdate:int=0):
+        with open(BotPaths.lookForUpdates,"w") as f:
+            f.write(str(tryUpdate))
         if await canUseCommand(ctx,2):
             if activeTimerExists(self.bot):
                 ctx.reply("Sorry, I can't restart now, there is at least 1 active timer.")
@@ -52,9 +63,10 @@ class Power(commands.Cog):
                 if save=="save":
                     save_json(BotPaths.user_data_path,self.bot.user_data)
                     deep_save_json(BotPaths.user_data_file,self.bot.user_data)
+                    deep_save_txt(BotPaths.degen_timer_file,str(self.bot.degenTimer))
                 with open(BotPaths.restart_file,"w") as f:
                     f.write("1")
-                await ctx.reply("Shuting down.\nBe right back!\n"+chooseFaceFromCategory("blush_happy"),delete_after=20)
+                await ctx.reply("Shuting down.\nBe right back!\n"+chooseFaceFromCategory("blush_happy")+("\n-# Warning! I will not look for updates from any source! (use `!update`)" if tryUpdate!=1 else ""),delete_after=20)
                 await self.bot.close()
     
     @commands.command()
@@ -67,7 +79,8 @@ class Power(commands.Cog):
                     await ctx.guild.voice_client.disconnect()
                 if save=="save":
                     save_json(BotPaths.user_data_path,self.bot.user_data)
-                    deep_save_json(BotPaths.user_data_file,self.bot.user_data)
+                    deep_save_txt(BotPaths.degen_timer_file,str(self.bot.degenTimer))
+                    #deep_save_json(BotPaths.user_data_file,self.bot.user_data)
                 
                 with open(BotPaths.restart_file,"w") as f:
                     f.write("2")

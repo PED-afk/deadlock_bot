@@ -5,10 +5,10 @@ import asyncio
 import time
 import random
 
-from own_utils import chooseFaceFromCategory, canUseCommand, format_duration, printLog
+from own_utils import chooseFaceFromCategory, canUseCommand, format_duration
 from constants import ME, BOT_ROLE, BOTS_CHANNEL_ID
 from user_bot_interaction import interact, getInteractValue, getGlobalInteractValue
-from debug import printLogToDc
+from debug import printLogToDc, printLog
 from classes.file_paths import BotPaths
 
 #"hidden" commands (they are not listed in bot_help; KEEP IT THIS WAY)
@@ -58,7 +58,7 @@ class Hiddens(commands.Cog):
 
     @commands.command()
     async def clean(self,ctx,many:int=None):
-        if canUseCommand(ctx,0):
+        if await canUseCommand(ctx,0):
             #cleanup
             if many==None:
                 await ctx.reply("Range not specified.")

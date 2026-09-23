@@ -22,6 +22,7 @@ from constants import HERO_ID_MAP, RANK_NAMES, RANK_COLORS, BOTS_CHANNEL_ID, BOT
 from constants import ROLE_CHANNEL_ID, WHO_AM_I_ROLES, COLOR_CHOOSER_MESSAGE_ID, IAM_MESSAGE_ID, IAM_MESSAGE_CONTENT, COLOR_CHOOSER_MESSAGE_CONTENT, COLORED_ROLES
 from constants import SUGGESTIONS_NEW_TAG_ID, SUGGESTIONS_ID,SUGGESTIONS_REJ_TAG_ID ,SUGGESTIONS_ACC_TAG_ID, SUGGESTIONS_CANT_TAG_ID
 from constants import AUTODELETE_TRESHOLD, MIN_TIME_BETWEEN_SHH_UPDATE_SECONDS
+from constants import DEGEN_TIMER_RESET_MESSAGES, DEGEN_TIMER_ASK_MESSAGES, THANKING_MESSAGES
 
 from classes.item import Item
 from classes.file_paths import BotPaths
@@ -38,6 +39,8 @@ intents.reactions = True
 intents.members = True
 intents.guilds = True
 
+intents.presences = True
+
 class MyBot(commands.Bot):
     async def setup_hook(self):
         await self.load_extension("cogs.hiddens")
@@ -46,6 +49,7 @@ class MyBot(commands.Bot):
         await self.load_extension("cogs.unorganized")
         await self.load_extension("cogs.debugcog")
         await self.load_extension("cogs.moderator")
+        await self.load_extension("cogs.tools")
         #await self.load_extension("cogs.priority_cog")
 
 #bot=commands.Bot(command_prefix='!', intents=intents)
@@ -230,6 +234,13 @@ async def on_ready():
         await message.add_reaction(WHO_AM_I_ROLES[i]["emoji"])
 
 
+    #need a message in a channel? use this:
+    """
+    channel=bot.get_channel(ROLE_CHANNEL_ID)
+    if channel is None:
+        channel=await bot.fetch_channel(ROLE_CHANNEL_ID)
+    await channel.send("New message!")
+    """
 
     #thess were needed once
     """
@@ -270,8 +281,7 @@ async def on_message(message):
     if message.reference:
         repliedTo=await message.channel.fetch_message(message.reference.message_id)
         if repliedTo.author.id == bot.user.id:
-            thankingMessages=["thank you!","thank you","thanks!","thanks"]
-            if any(t in message.content.lower() for t in thankingMessages):
+            if any(t in message.content.lower() for t in THANKING_MESSAGES):
                 if any(t in message.content.lower() for t in BOT_SECRET_NICKNAMES):
                     interact(bot,3,"thank",idINT)
                     intVal=max(getInteractValue(bot,"thank",idINT),getGlobalInteractValue(bot,"thank"))
@@ -356,12 +366,12 @@ async def on_message(message):
         return
 
 
-    if message.content.lower() in ["reset the timer","reset timer","!reset_the_timer","0 days without degenerate nonsense","0 days without degeneracy"]:
+    if message.content.lower() in DEGEN_TIMER_RESET_MESSAGES:
         message.content = "!reset_the_timer"
         await bot.process_commands(message)
         return
 
-    if message.content.lower() in ["the timer","what's the time","!the_timer"]:
+    if message.content.lower() in DEGEN_TIMER_ASK_MESSAGES:
         message.content = "!the_timer"
         await bot.process_commands(message)
         return
@@ -687,8 +697,8 @@ bot.lastShhCheck=time.time()//1
 
 
 bot.bootTime=time.time()//1
-bot.version="0.9.1"
-bot.versionSTR=""
+bot.version="0.9.7"
+bot.versionSTR="Save fix"
 
 bot.name="FUNLOCK BOT" #Not yet decided
 
@@ -696,7 +706,7 @@ bot.name="FUNLOCK BOT" #Not yet decided
 
 bot.messageCD=MESSAGE_CD
 bot.greetCD=GREET_CD
-bot.degenTimer=deep_load_txt(BotPaths.degen_timer_file)
+bot.degenTimer=int(deep_load_txt(BotPaths.degen_timer_file))
 
 bot.user_data=deep_load_json(BotPaths.user_data_file)
 idSTR="global"
