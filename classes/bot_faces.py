@@ -5,6 +5,7 @@ from classes.file_paths import BotPaths
 class Faces():
     faces=load_json(BotPaths.face_file)
     big_eyes="big_eyes"
+    small_eyes="small_eyes"
     question="question"
     love="love"
     happy="happy"
@@ -30,3 +31,4 @@ class Faces():
 
     class FaceBigCategory:
         happies=["love","blush_happy","pat","spark","excited"]
+        eye_only=["small_eyes","big_eyes"]
