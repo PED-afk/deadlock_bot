@@ -697,7 +697,7 @@ bot.lastShhCheck=time.time()//1
 
 
 bot.bootTime=time.time()//1
-bot.version="0.9.8"
+bot.version="0.9.9"
 bot.versionSTR=""
 
 bot.name="FUNLOCK BOT" #Not yet decided
@@ -706,7 +706,7 @@ bot.name="FUNLOCK BOT" #Not yet decided
 
 bot.messageCD=MESSAGE_CD
 bot.greetCD=GREET_CD
-bot.degenTimer=int(deep_load_txt(BotPaths.degen_timer_file))
+bot.degenTimer=int(float(deep_load_txt(BotPaths.degen_timer_file)))
 
 bot.user_data=deep_load_json(BotPaths.user_data_file)
 idSTR="global"
