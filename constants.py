@@ -106,6 +106,9 @@ WHO_AM_I_ROLES={
     }
 }
 
+WARNING_MESSAGE_IN_NAMETAG_CHANNEL="Warnig!!!\nBefore you add a reaction, check if the @ is online! If not wait until if it is.\nIf you haven't recieved the roles you wanted, remove and read your reactions (when the bot is online).\n\n-# The bot may appear online right after it shuts down or crashes. Check the # channel for shutdown and startup messages."
+WARNING_MESSAGE_IN_NAMETAG_CHANNEL_ID=1553357812409704489
+
 
 SUGGESTIONS_ID=1544060319263883324
 SUGGESTIONS_NEW_TAG_ID=1544065933948223558
