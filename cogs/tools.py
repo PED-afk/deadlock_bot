@@ -33,7 +33,8 @@ class Tools(commands.Cog):
                 message=f"{ctx.author.mention} is looking for people to play with!\n\n{mentions}"
                 await ctx.send(message)
             else:
-                await ctx.reply("No users online.")
+                await ctx.send("No users online.")
+        await ctx.message.delete()
 
 
    

@@ -130,4 +130,9 @@ DEGEN_TIMER_ASK_MESSAGES=["the timer","what's the time","!the_timer"]
 THANKING_MESSAGES=["thank you!","thank you","thanks!","thanks"]
 
 
+class ROLES():
+    BOT_PROGRAMMER=1523561168956817578
+    GITHUB_HELPER=1542983727632752740
+    GITHUB_HELPER_APLICANT=1543929441225412608
+
 
