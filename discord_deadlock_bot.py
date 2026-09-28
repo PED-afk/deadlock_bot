@@ -23,6 +23,7 @@ from constants import ROLE_CHANNEL_ID, WHO_AM_I_ROLES, COLOR_CHOOSER_MESSAGE_ID,
 from constants import AUTODELETE_TRESHOLD, MIN_TIME_BETWEEN_SHH_UPDATE_SECONDS
 from constants import DEGEN_TIMER_RESET_MESSAGES, DEGEN_TIMER_ASK_MESSAGES, THANKING_MESSAGES
 from constants import WARNING_MESSAGE_IN_NAMETAG_CHANNEL_ID, WARNING_MESSAGE_IN_NAMETAG_CHANNEL
+from constants import FLOOR_PLAN_MESSAGE, FLOOR_PLAN_MESSAGE_ID, FLOOR_PLAN_CHANNEL_ID, RULES_CHANNEL_ID, RULES_MESSAGE, RULES_MESSAGE_ID
 from constants import ROLES
 
 from classes.item import Item
@@ -105,7 +106,7 @@ async def on_ready():
         await printLogToDc(bot,"info",tempData[0])
 
 
-    #edit the role select messages
+    #edit bot created messages
     channel=bot.get_channel(ROLE_CHANNEL_ID)
     message=await channel.fetch_message(COLOR_CHOOSER_MESSAGE_ID)
     await message.edit(content=COLOR_CHOOSER_MESSAGE_CONTENT)
@@ -120,13 +121,19 @@ async def on_ready():
     message=await channel.fetch_message(WARNING_MESSAGE_IN_NAMETAG_CHANNEL_ID)
     await message.edit(content=WARNING_MESSAGE_IN_NAMETAG_CHANNEL.replace("@",bot.user.mention).replace(" #",bot.get_channel(BOTS_CHANNEL_ID).mention))
 
+    channel=bot.get_channel(FLOOR_PLAN_CHANNEL_ID)
+    message=await channel.fetch_message(FLOOR_PLAN_MESSAGE_ID)
+    await message.edit(content=FLOOR_PLAN_MESSAGE)
+    
+    channel=bot.get_channel(RULES_CHANNEL_ID)
+    message=await channel.fetch_message(RULES_MESSAGE_ID)
+    await message.edit(content=RULES_MESSAGE)
 
     #need a message in a channel? use this:
-    
     """
-    channel=bot.get_channel(ROLE_CHANNEL_ID)
+    channel=bot.get_channel(1554145604840456222)
     if channel is None:
-        channel=await bot.fetch_channel(ROLE_CHANNEL_ID)
+        channel=await bot.fetch_channel(1554145604840456222)
     await channel.send("New message!")
     exit()
     """
