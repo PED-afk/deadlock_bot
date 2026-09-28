@@ -365,7 +365,6 @@ async def tick():
 
 
 
-save_json(BotPaths.autoMessage_file_gitignored,{})
 bot.autoMessages=load_json(BotPaths.autoMessage_file)
 bot.autoMessagesOld=load_json(BotPaths.autoMessage_file_gitignored)
 
@@ -388,8 +387,8 @@ bot.lastShhCheck=time.time()//1
 
 
 bot.bootTime=time.time()//1
-bot.version="0.10.0.5"
-bot.versionSTR="Cleaning and documentation start"
+bot.version="0.10.1"
+bot.versionSTR="Auto messages available"
 
 bot.name="FUNLOCK BOT" #Not yet decided
 
