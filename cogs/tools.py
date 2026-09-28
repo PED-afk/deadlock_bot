@@ -7,7 +7,8 @@ import time
 import random
 
 from own_utils import chooseFaceFromCategory, canUseCommand
-from constants import ME, BOT_ROLE, BOTS_CHANNEL_ID, WHO_AM_I_ROLES
+from constants import WHO_AM_I_ROLES
+from constants import CHANNEL_IDS
 from debug import printLogToDc, printLog
 from classes.file_paths import BotPaths
 
@@ -52,7 +53,7 @@ class Tools(commands.Cog):
             return returnItems
 
         senderID=ctx.author.id
-        if ctx.channel.id==BOTS_CHANNEL_ID:
+        if ctx.channel.id==CHANNEL_IDS.BOTS_CHANNEL_ID:
             if sub==None:
                 botcommands=[
                     "`!rand char X`: Generates X random characters. (1 to 12)",

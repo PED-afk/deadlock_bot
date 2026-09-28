@@ -4,7 +4,8 @@ from discord.ext import commands
 from datetime import datetime
 import time
 
-from constants import ME, BOT_ROLE, BOTS_CHANNEL_ID, MOD_ROLE, AUTODELETE_TIME_SECONDS
+from constants import ME, BOT_ROLE, MOD_ROLE, AUTODELETE_TIME_SECONDS
+from constants import CHANNEL_IDS
 from debug import printLog
 from classes.bot_faces import Faces
 from classes.dc_colors import Colors
@@ -96,7 +97,7 @@ async def canUseCommand(ctx:commands.Context, mode:int=3, inChannel:bool=True, i
     \tSend a reply to tell the user why they CAN'T use the command
     """
     
-    if inChannel and ctx.channel.id!=BOTS_CHANNEL_ID:
+    if inChannel and ctx.channel.id!=CHANNEL_IDS.BOTS_CHANNEL_ID:
         return False
     if inVoice and ctx.author.voice==None:
         if tellReason:

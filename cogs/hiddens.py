@@ -6,7 +6,7 @@ import time
 import random
 
 from own_utils import chooseFaceFromCategory, canUseCommand, format_duration
-from constants import ME, BOT_ROLE, BOTS_CHANNEL_ID
+from constants import CHANNEL_IDS
 from user_bot_interaction import interact, getInteractValue, getGlobalInteractValue
 from debug import printLogToDc, printLog
 from classes.file_paths import BotPaths
@@ -65,7 +65,7 @@ class Hiddens(commands.Cog):
             else:
                 if many==-1:
                     many=None
-                async for msg in self.bot.get_channel(BOTS_CHANNEL_ID).history(limit=many):
+                async for msg in self.bot.get_channel(CHANNEL_IDS.BOTS_CHANNEL_ID).history(limit=many):
                     try:
                         await msg.delete()
                     except discord.Forbidden:

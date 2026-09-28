@@ -8,7 +8,7 @@ import random
 
 from own_utils import chooseFaceFromCategory, activeTimerExists, canUseCommand, getDictStr, colorTextForDc, colorTextForDcRainbow
 from data_manage import save_json, load_json, load_txt, deep_save_json, deep_save_txt
-from constants import ME, BOT_ROLE, BOTS_CHANNEL_ID
+from constants import ME, BOT_ROLE
 from pi_specific import getAll
 from debug import printLog, printLogToDc
 from data_manage import load_json
@@ -34,21 +34,20 @@ class Unorganized(commands.Cog):
     @commands.command()
     async def test(self,ctx):
         senderID=ctx.author.id
-        if ctx.channel.id == BOTS_CHANNEL_ID:
-            if senderID==ME or any(role.id == BOT_ROLE for role in ctx.author.roles):
-                #await ctx.send("TEST:\nNothing to test.\n.=.",delete_after=10)
-                await ctx.reply(colorTextForDc("color?",Colors.PURPLE))
-                await ctx.reply(colorTextForDcRainbow("Rainbow with looooooooooooooooooooooooooooong text"))
-                await ctx.reply(colorTextForDcRainbow("Rainbow with looooooooooooooooooooooooooooong text and more letters the same",3))
-                view=Button()
-                view=MultButton(ctx.author)
-                view=FindRem(ctx,self.bot)
-                #await ctx.send("Buttons:", view=view)
+        if canUseCommand(ctx,2):
+            #await ctx.send("TEST:\nNothing to test.\n.=.",delete_after=10)
+            await ctx.reply(colorTextForDc("color?",Colors.PURPLE))
+            await ctx.reply(colorTextForDcRainbow("Rainbow with looooooooooooooooooooooooooooong text"))
+            await ctx.reply(colorTextForDcRainbow("Rainbow with looooooooooooooooooooooooooooong text and more letters the same",3))
+            view=Button()
+            view=MultButton(ctx.author)
+            view=FindRem(ctx,self.bot)
+            #await ctx.send("Buttons:", view=view)
 
     @commands.command()
     async def minigames(self, ctx, game:str=None):
         senderID=ctx.author.id
-        if ctx.channel.id == BOTS_CHANNEL_ID:
+        if canUseCommand(ctx,3):
             if game==None:
                 games=[
                     "`!minigames find_Rem`: Try to find the enemy Rem and stop them from getting the sinners.",
@@ -78,7 +77,7 @@ class Unorganized(commands.Cog):
     @commands.command()
     async def help_me(self, ctx, section:str=None):
         senderID=ctx.author.id
-        if ctx.channel.id==BOTS_CHANNEL_ID:
+        if canUseCommand(ctx,3):
             anyView=True
             if section==None:
                 anyView=True
@@ -171,7 +170,7 @@ class Unorganized(commands.Cog):
     @commands.command()
     async def status(self,ctx):
         senderID=ctx.author.id
-        if ctx.channel.id==BOTS_CHANNEL_ID:
+        if canUseCommand(ctx,3):
             if random.randint(0,9)==0:
                 if senderID==ME:
                     face=chooseFaceFromCategory("annoyed")
@@ -208,36 +207,34 @@ class Unorganized(commands.Cog):
     @commands.command()
     async def version(self,ctx):
         senderID=ctx.author.id
-        if ctx.channel.id==BOTS_CHANNEL_ID:
+        if canUseCommand(ctx,3):
             await ctx.reply("Bot version:\n"+self.bot.version+"\n"+self.bot.versionSTR)
 
     @commands.command()
     async def join(self,ctx):
         senderID=ctx.author.id
-        if ctx.channel.id==BOTS_CHANNEL_ID:
-            if senderID==ME or any(role.id == BOT_ROLE for role in ctx.author.roles):
-                if ctx.guild.voice_client!=None:
-                    await ctx.reply("Sorry I'm busy in another channel. "+chooseFaceFromCategory("nervous"))
+        if canUseCommand(ctx,2):
+            if ctx.guild.voice_client!=None:
+                await ctx.reply("Sorry I'm busy in another channel. "+chooseFaceFromCategory("nervous"))
+            else:
+                if ctx.author.voice==None:
+                    await ctx.reply("You must be in a voice channel so I know which channel to join.")
                 else:
-                    if ctx.author.voice==None:
-                        await ctx.reply("You must be in a voice channel so I know which channel to join.")
-                    else:
-                        channel = ctx.author.voice.channel
-                        await channel.connect()
+                    channel = ctx.author.voice.channel
+                    await channel.connect()
 
     @commands.command()
     async def leave(self,ctx):
         senderID=ctx.author.id
-        if ctx.channel.id==BOTS_CHANNEL_ID:
-            if senderID==ME or any(role.id == BOT_ROLE for role in ctx.author.roles):
-                if ctx.voice_client:
-                    if ctx.author.voice==None:
-                        await ctx.reply("You must be in a voice channel so I know if you are allowed to make me leave.")
-                    else:
-                        if ctx.author.voice.channel == ctx.voice_client.channel:
-                            await ctx.guild.voice_client.disconnect()
+        if canUseCommand(ctx,2):
+            if ctx.voice_client:
+                if ctx.author.voice==None:
+                    await ctx.reply("You must be in a voice channel so I know if you are allowed to make me leave.")
                 else:
-                    await ctx.reply("I'm not in any voice channels.")
+                    if ctx.author.voice.channel == ctx.voice_client.channel:
+                        await ctx.guild.voice_client.disconnect()
+            else:
+                await ctx.reply("I'm not in any voice channels.")
 
     @commands.command()
     async def source(self,ctx):
@@ -253,7 +250,7 @@ class Unorganized(commands.Cog):
     @commands.command()
     async def set_main(self, ctx,main:str):
         senderID=ctx.author.id
-        if ctx.channel.id==BOTS_CHANNEL_ID:
+        if canUseCommand(ctx,3):
             character=self.bot.characters
             if main in character.keys():
                 self.bot.user_data[str(senderID)]["main"]=main
@@ -264,7 +261,7 @@ class Unorganized(commands.Cog):
     @commands.command()
     async def my_data(self,ctx):
         senderID=ctx.author.id
-        if ctx.channel.id==BOTS_CHANNEL_ID:
+        if canUseCommand(ctx,3):
             message=await getDictStr(self.bot.user_data[str(senderID)],True,format=False)
             await ctx.reply(message,delete_after=30)
 
@@ -279,7 +276,7 @@ class Unorganized(commands.Cog):
     @commands.command()
     async def remove_me(self,ctx):
         senderID=ctx.author.id
-        if ctx.channel.id==BOTS_CHANNEL_ID:
+        if canUseCommand(ctx,3):
             self.bot.user_data.pop(str(senderID),None)
             if random.randint(0,1)==0:
                 face=chooseFaceFromCategory("nervous")
@@ -290,22 +287,21 @@ class Unorganized(commands.Cog):
     @commands.command()
     async def save(self,ctx,deep:str=""):
         senderID=ctx.author.id
-        if ctx.channel.id==BOTS_CHANNEL_ID:
-            if senderID==ME or any(role.id == BOT_ROLE for role in ctx.author.roles):
-                save_json(BotPaths.user_data_path,self.bot.user_data)
-                face=chooseFaceFromCategory("concentrate")
-                extra=" "
-                if deep=="deep":
-                    face=chooseFaceFromCategory("deep_concentrate")
-                    deep_save_json(BotPaths.user_data_file,self.bot.user_data)
-                    deep_save_txt(BotPaths.degen_timer_file,str(self.bot.degenTimer))
-                    extra=".. HARDER! "
-                await ctx.reply("Saving some stuff."+extra+face,delete_after=10)
+        if canUseCommand(ctx,2):
+            save_json(BotPaths.user_data_path,self.bot.user_data)
+            face=chooseFaceFromCategory("concentrate")
+            extra=" "
+            if deep=="deep":
+                face=chooseFaceFromCategory("deep_concentrate")
+                deep_save_json(BotPaths.user_data_file,self.bot.user_data)
+                deep_save_txt(BotPaths.degen_timer_file,str(self.bot.degenTimer))
+                extra=".. HARDER! "
+            await ctx.reply("Saving some stuff."+extra+face,delete_after=10)
 
     @commands.command()
     async def clear_loaded(self,ctx):
         senderID=ctx.author.id
-        if ctx.channel.id==BOTS_CHANNEL_ID:
+        if canUseCommand(ctx,3):
             if senderID==ME:
                 self.bot.user_data={}
         await ctx.reply("I forgor. Head empty...\n"+chooseFaceFromCategory("big_eyes"))
@@ -313,7 +309,7 @@ class Unorganized(commands.Cog):
     @commands.command()
     async def clear_user_data(self,ctx):
         senderID=ctx.author.id
-        if ctx.channel.id==BOTS_CHANNEL_ID:
+        if canUseCommand(ctx,3):
             if senderID==ME:
                 self.bot.user_data={}
                 save_json(BotPaths.user_data_path,{})
@@ -322,7 +318,7 @@ class Unorganized(commands.Cog):
     @commands.command()
     async def set_rank(self, ctx,rank:str=None):
         senderID=ctx.author.id
-        if ctx.channel.id==BOTS_CHANNEL_ID:
+        if canUseCommand(ctx,3):
             if rank==None:
                 await ctx.reply("Please provide a rank.")
             else:
@@ -337,7 +333,7 @@ class Unorganized(commands.Cog):
     async def people_at_rank(self, ctx,rank:str=None,r:int=0,online:int=0):
         r=abs(r)
         senderID=ctx.author.id
-        if ctx.channel.id==BOTS_CHANNEL_ID:
+        if canUseCommand(ctx,3):
             if rank==None:
                 rank=self.bot.user_data[str(senderID)]["rank"]
                 if rank=="None":

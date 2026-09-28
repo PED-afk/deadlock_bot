@@ -5,7 +5,7 @@ import asyncio
 
 from own_utils import chooseFaceFromCategory, activeTimerExists, canUseCommand
 from data_manage import save_json, load_json, load_txt, deep_save_json, deep_save_txt
-from constants import ME, BOT_ROLE, BOTS_CHANNEL_ID
+from constants import ME
 
 from classes.file_paths import BotPaths
 from classes.bot_faces import Faces

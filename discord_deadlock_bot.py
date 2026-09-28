@@ -18,13 +18,14 @@ neither does anything else other than open the file on the filepath and load the
 """
 from own_utils import chooseFaceFromCategory, canUseCommand, getShhValue, updateShh
 from debug import printLog, printLogToDc
-from constants import BOTS_CHANNEL_ID, MESSAGE_CD, VOICE_CHANNEL_CAT_NAME_PREFIX, BOT_SECRET_NICKNAMES, GREET_CD, LOUNGE_CHANNEL_ID
-from constants import ROLE_CHANNEL_ID, WHO_AM_I_ROLES, COLOR_CHOOSER_MESSAGE_ID, IAM_MESSAGE_ID, IAM_MESSAGE_CONTENT, COLOR_CHOOSER_MESSAGE_CONTENT, COLORED_ROLES
+from constants import MESSAGE_CD, VOICE_CHANNEL_CAT_NAME_PREFIX, BOT_SECRET_NICKNAMES, GREET_CD
+from constants import WHO_AM_I_ROLES, COLOR_CHOOSER_MESSAGE_ID, IAM_MESSAGE_ID, IAM_MESSAGE_CONTENT, COLOR_CHOOSER_MESSAGE_CONTENT, COLORED_ROLES
 from constants import AUTODELETE_TRESHOLD, MIN_TIME_BETWEEN_SHH_UPDATE_SECONDS
 from constants import DEGEN_TIMER_RESET_MESSAGES, DEGEN_TIMER_ASK_MESSAGES, THANKING_MESSAGES
 from constants import WARNING_MESSAGE_IN_NAMETAG_CHANNEL_ID, WARNING_MESSAGE_IN_NAMETAG_CHANNEL
-from constants import FLOOR_PLAN_MESSAGE, FLOOR_PLAN_MESSAGE_ID, FLOOR_PLAN_CHANNEL_ID, RULES_CHANNEL_ID, RULES_MESSAGE, RULES_MESSAGE_ID
+from constants import FLOOR_PLAN_MESSAGE, FLOOR_PLAN_MESSAGE_ID, RULES_MESSAGE, RULES_MESSAGE_ID
 from constants import ROLES
+from constants import CHANNEL_IDS
 
 from classes.item import Item
 from classes.file_paths import BotPaths
@@ -89,7 +90,7 @@ async def on_ready():
 
     printLog("info",f"Bot connected as {bot.user}")
 
-    guild = bot.get_channel(BOTS_CHANNEL_ID).guild
+    guild = bot.get_channel(CHANNEL_IDS.BOTS_CHANNEL_ID).guild
     bot.tree.copy_global_to(guild=guild)
     await bot.tree.sync(guild=guild)
     
@@ -97,9 +98,9 @@ async def on_ready():
 
     with open(BotPaths.hotboot_file,"r") as f:
         if int(f.readline().strip())==0:
-            await bot.get_channel(BOTS_CHANNEL_ID).send("I'm awake!\nGood morning!\n"+face)
+            await bot.get_channel(CHANNEL_IDS.BOTS_CHANNEL_ID).send("I'm awake!\nGood morning!\n"+face)
         else:
-            await bot.get_channel(BOTS_CHANNEL_ID).send("Back online! "+face)
+            await bot.get_channel(CHANNEL_IDS.BOTS_CHANNEL_ID).send("Back online! "+face)
 
     tempData=load_txt(BotPaths.update_check_file)
     if len(tempData)!=0:
@@ -107,7 +108,7 @@ async def on_ready():
 
 
     #edit bot created messages
-    channel=bot.get_channel(ROLE_CHANNEL_ID)
+    channel=bot.get_channel(CHANNEL_IDS.ROLE_CHANNEL_ID)
     message=await channel.fetch_message(COLOR_CHOOSER_MESSAGE_ID)
     await message.edit(content=COLOR_CHOOSER_MESSAGE_CONTENT)
     for i in COLORED_ROLES:
@@ -119,13 +120,13 @@ async def on_ready():
         await message.add_reaction(WHO_AM_I_ROLES[i]["emoji"])
 
     message=await channel.fetch_message(WARNING_MESSAGE_IN_NAMETAG_CHANNEL_ID)
-    await message.edit(content=WARNING_MESSAGE_IN_NAMETAG_CHANNEL.replace("@",bot.user.mention).replace(" #",bot.get_channel(BOTS_CHANNEL_ID).mention))
+    await message.edit(content=WARNING_MESSAGE_IN_NAMETAG_CHANNEL.replace("@",bot.user.mention).replace(" #",bot.get_channel(CHANNEL_IDS.BOTS_CHANNEL_ID).mention))
 
-    channel=bot.get_channel(FLOOR_PLAN_CHANNEL_ID)
+    channel=bot.get_channel(CHANNEL_IDS.FLOOR_PLAN_CHANNEL_ID)
     message=await channel.fetch_message(FLOOR_PLAN_MESSAGE_ID)
     await message.edit(content=FLOOR_PLAN_MESSAGE)
     
-    channel=bot.get_channel(RULES_CHANNEL_ID)
+    channel=bot.get_channel(CHANNEL_IDS.RULES_CHANNEL_ID)
     message=await channel.fetch_message(RULES_MESSAGE_ID)
     await message.edit(content=RULES_MESSAGE)
 
@@ -291,9 +292,9 @@ async def tick():
                 #find channel
                 here=message["toWhere"]
                 if here=="main":
-                    channel=bot.get_channel(LOUNGE_CHANNEL_ID)
+                    channel=bot.get_channel(CHANNEL_IDS.LOUNGE_CHANNEL_ID)
                 elif here=="own":
-                    channel=bot.get_channel(BOTS_CHANNEL_ID)
+                    channel=bot.get_channel(CHANNEL_IDS.BOTS_CHANNEL_ID)
                 else:
                     printLog("error",f"Unknown toWhere value: {here}")
                     await printLogToDc(bot,"error",f"Unknown toWhere value: {here}")

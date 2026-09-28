@@ -4,7 +4,8 @@ from discord.ext import commands, tasks
 import aiohttp
 
 from own_utils import chooseFaceFromCategory
-from constants import BOTS_CHANNEL_ID, HERO_ID_MAP, RANK_NAMES, RANK_COLORS
+from constants import HERO_ID_MAP, RANK_NAMES, RANK_COLORS
+from constants import CHANNEL_IDS
 
 from classes.file_paths import BotPaths
 from classes.bot_faces import Faces
@@ -141,7 +142,7 @@ class SpokCog(commands.Cog):
     @commands.command()
     async def set_steam_id(self, ctx, id: int):
         senderID = ctx.author.id
-        if ctx.channel.id == BOTS_CHANNEL_ID:
+        if ctx.channel.id == CHANNEL_IDS.BOTS_CHANNEL_ID:
             account_id = id - 76561197960265728
             self.bot.user_data[str(senderID)]["steamID"] = str(account_id)
             self.bot.user_data[str(senderID)]["steamID64"] = str(id)
@@ -165,7 +166,7 @@ class SpokCog(commands.Cog):
     @commands.command()
     async def update_rank(self,ctx):
         senderID = ctx.author.id
-        if ctx.channel.id == BOTS_CHANNEL_ID:
+        if ctx.channel.id == CHANNEL_IDS.BOTS_CHANNEL_ID:
             steam_id_64 = self.bot.user_data[str(senderID)].get("steamID64", "None")
             if steam_id_64 == "None" or not steam_id_64:
                 await ctx.reply("You haven't set your Steam ID yet. Use `!set_steam_id <your_steamid64>` first.")
@@ -182,7 +183,7 @@ class SpokCog(commands.Cog):
 
     @commands.command()
     async def profile(self,ctx, member: discord.Member = None):
-        if ctx.channel.id != BOTS_CHANNEL_ID:
+        if ctx.channel.id != CHANNEL_IDS.BOTS_CHANNEL_ID:
             return
         target = member or ctx.author
         senderID = str(target.id)

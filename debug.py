@@ -9,7 +9,8 @@ import shutil
 from discord.ext import commands
 import inspect
 
-from constants import BOT_DEBUG_CHANNEL, BASE
+from constants import BASE
+from constants import CHANNEL_IDS
 from classes.dc_colors import Colors
 
 
@@ -125,7 +126,7 @@ async def printLogToDc(bot:commands.Bot,type:str, content:str):
     extra+=Colors.BOLD
     
     fromFunction = inspect.currentframe().f_back.f_code.co_name
-    await bot.get_channel(BOT_DEBUG_CHANNEL).send("```"+colorTextForDc(f"[{type.upper()}]",extra,False)+colorTextForDc(f" [{fromFunction.upper()}]",Colors.BLUE,False)+f"  {content}"+"```")
+    await bot.get_channel(CHANNEL_IDS.BOT_DEBUG_CHANNEL).send("```"+colorTextForDc(f"[{type.upper()}]",extra,False)+colorTextForDc(f" [{fromFunction.upper()}]",Colors.BLUE,False)+f"  {content}"+"```")
 
 def readback(what:str="all",deleteAfter:bool=False)->str:
     """

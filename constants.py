@@ -53,11 +53,6 @@ ME=616710497378631709
 BOT_ROLE=1516075439347470437
 MOD_ROLE=1515132970019848212
 
-#channel(s)
-BOTS_CHANNEL_ID=1515333724269445270
-BOT_DEBUG_CHANNEL=1524176375903420466
-LOUNGE_CHANNEL_ID=1510049700416327753
-
 #in seconds
 BOT_INTERACTION_TIMEOUT=60*15
 
@@ -71,8 +66,6 @@ GREET_RESPONSES=["Hello!","Hewwo!","","Hi!","Hiiiii!","Hoi!","Hoy!"]
 GREET_SEARCH_LIMIT=10
 
 
-#personality roles
-ROLE_CHANNEL_ID=1543701162581168228
 
 COLOR_CHOOSER_MESSAGE_ID=1543703073992745011
 COLOR_CHOOSER_MESSAGE_CONTENT="React to this message to set your name's color.\n You can only have 1."
@@ -138,9 +131,17 @@ class ROLES():
     BOT_PROGRAMMER=1523561168956817578
     GITHUB_HELPER=1542983727632752740
     GITHUB_HELPER_APLICANT=1543929441225412608
+    
+class CHANNEL_IDS():
+    FLOOR_PLAN_CHANNEL_ID=1554145604840456222
+    RULES_CHANNEL_ID=1526999395092922469
+    ROLE_CHANNEL_ID=1543701162581168228
+        
+    BOTS_CHANNEL_ID=1515333724269445270
+    BOT_DEBUG_CHANNEL=1524176375903420466
+    LOUNGE_CHANNEL_ID=1510049700416327753
+    
 
-
-FLOOR_PLAN_CHANNEL_ID=1554145604840456222
 FLOOR_PLAN_MESSAGE=("Here are the channels and what they are used for!\n"
                     "- Reception\n"
                     "  - #just-ziplined-in  This is where you can greet the newcomers.\n"
@@ -164,7 +165,6 @@ FLOOR_PLAN_MESSAGE=("Here are the channels and what they are used for!\n"
 FLOOR_PLAN_MESSAGE_ID=1554149941826551850
 
 
-RULES_CHANNEL_ID=1526999395092922469
 RULES_MESSAGE=("1. Good Vibes. Positive coms. No bitching. It's a game Have fun.\n"
                 "\n"
                 "2. Treat everyone with respect. Absolutely no harassment, witch hunting, sexism, racism, homophobia or hate speech will be tolerated.\n"
