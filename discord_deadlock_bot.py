@@ -124,7 +124,21 @@ async def on_ready():
 
     channel=bot.get_channel(CHANNEL_IDS.FLOOR_PLAN_CHANNEL_ID)
     message=await channel.fetch_message(FLOOR_PLAN_MESSAGE_ID)
-    await message.edit(content=FLOOR_PLAN_MESSAGE)
+    cont=FLOOR_PLAN_MESSAGE.replace("#13#",bot.get_channel(CHANNEL_IDS.STAT_TRACKER_CHANNEL_ID).mention)
+    cont=cont.replace("#12#",bot.get_channel(CHANNEL_IDS.BOTS_CHANNEL_ID).mention)
+    cont=cont.replace("#11#",bot.get_channel(CHANNEL_IDS.SUGGESTIONS_CHANNEL_ID).mention)
+    cont=cont.replace("#10#",bot.get_channel(CHANNEL_IDS.PROJECT_SHARE).mention)
+    cont=cont.replace("#9#",bot.get_channel(CHANNEL_IDS.PROJECTOR_ID).mention)
+    cont=cont.replace("#8#",bot.get_channel(CHANNEL_IDS.SEMINAR_ROOM_ID).mention)
+    cont=cont.replace("#7#",bot.get_channel(CHANNEL_IDS.CURIOSITY_ID).mention)
+    cont=cont.replace("#6#",bot.get_channel(CHANNEL_IDS.LOBBY_CODES_ID).mention)
+    cont=cont.replace("#5#",bot.get_channel(CHANNEL_IDS.LOUNGE_CHANNEL_ID).mention)
+    cont=cont.replace("#4#",bot.get_channel(CHANNEL_IDS.PA_ID).mention)
+    cont=cont.replace("#3#",bot.get_channel(CHANNEL_IDS.ROLE_CHANNEL_ID).mention)
+    cont=cont.replace("#2#",bot.get_channel(CHANNEL_IDS.FLOOR_PLAN_CHANNEL_ID).mention)
+    cont=cont.replace("#1#",bot.get_channel(CHANNEL_IDS.RULES_CHANNEL_ID).mention)
+    cont=cont.replace("#0#",bot.get_channel(CHANNEL_IDS.JUST_ZIPLINE_ID).mention)
+    await message.edit(content=cont)
     
     channel=bot.get_channel(CHANNEL_IDS.RULES_CHANNEL_ID)
     message=await channel.fetch_message(RULES_MESSAGE_ID)
@@ -346,9 +360,9 @@ async def tick():
             curTime=time.time()//1
             timerTime=timerTime//1
             if timerTime-curTime==60:
-                await bot.get_channel(BOTS_CHANNEL_ID).send("1 minute remaining on the "+VOICE_CHANNEL_CAT_NAME_PREFIX+"["+name+"] timer.",delete_after=60)
+                await bot.get_channel(CHANNEL_IDS.BOTS_CHANNEL_ID).send("1 minute remaining on the "+VOICE_CHANNEL_CAT_NAME_PREFIX+"["+name+"] timer.",delete_after=60)
             elif timerTime<=curTime:
-                await bot.get_channel(BOTS_CHANNEL_ID).send("Moving people in category "+VOICE_CHANNEL_CAT_NAME_PREFIX+"["+name+"].",delete_after=60)
+                await bot.get_channel(CHANNEL_IDS.BOTS_CHANNEL_ID).send("Moving people in category "+VOICE_CHANNEL_CAT_NAME_PREFIX+"["+name+"].",delete_after=60)
                 for guild in bot.guilds:
                     category = discord.utils.get(guild.categories, name=VOICE_CHANNEL_CAT_NAME_PREFIX+"["+name+"]")
                     TARGET=discord.utils.get(category.voice_channels, name="Deadlock ["+name+"]").id
@@ -366,7 +380,7 @@ async def tick():
                             try:
                                 await member.move_to(bot.get_channel(TARGET))
                             except discord.Forbidden:
-                                await bot.get_channel(BOTS_CHANNEL_ID).send("Can't move "+member.display_name)
+                                await bot.get_channel(CHANNEL_IDS.BOTS_CHANNEL_ID).send("Can't move "+member.display_name)
                             except discord.HTTPException:
                                 pass
                 bot.timers[name]["time"]=None

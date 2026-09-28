@@ -104,7 +104,6 @@ WARNING_MESSAGE_IN_NAMETAG_CHANNEL="Warnig!!!\nBefore you add a reaction, check 
 WARNING_MESSAGE_IN_NAMETAG_CHANNEL_ID=1553357812409704489
 
 
-SUGGESTIONS_ID=1544060319263883324
 SUGGESTIONS_NEW_TAG_ID=1544065933948223558
 
 SUGGESTIONS_REJ_TAG_ID=1544065901794426981
@@ -141,31 +140,41 @@ class CHANNEL_IDS():
     BOT_DEBUG_CHANNEL=1524176375903420466
     LOUNGE_CHANNEL_ID=1510049700416327753
     
+    JUST_ZIPLINE_ID=1520781404315848736
+    PA_ID=1535310773684019201
+    LOBBY_CODES_ID=1515295871028432977
+    CURIOSITY_ID=1544085021156184214
+    SEMINAR_ROOM_ID=1521993492572799037
+    PROJECTOR_ID=1515343404383473775
+    PROJECT_SHARE=1523560126806622298
+    SUGGESTIONS_CHANNEL_ID=1544060319263883324
+    STAT_TRACKER_CHANNEL_ID=1515053044813791282
+    
 
 FLOOR_PLAN_MESSAGE=("Here are the channels and what they are used for!\n"
                     "- Reception\n"
-                    "  - #just-ziplined-in  This is where you can greet the newcomers.\n"
-                    "  - #house-rules  Here you can find the rules you must follow on this server.\n"
-                    "  - #floor-plan  This is where you are right now, and where you can read where to find what.\n"
-                    "  - #nametags  Choose your name color and roles here, check it out to learn more.\n"
-                    "  - #pa-system  Here you can read about server wide announcements.\n"
+                    "  - #0#  This is where you can greet the newcomers.\n"
+                    "  - #1#  Here you can find the rules you must follow on this server.\n"
+                    "  - #2#  This is where you are right now, and where you can read where to find what.\n"
+                    "  - #3#  Choose your name color and roles here, check it out to learn more.\n"
+                    "  - #4#  Here you can read about server wide announcements.\n"
                     "- The Hideout\n"
-                    "  - #lounge Talk About all kind of things\n"
-                    "  - #lobby-codes When you want to play with others this is where you put your in game lobby codes.\n"
-                    "  - #curiosity-shop Share your builds.\n"
-                    "  - #professor-dynamos-seminar-room You seek knoledge or want to share some of yours? You can do it here.\n"
-                    "  - #projector-room You can share your videos, clips, and pictures here.\n"
-                    "  - #pet-projects-shared Share whatever you made.\n"
-                    "  - #suggestion-box Suggestions/changes about the server or our bot go here.\n"
+                    "  - #5# Talk About all kind of things\n"
+                    "  - #6# When you want to play with others this is where you put your in game lobby codes.\n"
+                    "  - #7# Share your builds.\n"
+                    "  - #8# You seek knoledge or want to share some of yours? You can do it here.\n"
+                    "  - #9# You can share your videos, clips, and pictures here.\n"
+                    "  - #10# Share whatever you made.\n"
+                    "  - #11# Suggestions/changes about the server or our bot go here.\n"
                     "- Miss Shelly's Workshop\n"
-                    "  - #🤖funlock-dedicated_bot Commands for our dedicadet bot and the outputs from those commands. Use `!help_me` to learn more.\n"
-                    "  - #🤖stat-tracker-bot Deadlock stat tracker bot and it's commands.\n"
+                    "  - #12# Commands for our dedicadet bot and the outputs from those commands. Use `!help_me` to learn more.\n"
+                    "  - #13# Deadlock stat tracker bot and it's commands.\n"
                     )
 
 FLOOR_PLAN_MESSAGE_ID=1554149941826551850
 
 
-RULES_MESSAGE=("1. Good Vibes. Positive coms. No bitching. It's a game Have fun.\n"
+RULES_MESSAGE=("1. Good Vibes. Positive coms. No bitching. It's a game, Have `FUN`!\n"
                 "\n"
                 "2. Treat everyone with respect. Absolutely no harassment, witch hunting, sexism, racism, homophobia or hate speech will be tolerated.\n"
                 "\n"

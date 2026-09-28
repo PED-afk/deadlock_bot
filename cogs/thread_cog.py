@@ -5,7 +5,8 @@ import discord
 from discord.ext import commands, tasks
 
 from debug import printLog, printLogToDc
-from constants import SUGGESTIONS_ID, SUGGESTIONS_NEW_TAG_ID, SUGGESTIONS_ACC_TAG_ID, SUGGESTIONS_CANT_TAG_ID, SUGGESTIONS_REJ_TAG_ID
+from constants import SUGGESTIONS_NEW_TAG_ID, SUGGESTIONS_ACC_TAG_ID, SUGGESTIONS_CANT_TAG_ID, SUGGESTIONS_REJ_TAG_ID
+from constants import CHANNEL_IDS
 
 
 #stuff "made" by spooks
@@ -19,7 +20,7 @@ class ThreadMod(commands.Cog):
     @commands.Cog.listener()
     async def on_thread_create(self,thread: discord.Thread):
         # Only handle posts created in the target forum
-        if thread.parent_id!=SUGGESTIONS_ID:
+        if thread.parent_id!=CHANNEL_IDS.SUGGESTIONS_ID:
             return
         forum=thread.parent
 
@@ -43,7 +44,7 @@ class ThreadMod(commands.Cog):
     @commands.Cog.listener()
     async def on_thread_update(self,before: discord.Thread, after: discord.Thread):
         #only posts in correct forum
-        if after.parent_id != SUGGESTIONS_ID:
+        if after.parent_id != CHANNEL_IDS.SUGGESTIONS_ID:
             return
 
         before_tags={tag.id for tag in before.applied_tags}
