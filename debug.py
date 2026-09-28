@@ -109,9 +109,23 @@ async def printLogToDc(bot:commands.Bot,type:str, content:str):
 
         type can also be the function the print is from
     """
+    from own_utils import colorTextForDc
+    
+    extra=''
+    if type=="warning" or type=="error":
+        extra=Colors.RED
+    elif type=="debug":
+        extra=Colors.YELLOW
+    elif type=="debug2":
+        extra=Colors.BROWN
+    elif type=="log":
+        extra=Colors.CYAN
+    elif type=="info":
+        extra=Colors.BLUE
+    extra+=Colors.BOLD
     
     fromFunction = inspect.currentframe().f_back.f_code.co_name
-    await bot.get_channel(BOT_DEBUG_CHANNEL).send(f"[{type.upper()}]"+f" [{fromFunction.upper()}]"+f"  {content}")
+    await bot.get_channel(BOT_DEBUG_CHANNEL).send("```"+colorTextForDc(f"[{type.upper()}]",extra,False)+colorTextForDc(f" [{fromFunction.upper()}]",Colors.BLUE,False)+f"  {content}"+"```")
 
 def readback(what:str="all",deleteAfter:bool=False)->str:
     """

@@ -7,6 +7,7 @@ import os
 from dotenv import load_dotenv
 import time
 import random
+from datetime import datetime, timedelta
 
 from data_manage import save_json, load_json, load_txt, deep_load_json, deep_load_txt
 """
@@ -17,7 +18,7 @@ neither does anything else other than open the file on the filepath and load the
 """
 from own_utils import chooseFaceFromCategory, canUseCommand, getShhValue, updateShh
 from debug import printLog, printLogToDc
-from constants import BOTS_CHANNEL_ID, MESSAGE_CD, VOICE_CHANNEL_CAT_NAME_PREFIX, BOT_SECRET_NICKNAMES, GREET_CD
+from constants import BOTS_CHANNEL_ID, MESSAGE_CD, VOICE_CHANNEL_CAT_NAME_PREFIX, BOT_SECRET_NICKNAMES, GREET_CD, LOUNGE_CHANNEL_ID
 from constants import ROLE_CHANNEL_ID, WHO_AM_I_ROLES, COLOR_CHOOSER_MESSAGE_ID, IAM_MESSAGE_ID, IAM_MESSAGE_CONTENT, COLOR_CHOOSER_MESSAGE_CONTENT, COLORED_ROLES
 from constants import AUTODELETE_TRESHOLD, MIN_TIME_BETWEEN_SHH_UPDATE_SECONDS
 from constants import DEGEN_TIMER_RESET_MESSAGES, DEGEN_TIMER_ASK_MESSAGES, THANKING_MESSAGES
@@ -101,7 +102,7 @@ async def on_ready():
 
     tempData=load_txt(BotPaths.update_check_file)
     if len(tempData)!=0:
-        printLogToDc(bot,"info",tempData[0])
+        await printLogToDc(bot,"info",tempData[0])
 
 
     #edit the role select messages
@@ -275,6 +276,60 @@ async def on_message(message):
 
 @tasks.loop(seconds=1)
 async def tick():
+    #auto messages
+    if len(bot.autoMessages)>0:
+        now = datetime.now()
+        for key, message in bot.autoMessages.items():
+            if not message["done"]:
+                #find channel
+                here=message["toWhere"]
+                if here=="main":
+                    channel=bot.get_channel(LOUNGE_CHANNEL_ID)
+                elif here=="own":
+                    channel=bot.get_channel(BOTS_CHANNEL_ID)
+                else:
+                    printLog("error",f"Unknown toWhere value: {here}")
+                    await printLogToDc(bot,"error",f"Unknown toWhere value: {here}")
+                    bot.autoMessages[key]["done"]=True
+                    save_json(BotPaths.autoMessage_file_gitignored,bot.autoMessages)
+                    continue
+                    
+                
+                target_time = datetime.strptime(message["date"],"%Y.%m.%d %H:%M:%S")
+
+                amount = message["allowedDiference"]["amount"]
+                measurement = message["allowedDiference"]["measurement"].lower()
+
+                #Convert difference
+                if measurement in ("second", "seconds"):
+                    difference=timedelta(seconds=amount)
+                elif measurement in ("minute", "minutes"):
+                    difference=timedelta(minutes=amount)
+                elif measurement in ("hour", "hours"):
+                    difference=timedelta(hours=amount)
+                elif measurement in ("day", "days"):
+                    difference=timedelta(days=amount)
+                elif measurement in ("week", "weeks"):
+                    difference=timedelta(weeks=amount)
+                elif measurement in ("year", "years"):
+                    #approx: 365 days per year
+                    difference=timedelta(days=365*amount)
+                else:
+                    printLog("error",f"Unknown measurement: {measurement}")
+                    await printLogToDc(bot,"error",f"Unknown measurement: {measurement}")
+                    bot.autoMessages[key]["done"]=True
+                    save_json(BotPaths.autoMessage_file_gitignored,bot.autoMessages)
+                    continue
+
+                latest_time=target_time+difference
+
+                if target_time<=now<=latest_time:
+                    await channel.send(key)
+                    bot.autoMessages[key]["done"]=True
+                    save_json(BotPaths.autoMessage_file_gitignored,bot.autoMessages)
+                    
+    
+    #timers
     for i, (name,timerData) in enumerate(bot.timers.items()):
         timerTime=timerData["time"]
         if timerTime!=None:
@@ -308,6 +363,20 @@ async def tick():
                                 pass
                 bot.timers[name]["time"]=None
 
+save_json(BotPaths.autoMessage_file_gitignored,{})
+bot.autoMessages=load_json(BotPaths.autoMessage_file)
+bot.autoMessagesOld=load_json(BotPaths.autoMessage_file_gitignored)
+
+bot.autoMessagesOld.update(bot.autoMessages)
+save_json(BotPaths.autoMessage_file_gitignored,bot.autoMessagesOld)
+bot.autoMessages=bot.autoMessagesOld
+del bot.autoMessagesOld
+for key, value in bot.autoMessages.items():
+    if key=="delAll":
+        bot.autoMessages={}
+        save_json(BotPaths.autoMessage_file_gitignored,bot.autoMessages)
+        break
+
 
 bot.startTimers={"A":11*60,"B":11*60}
 bot.timers={"A":{"time":None,"paused":False},"B":{"time":None,"paused":False}}
@@ -317,7 +386,7 @@ bot.lastShhCheck=time.time()//1
 
 
 bot.bootTime=time.time()//1
-bot.version="0.10.0"
+bot.version="0.10.0.5"
 bot.versionSTR="Cleaning and documentation start"
 
 bot.name="FUNLOCK BOT" #Not yet decided

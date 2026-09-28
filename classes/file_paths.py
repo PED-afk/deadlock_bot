@@ -29,3 +29,6 @@ class BotPaths():
     credits_file=BASE / "data" / "3rd_party_credits.json"
 
     lookForUpdates=BASE / "update.txt"
+    
+    autoMessage_file=BASE / "data" / "send_these_at_time.json"
+    autoMessage_file_gitignored=BASE / "data" / "send_these_at_time_gitignored.json"

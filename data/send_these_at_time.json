@@ -1,0 +1,22 @@
+{
+    "https://klipy.com/gifs/patch-time":{
+        "timeType":"data",
+        "date":"2026.09.29 00:00:00",
+        "toWhere":"main",
+        "allowedDiference":{
+            "amount":1,
+            "measurement":"hours"
+        },
+        "done":false
+    },
+    "https://klipy.com/gifs/code-works-code-not-working":{
+        "timeType":"data",
+        "date":"2026.09.28 14:50:00",
+        "toWhere":"own",
+        "allowedDiference":{
+            "amount":2,
+            "measurement":"hours"
+        },
+        "done":false
+    }
+}
