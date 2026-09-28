@@ -363,6 +363,8 @@ async def tick():
                                 pass
                 bot.timers[name]["time"]=None
 
+
+
 save_json(BotPaths.autoMessage_file_gitignored,{})
 bot.autoMessages=load_json(BotPaths.autoMessage_file)
 bot.autoMessagesOld=load_json(BotPaths.autoMessage_file_gitignored)
