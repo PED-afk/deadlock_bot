@@ -1,7 +1,7 @@
 {
     "https://klipy.com/gifs/patch-time": {
         "timeType": "data",
-        "date": "2026.09.29 20:00:00",
+        "date": "2026.09.29 22:00:00",
         "toWhere": "main",
         "allowedDiference": {
             "amount": 1,
@@ -11,7 +11,7 @@
     },
     "https://klipy.com/gifs/yoshi-walter-white":{
         "timeType": "data",
-        "date": "2026.09.29 18:00:00",
+        "date": "2026.09.29 20:00:00",
         "toWhere": "main",
         "allowedDiference": {
             "amount": 1,
@@ -21,7 +21,7 @@
     },
     "Proof:\nhttps://klipy.com/gifs/deadlock-yoshi-patch":{
         "timeType": "data",
-        "date": "2026.09.29 19:00:00",
+        "date": "2026.09.29 21:00:00",
         "toWhere": "main",
         "allowedDiference": {
             "amount": 1,
