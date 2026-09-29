@@ -423,7 +423,7 @@ bot.lastShhCheck=time.time()//1
 
 
 bot.bootTime=time.time()//1
-bot.version="0.10.3"
+bot.version="0.10.4"
 bot.versionSTR=""
 
 bot.name="FUNLOCK BOT" #Not yet decided
