@@ -1,5 +1,5 @@
 
-class Item:
+class DeadlockItem:
     def __init__(self,type:str,tier:int,name:str):
         self.tier=tier
         self.type=type

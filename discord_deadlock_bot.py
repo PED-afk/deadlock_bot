@@ -10,12 +10,6 @@ import random
 from datetime import datetime, timedelta
 
 from data_manage import save_json, load_json, load_txt, deep_load_json, deep_load_txt
-"""
-load_txt returns a list of str from the filepath
-load_json and save_json loads from and saves to json files
-
-neither does anything else other than open the file on the filepath and load the data from it
-"""
 from own_utils import chooseFaceFromCategory, canUseCommand, getShhValue, updateShh
 from debug import printLog, printLogToDc
 from constants import MESSAGE_CD, VOICE_CHANNEL_CAT_NAME_PREFIX, BOT_SECRET_NICKNAMES, GREET_CD
@@ -27,7 +21,7 @@ from constants import FLOOR_PLAN_MESSAGE, FLOOR_PLAN_MESSAGE_ID, RULES_MESSAGE, 
 from constants import ROLES
 from constants import CHANNEL_IDS
 
-from classes.item import Item
+from classes.item import DeadlockItem
 from classes.file_paths import BotPaths
 from user_bot_interaction import interact, getGlobalInteractValue, getInteractValue, wasGreeted, botGreets
 
@@ -63,16 +57,21 @@ class MyBot(commands.Bot):
 
 bot=MyBot(command_prefix='!', intents=intents)
 
-def loadItemsProper(items):
+def loadItemsProper(items:list[str])->list[DeadlockItem]:
+    """
+    Creates and returns a list of DeadlockItem objects from a list of str
+    Str-s must have at least 3 arguments in them searated by ` `
+    """
     newItems=[]
     for curItem in items:
         curItemParts=curItem.split(" ")
-        newItems.append(Item(curItemParts[0],int(curItemParts[1]),curItemParts[2]))
+        newItems.append(DeadlockItem(curItemParts[0],int(curItemParts[1]),curItemParts[2]))
     return newItems
 
 
 @bot.event
 async def on_ready():
+    #setup the but name and profile pickture
     guild=bot.get_guild(123456789012345678)
     if guild:
         await guild.me.edit(nick=bot.name)
@@ -90,7 +89,7 @@ async def on_ready():
 
     printLog("info",f"Bot connected as {bot.user}")
 
-    guild = bot.get_channel(CHANNEL_IDS.BOTS_CHANNEL_ID).guild
+    #guild = bot.get_channel(CHANNEL_IDS.BOTS_CHANNEL_ID).guild
     bot.tree.copy_global_to(guild=guild)
     await bot.tree.sync(guild=guild)
     
@@ -102,6 +101,9 @@ async def on_ready():
         else:
             await bot.get_channel(CHANNEL_IDS.BOTS_CHANNEL_ID).send("Back online! "+face)
 
+    #print debug about updates
+    #something is broken here
+    #nothing seems to be sent
     tempData=load_txt(BotPaths.update_check_file)
     if len(tempData)!=0:
         await printLogToDc(bot,"info",tempData[0])
@@ -170,23 +172,27 @@ async def on_ready():
     """
 
     
-
+    #start the tick task
+    #ticks every 1s
     if not tick.is_running():
         tick.start()
 
 @bot.event
 async def on_message(message):
+    #update auto "moderation"
     if bot.lastShhCheck+MIN_TIME_BETWEEN_SHH_UPDATE_SECONDS<time.time()//1:
         bot.shhMod=updateShh(bot.shhMod)
         bot.lastShhCheck=time.time()//1
         
+    #return if we don't care
     if message.author.bot or message.webhook_id is not None or message.author == bot.user:
         return
     
+    #auto "moderate"
     if getShhValue(message.author.id,bot.shhMod)>=AUTODELETE_TRESHOLD:
         await message.delete()
         
-    
+    #if someone replied to us check if they thanked us and respond
     idINT=message.author.id
     idSTR=str(idINT)
     if message.reference:
@@ -214,7 +220,7 @@ async def on_message(message):
                     else:
                         await message.reply("You're welcome.\n"+chooseFaceFromCategory("neutral"))
 
-
+    #setup user data if the user is not in the "db"
     if str(message.author.id) not in bot.user_data.keys():
         bot.user_data[idSTR]={}
         bot.user_data[idSTR]["main"]="None"
@@ -238,7 +244,9 @@ async def on_message(message):
     if "interact" not in bot.user_data[idSTR]["hidden"].keys():
         bot.user_data[idSTR]["hidden"]["interact"]={}
 
-
+    #if it's a message with content
+    #and user haven't recieved "souls" for talking give them some
+    #later "souls" will be used as currency in other functionalities
     if message.content:
         if message.content[0]!="!" and time.time()>=bot.user_data[idSTR]["hidden"]["messageCD"]:
             bot.user_data[idSTR]["hidden"]["messageCD"]=time.time()+bot.messageCD
@@ -270,23 +278,28 @@ async def on_message(message):
                     bot.user_data[idSTR]["XP"]-=100+2**(level/4)+level
                     bot.user_data[idSTR]["lvl"]+=1
 
+    #was the bot greeted by a user after a long enough time
+    #reply to the greet
     greetAmount=await wasGreeted(message,bot.user.id)
     if greetAmount!=0 and time.time()>=bot.user_data[idSTR]["hidden"]["greetMessageCD"]:
         bot.user_data[idSTR]["hidden"]["messageCD"]=time.time()+bot.greetCD
         await message.reply(botGreets(greetAmount,message.author.mention))
         return
 
-
+    #reset the "degen" timer
+    #to keep track of time since last "degen" thing said
     if message.content.lower() in DEGEN_TIMER_RESET_MESSAGES:
         message.content = "!reset_the_timer"
         await bot.process_commands(message)
         return
 
+    #get the time since last "degen" thing said
     if message.content.lower() in DEGEN_TIMER_ASK_MESSAGES:
         message.content = "!the_timer"
         await bot.process_commands(message)
         return
 
+    #allow some users to execute multiple commands in 1 message
     if await canUseCommand(message,0,tellReason=False) and message.content.count("!")>1:
         for content in message.content.split("!"):
             if content.strip():
@@ -345,9 +358,10 @@ async def tick():
 
                 latest_time=target_time+difference
 
-                if target_time<=now<=latest_time:
-                    await channel.send(key)
+                if target_time<=now:
                     bot.autoMessages[key]["done"]=True
+                    if now<=latest_time:
+                        await channel.send(key)
                     save_json(BotPaths.autoMessage_file_gitignored,bot.autoMessages)
                     
     
