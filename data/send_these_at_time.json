@@ -8,5 +8,25 @@
             "measurement": "hours"
         },
         "done": false
+    },
+    "https://klipy.com/gifs/yoshi-walter-white":{
+        "timeType": "data",
+        "date": "2026.09.29 18:00:00",
+        "toWhere": "main",
+        "allowedDiference": {
+            "amount": 1,
+            "measurement": "hours"
+        },
+        "done": false
+    },
+    "Proof:\nhttps://klipy.com/gifs/deadlock-yoshi-patch":{
+        "timeType": "data",
+        "date": "2026.09.29 19:00:00",
+        "toWhere": "main",
+        "allowedDiference": {
+            "amount": 1,
+            "measurement": "hours"
+        },
+        "done": false
     }
 }
