@@ -424,8 +424,8 @@ bot.lastShhCheck=time.time()//1
 
 
 bot.bootTime=time.time()//1
-bot.version="0.10.5"
-bot.versionSTR=""
+bot.version="0.11.0"
+bot.versionSTR="Welcome message and we see your errors now"
 
 bot.name="FUNLOCK BOT" #Not yet decided
 
