@@ -49,6 +49,8 @@ class MyBot(commands.Bot):
         await self.load_extension("cogs.spok_cog")
         await self.load_extension("cogs.thread_cog")
         await self.load_extension("cogs.reactions_cog")
+        await self.load_extension("cogs.member_join_cog")
+        await self.load_extension("cogs.show_errors_cog")
         #await self.load_extension("cogs.priority_cog")
 
 #bot=commands.Bot(command_prefix='!', intents=intents)
@@ -88,7 +90,7 @@ async def on_ready():
 
     printLog("info",f"Bot connected as {bot.user}")
 
-    #guild = bot.get_channel(CHANNEL_IDS.BOTS_CHANNEL_ID).guild
+    guild = bot.get_channel(CHANNEL_IDS.BOTS_CHANNEL_ID).guild
     bot.tree.copy_global_to(guild=guild)
     await bot.tree.sync(guild=guild)
     

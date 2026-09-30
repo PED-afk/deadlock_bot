@@ -185,3 +185,21 @@ RULES_MESSAGE=("1. Good Vibes. Positive coms. No bitching. It's a game, Have `FU
                 "5. Use the proper channels.\n"
                 )
 RULES_MESSAGE_ID=1554150097887957173
+
+
+PRIVATE_MESSAGE_CONTENT=(
+    "Hello friend! Welcome to the Funlock server!"
+    "\n"
+    "\nI am the server's dedicated bot!"
+    "\n"
+    "\nPlease read our rules in #0#!"
+    "\nAfter that, visit #1# to select a name color for yourself and set when you want to be pinged!"
+    "\n-# We would really appreciate **it** if you didn't skip out on these. #f#"
+    "\nFinally check out the #2# to see what your options are."
+    "\n"
+    "\n-# (This is an automated message)"
+    "\n-# If you notice any spelling mistakes or bad formatting please take a screenshot of this message and"
+    "send it to the #3# channel with the `BUG Report` tag applied and describe the problem."
+    )
+
+
