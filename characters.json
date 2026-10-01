@@ -2,191 +2,267 @@
     "Abrams":{
         "base_HP":800,
         "maxLvl":35,
-        "perLvl":52
+        "perLvl":52,
+        "color":[0,0,200],
+        "colorStr":"blue"
     },
     "Apollo":{
         "base_HP":770,
         "maxLvl":35,
-        "perLvl":47
+        "perLvl":47,
+        "color":[200,0,0],
+        "colorStr":"red"
     },
     "Bebop":{
         "base_HP":880,
         "maxLvl":35,
-        "perLvl":55
+        "perLvl":55,
+        "color":[200,100,100],
+        "colorStr":["red","orange"]
     },
     "Billy":{
         "base_HP":820,
         "maxLvl":35,
-        "perLvl":56
+        "perLvl":56,
+        "color":[165,42,42],
+        "colorStr":"brown"
     },
     "Calico":{
         "base_HP":730,
         "maxLvl":35,
-        "perLvl":39
+        "perLvl":39,
+        "color":[200,0,200],
+        "colorStr":"purple"
     },
     "Celeste":{
         "base_HP":690,
         "maxLvl":35,
-        "perLvl":35
+        "perLvl":35,
+        "color":[100,100,255],
+        "colorStr":"blue"
     },
     "The Doorman":{
         "base_HP":755,
         "maxLvl":35,
-        "perLvl":44
+        "perLvl":44,
+        "color":[175,0,0],
+        "colorStr":"red"
     },
     "Drifter":{
         "base_HP":755,
         "maxLvl":35,
-        "perLvl":41
+        "perLvl":41,
+        "color":[200,0,0],
+        "colorStr":"red"
     },
     "Dynamo":{
         "base_HP":880,
         "maxLvl":35,
-        "perLvl":64
+        "perLvl":64,
+        "color":[0,250,250],
+        "colorStr":"yellow"
     },
     "Graves":{
         "base_HP":730,
         "maxLvl":35,
-        "perLvl":35
+        "perLvl":35,
+        "color":[10,255,10],
+        "colorStr":"green"
     },
     "Grey Talon":{
         "base_HP":780,
         "maxLvl":35,
-        "perLvl":40
+        "perLvl":40,
+        "color":[10,255,10],
+        "colorStr":"green"
     },
     "Haze":{
         "base_HP":730,
         "maxLvl":35,
-        "perLvl":35
+        "perLvl":35,
+        "color":[0,250,250],
+        "colorStr":"yellow"
     },
     "Holliday":{
         "base_HP":780,
         "maxLvl":35,
-        "perLvl":43
+        "perLvl":43,
+        "color":[255,69,0],
+        "colorStr":"orange"
     },
     "Infernus":{
         "base_HP":830,
         "maxLvl":35,
-        "perLvl":41
+        "perLvl":41,
+        "color":[255,30,0],
+        "colorStr":"red"
     },
     "Ivy":{
         "base_HP":755,
         "maxLvl":35,
-        "perLvl":47
+        "perLvl":47,
+        "color":[0,100,0],
+        "colorStr":"green"
     },
     "Kelvin":{
         "base_HP":880,
         "maxLvl":35,
-        "perLvl":63
+        "perLvl":63,
+        "color":[144,213,255],
+        "colorStr":"light_blue"
     },
     "Lady Geist":{
         "base_HP":880,
         "maxLvl":35,
-        "perLvl":54
+        "perLvl":54,
+        "color":[6,180,139],
+        "colorStr":"blue"
     },
     "The Lash":{
         "base_HP":780,
         "maxLvl":35,
-        "perLvl":53
+        "perLvl":53,
+        "color":[0,0,250],
+        "colorStr":"blue"
     },
     "McGinnis":{
         "base_HP":780,
         "maxLvl":35,
-        "perLvl":55
+        "perLvl":55,
+        "color":[0,0,175],
+        "colorStr":"blue"
     },
     "Mina":{
         "base_HP":660,
         "maxLvl":35,
-        "perLvl":28
+        "perLvl":28,
+        "color":[255,0,0],
+        "colorStr":"red"
     },
     "Mirage":{
         "base_HP":730,
         "maxLvl":35,
-        "perLvl":47
+        "perLvl":47,
+        "color":[150,0,150],
+        "colorStr":"purple"
     },
     "Mo & Krill":{
         "base_HP":930,
         "maxLvl":35,
-        "perLvl":68
+        "perLvl":68,
+        "color":[100,100,100],
+        "colorStr":"gray"
     },
     "Paige":{
         "base_HP":680,
         "maxLvl":35,
-        "perLvl":29
+        "perLvl":29,
+        "color":[10,255,10],
+        "colorStr":"green"
     },
     "Paradox":{
         "base_HP":730,
         "maxLvl":35,
-        "perLvl":48
+        "perLvl":48,
+        "color":[0,0,80],
+        "colorStr":"blue"
     },
     "Pocket":{
         "base_HP":780,
         "maxLvl":35,
-        "perLvl":38
+        "perLvl":38,
+        "color":[159,198,0],
+        "colorStr":"green"
     },
     "Rem":{
         "base_HP":680,
         "maxLvl":35,
-        "perLvl":29
+        "perLvl":29,
+        "color":[0,0,200],
+        "colorStr":"blue"
     },
     "Seven":{
         "base_HP":730,
         "maxLvl":35,
-        "perLvl":43
+        "perLvl":43,
+        "color":[0,150,150],
+        "colorStr":"yellow"
     },
     "Shiv":{
         "base_HP":830,
         "maxLvl":35,
-        "perLvl":48
+        "perLvl":48,
+        "color":[100,0,0],
+        "colorStr":"red"
     },
     "Silver":{
         "base_HP":830,
         "maxLvl":35,
-        "perLvl":29
+        "perLvl":29,
+        "color":[100,50,50],
+        "colorStr":"orange"
     },
     "Sinclair":{
         "base_HP":730,
         "maxLvl":35,
-        "perLvl":40
+        "perLvl":40,
+        "color":[200,200,255],
+        "colorStr":"white"
     },
     "Venator":{
         "base_HP":820,
         "maxLvl":35,
-        "perLvl":45
+        "perLvl":45,
+        "color":[50,0,50],
+        "colorStr":"purple"
     },
     "Victor":{
         "base_HP":800,
         "maxLvl":35,
-        "perLvl":36
+        "perLvl":36,
+        "color":[117,129,107],
+        "colorStr":"gray"
     },
     "Vindicta":{
         "base_HP":755,
         "maxLvl":35,
-        "perLvl":29
+        "perLvl":29,
+        "color":[50,50,255],
+        "colorStr":"light_blue"
     },
     "Viscous":{
         "base_HP":780,
         "maxLvl":35,
-        "perLvl":47
+        "perLvl":47,
+        "color":[0,255,0],
+        "colorStr":"green"
     },
     "Vyper":{
         "base_HP":780,
         "maxLvl":35,
-        "perLvl":37
+        "perLvl":37,
+        "color":[50,255,50],
+        "colorStr":"green"
     },
     "Warden":{
         "base_HP":805,
         "maxLvl":35,
-        "perLvl":63
+        "perLvl":63,
+        "color":[0,0,150],
+        "colorStr":"blue"
     },
     "Wraith":{
         "base_HP":730,
         "maxLvl":35,
-        "perLvl":37
+        "perLvl":37,
+        "color":[150,0,150],
+        "colorStr":"purple"
     },
     "Yamato":{
         "base_HP":730,
         "maxLvl":35,
-        "perLvl":47
+        "perLvl":47,
+        "color":[100,0,100],
+        "colorStr":"purple"
     }
 }

@@ -18,7 +18,7 @@ from constants import AUTODELETE_TRESHOLD, MIN_TIME_BETWEEN_SHH_UPDATE_SECONDS
 from constants import DEGEN_TIMER_RESET_MESSAGES, DEGEN_TIMER_ASK_MESSAGES, THANKING_MESSAGES
 from constants import WARNING_MESSAGE_IN_NAMETAG_CHANNEL_ID, WARNING_MESSAGE_IN_NAMETAG_CHANNEL
 from constants import FLOOR_PLAN_MESSAGE, FLOOR_PLAN_MESSAGE_ID, RULES_MESSAGE, RULES_MESSAGE_ID
-from constants import CHANNEL_IDS
+from constants import CHANNEL_IDS, ROLES, FUNLOCK_SERVER_ID, BOT_SERVER_SPEC_NAME
 
 from classes.item import DeadlockItem
 from classes.file_paths import BotPaths
@@ -72,10 +72,11 @@ def loadItemsProper(items:list[str])->list[DeadlockItem]:
 
 @bot.event
 async def on_ready():
-    #setup the but name and profile pickture
-    guild=bot.get_guild(123456789012345678)
+    #setup the bot name and profile picture
+    guild=bot.get_guild(FUNLOCK_SERVER_ID)
+    name=BOT_SERVER_SPEC_NAME[FUNLOCK_SERVER_ID]
     if guild:
-        await guild.me.edit(nick=bot.name)
+        await guild.me.edit(nick=name)
 
     pfp_files=list(BotPaths.pfp_folder.glob("*.jpg"))
     if pfp_files:
@@ -84,6 +85,19 @@ async def on_ready():
         with pfp_path.open("rb") as f:
             await bot.user.edit(avatar=f.read())
         printLog("info",f"Changed PFP to {pfp_path.name}")
+        
+        #change name(role) color accordingly
+        botRole=guild.get_role(ROLES.BOT_ROLE_NOT_AUTO_CREATED)
+        if botRole is not None:
+            find=pfp_path.name.lower()
+            rgb=next((bot.characters[i]["color"] for i in bot.characters if i.lower() in find),None)
+            if rgb is None:
+                printLog("error",f"Couldn't find color to match profile picture {pfp_path.name}.")
+                printLogToDc(bot,"error",f"Couldn't find color to match profile picture {pfp_path.name}.")
+                rgb=[200,0,200]
+            color=discord.Color.from_rgb(*rgb)
+            await botRole.edit(color=color)
+            printLog("info","Changed role color.")
     else:
         printLog("error",f"No .jpg files found in {BotPaths.pfp_folder}")
 
@@ -427,8 +441,6 @@ bot.bootTime=time.time()//1
 bot.version="0.11.0"
 bot.versionSTR="Welcome message and we see your errors now"
 
-bot.name="FUNLOCK BOT" #Not yet decided
-
 
 
 bot.messageCD=MESSAGE_CD
@@ -460,7 +472,7 @@ if "hidden" not in bot.user_data[idSTR].keys():
 if "interact" not in bot.user_data[idSTR]["hidden"].keys():
     bot.user_data[idSTR]["hidden"]["interact"]={}
 
-bot.characters=load_txt(BotPaths.characters_file)
+#bot.characters=load_txt(BotPaths.characters_file)
 bot.characters=load_json(BotPaths.characters_file_json)
 bot.maxLevel=bot.characters[list(bot.characters.keys())[0]]["maxLvl"]
 
