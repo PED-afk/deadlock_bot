@@ -208,7 +208,7 @@ class Unorganized(commands.Cog):
     async def version(self,ctx):
         senderID=ctx.author.id
         if canUseCommand(ctx,3):
-            await ctx.reply("Bot version:\n"+self.bot.version+"\n"+self.bot.versionSTR)
+            await ctx.reply("Bot version: "+self.bot.version+"\n"+self.bot.versionSTR)
 
     @commands.command()
     async def join(self,ctx):

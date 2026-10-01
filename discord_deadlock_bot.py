@@ -51,6 +51,7 @@ class MyBot(commands.Bot):
         await self.load_extension("cogs.reactions_cog")
         await self.load_extension("cogs.member_join_cog")
         await self.load_extension("cogs.show_errors_cog")
+        await self.load_extension("cogs.games_cog")
         #await self.load_extension("cogs.priority_cog")
 
 #bot=commands.Bot(command_prefix='!', intents=intents)
@@ -407,6 +408,9 @@ async def tick():
                     if len(people)!=0:
                         for member in people:
                             try:
+                                userID=member.id
+                                bot.user_data[userID]["money"]["secured"]+=bot.user_data[userID]["money"]["unsecured"]
+                                bot.user_data[userID]["money"]["unsecured"]=0
                                 await member.move_to(bot.get_channel(TARGET))
                             except discord.Forbidden:
                                 await bot.get_channel(CHANNEL_IDS.BOTS_CHANNEL_ID).send("Can't move "+member.display_name)
@@ -438,8 +442,8 @@ bot.lastShhCheck=time.time()//1
 
 
 bot.bootTime=time.time()//1
-bot.version="0.11.0"
-bot.versionSTR="Welcome message and we see your errors now"
+bot.version="0.12.-1"
+bot.versionSTR="New things are brewing"
 
 
 

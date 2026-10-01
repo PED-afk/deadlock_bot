@@ -2,8 +2,6 @@
 
 import discord
 from discord.ext import commands, tasks
-import asyncio
-import time
 import random
 
 from own_utils import chooseFaceFromCategory, canUseCommand
