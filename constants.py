@@ -188,19 +188,21 @@ RULES_MESSAGE_ID=1554150097887957173
 
 
 PRIVATE_MESSAGE_CONTENT=(
-    "Hello friend! Welcome to the Funlock server!"
-    "\n"
-    "\nI am the server's dedicated bot!"
+    "###Hello friend! Welcome to the Funlock server!"
+    "\n\tI am the server's dedicated bot!"
     "\n"
     "\n## What you should do:"
     "\n- Please read our rules in #0#!"
     "\n- After that, visit #1# to select a name color for yourself and set when you want to be pinged!"
-    "\n-# We would really appreciate **it** if you didn't skip out on this. #f#"
+    "\n-#   We would really **appreciate** it if you **didn't** skip out on this. #f#"
     "\n- Finally check out the #2# to see what your options are."
     "\n"
-    "\n-# (This is an automated message)"
-    "\n-# If you notice any spelling mistakes or bad formatting please take a screenshot of this message and"
+    "\n# -# Warning:"
+    "\n-# - (This is an automated message)"
+    "\n-# - If you notice any spelling mistakes or bad formatting please take a screenshot of this message,"
     " send it to the #3# channel with the `BUG Report` tag applied and describe the problem."
+    "\n"
+    "\n### Thank you for your time and again Welcome!"
     )
 
 
