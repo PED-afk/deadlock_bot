@@ -52,9 +52,10 @@ class Power(commands.Cog):
             await self.restartFunc(ctx,"save",1)
 
     async def restartFunc(self,ctx,save:str="save",tryUpdate:int=0):
-        with open(BotPaths.lookForUpdates,"w") as f:
-            f.write(str(tryUpdate))
         if await canUseCommand(ctx,2):
+            with open(BotPaths.lookForUpdates,"w") as f:
+                f.write(str(tryUpdate))
+            
             if activeTimerExists(self.bot):
                 ctx.reply("Sorry, I can't restart now, there is at least 1 active timer.")
             else:
