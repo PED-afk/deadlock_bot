@@ -27,10 +27,10 @@ class MemberJoin(commands.Cog):
             cont=cont.replace("#2#",self.bot.get_channel(CHANNEL_IDS.FLOOR_PLAN_CHANNEL_ID).mention)
             cont=cont.replace("#3#",self.bot.get_channel(CHANNEL_IDS.SUGGESTIONS_CHANNEL_ID).mention)
             cont=cont.replace("#f#",chooseFaceFromCategory(Faces.big_eyes))
-            embed = discord.Embed(title="Welcome To Funlock",description=(PRIVATE_MESSAGE_CONTENT),color=discord.Color.purple())
+            embed = discord.Embed(title="Welcome To Funlock",description=(cont),color=discord.Color.purple())
 
             # Image/GIF on the right side
-            embed.set_thumbnail(url="https://klipy.com/gifs/rem-rem-deadlock")
+            embed.set_thumbnail(url="https://static2.klipy.com/ii/4493325008d34b7bf8cd6813cd5c1619/33/01/iRTUDQfJpBrlbWZZdiR.gif")
 
             await member.send("Welcome!",embed=embed)
         except discord.Forbidden:

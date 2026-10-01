@@ -25,6 +25,8 @@ class ErrorOverwrite(commands.Cog):
         printLogToDc(self.bot,"error",f"Exception in event: {event}")
         import traceback
         traceback.print_exception(exc_type, exc, tb)
+        
+        
     @commands.Cog.listener()
     async def on_command_error(self,ctx, error):
         printLogToDc(self.bot,"error",f"Command error: {error}")

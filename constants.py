@@ -174,7 +174,7 @@ FLOOR_PLAN_MESSAGE=("Here are the channels and what they are used for!\n"
 FLOOR_PLAN_MESSAGE_ID=1554149941826551850
 
 
-RULES_MESSAGE=("1. Good Vibes. Positive coms. No bitching. It's a game, Have `FUN`!\n"
+RULES_MESSAGE=("1. Good Vibes. Positive coms. No bitching. It's a game, Have **`FUN`**!\n"
                 "\n"
                 "2. Treat everyone with respect. Absolutely no harassment, witch hunting, sexism, racism, homophobia or hate speech will be tolerated.\n"
                 "\n"
@@ -192,14 +192,15 @@ PRIVATE_MESSAGE_CONTENT=(
     "\n"
     "\nI am the server's dedicated bot!"
     "\n"
-    "\nPlease read our rules in #0#!"
-    "\nAfter that, visit #1# to select a name color for yourself and set when you want to be pinged!"
-    "\n-# We would really appreciate **it** if you didn't skip out on these. #f#"
-    "\nFinally check out the #2# to see what your options are."
+    "\n## What you should do:"
+    "\n- Please read our rules in #0#!"
+    "\n- After that, visit #1# to select a name color for yourself and set when you want to be pinged!"
+    "\n-# We would really appreciate **it** if you didn't skip out on this. #f#"
+    "\n- Finally check out the #2# to see what your options are."
     "\n"
     "\n-# (This is an automated message)"
     "\n-# If you notice any spelling mistakes or bad formatting please take a screenshot of this message and"
-    "send it to the #3# channel with the `BUG Report` tag applied and describe the problem."
+    " send it to the #3# channel with the `BUG Report` tag applied and describe the problem."
     )
 
 
