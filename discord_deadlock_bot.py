@@ -19,6 +19,7 @@ from constants import DEGEN_TIMER_RESET_MESSAGES, DEGEN_TIMER_ASK_MESSAGES, THAN
 from constants import WARNING_MESSAGE_IN_NAMETAG_CHANNEL_ID, WARNING_MESSAGE_IN_NAMETAG_CHANNEL
 from constants import FLOOR_PLAN_MESSAGE, FLOOR_PLAN_MESSAGE_ID, RULES_MESSAGE, RULES_MESSAGE_ID
 from constants import CHANNEL_IDS, ROLES, FUNLOCK_SERVER_ID, BOT_SERVER_SPEC_NAME
+from constants import MAX_MONEY_SECURE_AFTER_GAME
 
 from classes.item import DeadlockItem
 from classes.file_paths import BotPaths
@@ -91,10 +92,11 @@ async def on_ready():
         botRole=guild.get_role(ROLES.BOT_ROLE_NOT_AUTO_CREATED)
         if botRole is not None:
             find=pfp_path.name.lower()
-            rgb=next((bot.characters[i]["color"] for i in bot.characters if i.lower() in find),None)
+            i=""
+            rgb=next((bot.characters[i]["color"] for i in bot.characters if i.split(".")[0].lower().removesuffix("the_").replace("_"," ") in find),None)
             if rgb is None:
                 printLog("error",f"Couldn't find color to match profile picture {pfp_path.name}.")
-                printLogToDc(bot,"error",f"Couldn't find color to match profile picture {pfp_path.name}.")
+                await printLogToDc(bot,"error",f"Couldn't find color to match profile picture {pfp_path.name}.")
                 rgb=[200,0,200]
             color=discord.Color.from_rgb(*rgb)
             await botRole.edit(color=color)
@@ -400,6 +402,7 @@ async def tick():
                     for other in category.voice_channels:
                         if other.id!=TARGET:
                             SOURCES.append(other.id)
+                allPeople=[]
                 for channel in SOURCES:
                     people=[]
                     lane=bot.get_channel(channel)
@@ -407,15 +410,22 @@ async def tick():
                         people=lane.members
                     if len(people)!=0:
                         for member in people:
-                            try:
-                                userID=member.id
-                                bot.user_data[userID]["money"]["secured"]+=bot.user_data[userID]["money"]["unsecured"]
-                                bot.user_data[userID]["money"]["unsecured"]=0
+                            allPeople.append(member.id)
+                            try:                                
                                 await member.move_to(bot.get_channel(TARGET))
                             except discord.Forbidden:
                                 await bot.get_channel(CHANNEL_IDS.BOTS_CHANNEL_ID).send("Can't move "+member.display_name)
                             except discord.HTTPException:
                                 pass
+                if len(allPeople)>=4:
+                    for id in allPeople:
+                        userID=str(id)
+                        if bot.user_data[userID]["money"]["unsecured"]>=MAX_MONEY_SECURE_AFTER_GAME:
+                            moneyToBeSecured=MAX_MONEY_SECURE_AFTER_GAME
+                        else:
+                            moneyToBeSecured=bot.user_data[userID]["money"]["unsecured"]
+                        bot.user_data[userID]["money"]["secured"]+=moneyToBeSecured
+                        bot.user_data[userID]["money"]["unsecured"]-=moneyToBeSecured
                 bot.timers[name]["time"]=None
 
 
@@ -442,8 +452,8 @@ bot.lastShhCheck=time.time()//1
 
 
 bot.bootTime=time.time()//1
-bot.version="0.12.-1"
-bot.versionSTR="New things are brewing"
+bot.version="0.12.0"
+bot.versionSTR="The Shop is now available\nBuy items to participate in the next updates minigame(s)"
 
 
 
@@ -476,7 +486,6 @@ if "hidden" not in bot.user_data[idSTR].keys():
 if "interact" not in bot.user_data[idSTR]["hidden"].keys():
     bot.user_data[idSTR]["hidden"]["interact"]={}
 
-#bot.characters=load_txt(BotPaths.characters_file)
 bot.characters=load_json(BotPaths.characters_file_json)
 bot.maxLevel=bot.characters[list(bot.characters.keys())[0]]["maxLvl"]
 

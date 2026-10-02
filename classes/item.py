@@ -4,3 +4,5 @@ class DeadlockItem:
         self.tier=tier
         self.type=type
         self.name=name
+    def __str__(self):
+        return "{"+f"{self.name}:\n{self.tier}\n{self.type}"+"}"

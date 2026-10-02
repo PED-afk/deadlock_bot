@@ -34,7 +34,7 @@ class Unorganized(commands.Cog):
     @commands.command()
     async def test(self,ctx):
         senderID=ctx.author.id
-        if canUseCommand(ctx,2):
+        if await canUseCommand(ctx,2):
             #await ctx.send("TEST:\nNothing to test.\n.=.",delete_after=10)
             await ctx.reply(colorTextForDc("color?",Colors.PURPLE))
             await ctx.reply(colorTextForDcRainbow("Rainbow with looooooooooooooooooooooooooooong text"))

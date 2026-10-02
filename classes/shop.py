@@ -1,6 +1,6 @@
 
 
-class Shop():
+class Shop:
     def __init__(self):
         self.tiersToCost={
             1:800,

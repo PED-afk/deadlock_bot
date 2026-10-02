@@ -124,7 +124,7 @@ async def canUseCommand(ctx:commands.Context, mode:int=3, inChannel:bool=True, i
 
     return True
 
-async def getDictStr(d: dict, hideSome:bool=False, hideThese:dict={"hidden":"normal","items":"len=#0","steamID3":"normal","steamID64":"normal","rank":"value=#None"}, format:bool=True, indent=0):
+async def getDictStr(d: dict, hideSome:bool=False, hideThese:dict={"hidden":"normal","items":"len==#0","steamID3":"normal","steamID64":"normal","rank":"value==#None"}, format:bool=True, indent=0):
     """
 
     Creates a str from a dict <key>:<value> format\n\n
@@ -135,38 +135,57 @@ async def getDictStr(d: dict, hideSome:bool=False, hideThese:dict={"hidden":"nor
     inData=""
     for innerKey, innerData in d.items():
         if hideSome:
-            for i,(key,data) in enumerate(hideThese.items()):
+            skip=False
+            for key,data in hideThese.items():
                 if innerKey==key:
                     if data=="normal":
-                        continue
-                    if "len" in data:
+                        skip=True
+                        break
+                    elif "len" in data:
                         inDataLen=len(innerData)
+                        compareTo=int(data.split("#")[1])
                         if "!=" in data:
-                            if inDataLen!=int(data.split("#")[1]):
-                                continue
-                        if "=" in data:
-                            if inDataLen==int(data.split("#")[1]):
-                                continue
-                        if ">" in data:
-                            if inDataLen>int(data.split("#")[1]):
-                                continue
-                        if "<" in data:
-                            if inDataLen<int(data.split("#")[1]):
-                                continue
-                    if "value" in data:
-                        inDataLen=len(innerData)
+                            if inDataLen!=compareTo:
+                                skip=True
+                                break
+                        elif "==" in data:
+                            if inDataLen==compareTo:
+                                skip=True
+                                break
+                        elif ">" in data:
+                            if inDataLen>compareTo:
+                                skip=True
+                                break
+                        elif "<" in data:
+                            if inDataLen<compareTo:
+                                skip=True
+                                break
+                    elif "value" in data:
+                        inDataVal=str(innerData)
+                        if inDataVal.isnumeric():
+                            inDataVal=int(inDataVal)
+                        
+                        compareTo=data.split("#")[1]
+                        if compareTo.isnumeric():
+                            compareTo=int(compareTo)
                         if "!=" in data:
-                            if inDataLen!=data.split("#")[1]:
-                                continue
-                        if "=" in data:
-                            if inDataLen==data.split("#")[1]:
-                                continue
-                        if ">" in data:
-                            if inDataLen>data.split("#")[1]:
-                                continue
-                        if "<" in data:
-                            if inDataLen<data.split("#")[1]:
-                                continue
+                            if inDataVal!=compareTo:
+                                skip=True
+                                break
+                        elif "==" in data:
+                            if inDataVal==compareTo:
+                                skip=True
+                                break
+                        elif ">" in data:
+                            if inDataVal>compareTo:
+                                skip=True
+                                break
+                        elif "<" in data:
+                            if inDataVal<compareTo:
+                                skip=True
+                                break
+            if skip:
+                continue
         if indent==0:
             if format:
                 inData+="# "
@@ -174,7 +193,8 @@ async def getDictStr(d: dict, hideSome:bool=False, hideThese:dict={"hidden":"nor
             inData+="\t"*indent+str(innerKey)+":\n"
             inData+="\t"*indent+await getDictStr(innerData, hideSome, hideThese, format, indent+1)
         else:
-            inData+="\t"*indent+str(innerKey)+":\n"+str(innerData)+"\n"
+            inData+="\t"*indent+str(innerKey)+":\n"
+            inData+="\t"*(indent+1)+str(innerData)+"\n"
     return inData
 
 def format_duration(seconds: int) -> str:

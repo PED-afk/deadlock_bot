@@ -3,7 +3,7 @@
         "base_HP":800,
         "maxLvl":35,
         "perLvl":52,
-        "color":[0,0,200],
+        "color":[20,20,200],
         "colorStr":"blue"
     },
     "Apollo":{
@@ -59,7 +59,7 @@
         "base_HP":880,
         "maxLvl":35,
         "perLvl":64,
-        "color":[0,250,250],
+        "color":[250,250,0],
         "colorStr":"yellow"
     },
     "Graves":{
@@ -80,7 +80,7 @@
         "base_HP":730,
         "maxLvl":35,
         "perLvl":35,
-        "color":[0,250,250],
+        "color":[250,250,0],
         "colorStr":"yellow"
     },
     "Holliday":{
@@ -185,7 +185,7 @@
         "base_HP":730,
         "maxLvl":35,
         "perLvl":43,
-        "color":[0,150,150],
+        "color":[150,150,0],
         "colorStr":"yellow"
     },
     "Shiv":{

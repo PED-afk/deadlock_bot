@@ -26,21 +26,18 @@ class ChooseShopCategory(discord.ui.View):
 
     @discord.ui.button(label="Weapon", style=discord.ButtonStyle.primary,row=0)
     async def button1(self, interaction: discord.Interaction, button: discord.ui.Button):
-        await interaction.message.delete()
         view=ChooseShopTier(self.ctx,self.bot,"weapon")
-        await interaction.response.send_message("Weapon",view=view)
+        await interaction.response.send_message("Weapon",view=view,delete_after=120.0,ephemeral=True)
         
     @discord.ui.button(label="Vitality", style=discord.ButtonStyle.primary,row=0)
     async def button2(self, interaction: discord.Interaction, button: discord.ui.Button):
-        await interaction.message.delete()
         view=ChooseShopTier(self.ctx,self.bot,"vitality")
-        await interaction.response.send_message("Vitality",view=view)
+        await interaction.response.send_message("Vitality",view=view,delete_after=120.0,ephemeral=True)
         
     @discord.ui.button(label="Spirit", style=discord.ButtonStyle.primary,row=0)
     async def button3(self, interaction: discord.Interaction, button: discord.ui.Button):
-        await interaction.message.delete()
         view=ChooseShopTier(self.ctx,self.bot,"spirit")
-        await interaction.response.send_message("Spirit",view=view)
+        await interaction.response.send_message("Spirit",view=view,delete_after=120.0,ephemeral=True)
 
 
 class ChooseShopTier(discord.ui.View):
@@ -60,27 +57,23 @@ class ChooseShopTier(discord.ui.View):
 
     @discord.ui.button(label="Tier I", style=discord.ButtonStyle.primary,row=0)
     async def button1(self, interaction: discord.Interaction, button: discord.ui.Button):
-        await interaction.message.delete()
         view=ChooseShopItem(self.ctx,self.bot,self.itemType,1)
-        await interaction.response.send_message("Tier I",view=view)
+        await interaction.response.send_message("Tier I",view=view,delete_after=120.0,ephemeral=True)
         
     @discord.ui.button(label="Tier II", style=discord.ButtonStyle.primary,row=0)
     async def button2(self, interaction: discord.Interaction, button: discord.ui.Button):
-        await interaction.message.delete()
         view=ChooseShopItem(self.ctx,self.bot,self.itemType,2)
-        await interaction.response.send_message("Tier II",view=view)
+        await interaction.response.send_message("Tier II",view=view,delete_after=120.0,ephemeral=True)
         
     @discord.ui.button(label="Tier III", style=discord.ButtonStyle.primary,row=0)
     async def button3(self, interaction: discord.Interaction, button: discord.ui.Button):
-        await interaction.message.delete()
         view=ChooseShopItem(self.ctx,self.bot,self.itemType,3)
-        await interaction.response.send_message("Tier III",view=view)
+        await interaction.response.send_message("Tier III",view=view,delete_after=120.0,ephemeral=True)
         
     @discord.ui.button(label="Tier IV", style=discord.ButtonStyle.primary,row=0)
     async def button4(self, interaction: discord.Interaction, button: discord.ui.Button):
-        await interaction.message.delete()
         view=ChooseShopItem(self.ctx,self.bot,self.itemType,4)
-        await interaction.response.send_message("Tier IV",view=view)
+        await interaction.response.send_message("Tier IV",view=view,delete_after=120.0,ephemeral=True)
 
 
 class ChooseShopItem(discord.ui.View):
@@ -94,15 +87,19 @@ class ChooseShopItem(discord.ui.View):
 
         c=0
         for item in self.bot.items:
+            #printLog("debug",str(item.tier)+"; "+str(self.tier)+"; "+str(item.type)+"; "+str(self.itemType))
             if item.tier==self.tier and item.type==self.itemType:
-                button=discord.ui.Button(label=item.name,style=discord.ButtonStyle.primary,row=c//4)
+                button=discord.ui.Button(label=item.name,style=discord.ButtonStyle.primary,row=c//5)
                 c+=1
 
                 async def callback(interaction: discord.Interaction,item=item):
-                    await interaction.message.delete()
-                    await interaction.response.send_message(f"Bought {item.name}")
-                    printLog("debug","No buy logic yet!")
-                    printLogToDc(self.bot,"debug","No buy logic yet!")
+                    cost=Shop().getCost(self.tier)
+                    if cost<=self.bot.user_data[str(ctx.author.id)]["money"]["secured"]:
+                        await interaction.response.send_message(f"{self.author.mention} bought {item.name}")
+                        self.bot.user_data[str(ctx.author.id)]["money"]["secured"]-=cost
+                        self.bot.user_data[str(ctx.author.id)]["item"].append(item)
+                    else:
+                        await interaction.response.send_message(f"You can not afford {item.name}.\nYour secured souls: {self.bot.user_data[str(ctx.author.id)]["money"]["secured"]}\nItem cost: {cost}",delete_after=120.0,ephemeral=True)
 
                 button.callback=callback
                 self.add_item(button)

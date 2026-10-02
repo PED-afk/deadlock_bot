@@ -29,7 +29,7 @@ class ErrorOverwrite(commands.Cog):
         
     @commands.Cog.listener()
     async def on_command_error(self,ctx, error):
-        printLogToDc(self.bot,"error",f"Command error: {error}")
+        await printLogToDc(self.bot,"error",f"Command error: {error}")
 
 
 async def setup(bot):
