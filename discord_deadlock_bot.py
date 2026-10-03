@@ -92,8 +92,7 @@ async def on_ready():
         botRole=guild.get_role(ROLES.BOT_ROLE_NOT_AUTO_CREATED)
         if botRole is not None:
             find=pfp_path.name.lower()
-            i=""
-            rgb=next((bot.characters[i]["color"] for i in bot.characters if i.split(".")[0].lower().removesuffix("the_").replace("_"," ") in find),None)
+            rgb=next((bot.characters[i]["color"] for i in bot.characters if i.lower().removeprefix("the ").split(" ")[0] in find),None)
             if rgb is None:
                 printLog("error",f"Couldn't find color to match profile picture {pfp_path.name}.")
                 await printLogToDc(bot,"error",f"Couldn't find color to match profile picture {pfp_path.name}.")
@@ -452,7 +451,7 @@ bot.lastShhCheck=time.time()//1
 
 
 bot.bootTime=time.time()//1
-bot.version="0.12.1"
+bot.version="0.12.2"
 bot.versionSTR="The Shop is now available\nBuy items to participate in the next updates minigame(s)"
 
 

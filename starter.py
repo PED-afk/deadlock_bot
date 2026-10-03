@@ -20,12 +20,6 @@ fromrestart=0
 BASE = Path(__file__).parent
 bot_file = BASE / "discord_deadlock_bot.py"
 
-"""
-hotboot_file = BASE / "hotBoot.txt"
-restart_file = BASE / "restart.txt"
-pause_file = BASE / "pauseTimes.txt"
-update_check_file= BASE / "update_check.txt"
-"""
 
 raspberry_update_name="deadlock_bot_update"
 
@@ -121,8 +115,10 @@ while True:
                     f.write(str(fromrestart))
                 
                 if lindistr==None:
-                    process = subprocess.Popen(["python", bot_file],stderr=subprocess.PIPE,text=True)
+                    #runs on windows
+                    process = subprocess.Popen([sys.executable, bot_file],stderr=subprocess.PIPE,text=True)
                 else:
+                    #runs on linux
                     with open(BotPaths.lookForUpdates,"r") as f:
                         tryUpdate=int(f.readline().strip())
                     if tryUpdate==1:

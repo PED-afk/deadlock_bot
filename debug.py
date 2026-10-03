@@ -126,7 +126,7 @@ async def printLogToDc(bot:commands.Bot,type:str, content:str):
     extra+=Colors.BOLD
     
     fromFunction = inspect.currentframe().f_back.f_code.co_name
-    await bot.get_channel(CHANNEL_IDS.BOT_DEBUG_CHANNEL).send("```ansi"+colorTextForDc(f"[{type.upper()}]",extra,False)+colorTextForDc(f" [{fromFunction.upper()}]",Colors.BLUE,False)+f"  {content}"+"```")
+    await bot.get_channel(CHANNEL_IDS.BOT_DEBUG_CHANNEL).send("```ansi\n"+colorTextForDc(f"[{type.upper()}]",extra,False)+colorTextForDc(f" [{fromFunction.upper()}]",Colors.BLUE,False)+f"  {content}"+"\n```")
 
 def readback(what:str="all",deleteAfter:bool=False)->str:
     """
