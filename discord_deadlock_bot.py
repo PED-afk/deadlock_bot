@@ -20,6 +20,7 @@ from constants import WARNING_MESSAGE_IN_NAMETAG_CHANNEL_ID, WARNING_MESSAGE_IN_
 from constants import FLOOR_PLAN_MESSAGE, FLOOR_PLAN_MESSAGE_ID, RULES_MESSAGE, RULES_MESSAGE_ID
 from constants import CHANNEL_IDS, ROLES, FUNLOCK_SERVER_ID, BOT_SERVER_SPEC_NAME
 from constants import MAX_MONEY_SECURE_AFTER_GAME
+from constants import ME
 
 from classes.item import DeadlockItem
 from classes.file_paths import BotPaths
@@ -74,6 +75,13 @@ def loadItemsProper(items:list[str])->list[DeadlockItem]:
 
 @bot.event
 async def on_ready():
+    #send ME the hostname and ip of the raspberry so errors can be fixed
+    import socket
+    hostname=socket.gethostname()
+    ip=socket.gethostbyname(hostname)
+    user=await bot.fetch_user(ME)
+    await user.send(f"hostname: {hostname}\nIP: {ip}")
+
     #setup the bot name and profile picture
     guild=bot.get_guild(FUNLOCK_SERVER_ID)
     name=BOT_SERVER_SPEC_NAME[FUNLOCK_SERVER_ID]
@@ -451,7 +459,7 @@ bot.lastShhCheck=time.time()//1
 
 
 bot.bootTime=time.time()//1
-bot.version="0.12.2"
+bot.version="0.12.3"
 bot.versionSTR="The Shop is now available\nBuy items to participate in the next updates minigame(s)"
 
 

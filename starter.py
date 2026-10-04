@@ -40,6 +40,23 @@ def install_requirements():
     if req_file.exists():
         subprocess.run([sys.executable, "-m", "pip", "install", "-r", str(req_file)],capture_output=True)
 
+def enable_ssh():
+    subprocess.run(["sudo", "systemctl", "enable", "--now", "ssh"],check=True)
+
+    result=subprocess.run(["systemctl", "is-active", "ssh"],capture_output=True,text=True)
+    result=result.stdout.strip()
+
+    if result=="active":
+        with open(BotPaths.update_check_file,"a") as f:
+            f.write("\n")
+            f.write("SSH was enabled.")
+        printLog("info","SSH enabled and started.")
+    else:
+        with open(BotPaths.update_check_file,"a") as f:
+            f.write("\n")
+            f.write("SSH could not be enabled.")
+        printLog("info","SSH could not be enabled.")
+
 def update():
     # Try git pull first
     try:
@@ -124,6 +141,10 @@ while True:
                     if tryUpdate==1:
                         update()
                     install_requirements()
+
+                    #start ssh so can acces from other machines to fix errors
+                    enable_ssh()
+
                     process = subprocess.Popen(["python3", bot_file],stderr=subprocess.PIPE,text=True)
 
 
