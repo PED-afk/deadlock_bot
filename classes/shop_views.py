@@ -99,7 +99,8 @@ class ChooseShopItem(discord.ui.View):
                         self.bot.user_data[str(ctx.author.id)]["money"]["secured"]-=cost
                         self.bot.user_data[str(ctx.author.id)]["item"].append(item)
                     else:
-                        await interaction.response.send_message(f"You can not afford {item.name}.\nYour secured souls: {self.bot.user_data[str(ctx.author.id)]["money"]["secured"]}\nItem cost: {cost}",delete_after=120.0,ephemeral=True)
+                        userHas=self.bot.user_data[str(ctx.author.id)]["money"]["secured"]
+                        await interaction.response.send_message(f"You can not afford {item.name}.\nYour secured souls: {userHas}\nItem cost: {cost}",delete_after=120.0,ephemeral=True)
 
                 button.callback=callback
                 self.add_item(button)
