@@ -77,14 +77,16 @@ def loadItemsProper(items:list[str])->list[DeadlockItem]:
 async def on_ready():
     #send ME the hostname and ip of the raspberry so errors can be fixed
     import socket
+    import getpass
     hostname=socket.gethostname()
     s=socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     s.connect(("8.8.8.8", 80))
     ip=s.getsockname()[0]
     s.close()
+    piUser=getpass.getuser()
     #ip=socket.gethostbyname(hostname)
     user=await bot.fetch_user(ME)
-    await user.send(f"hostname: {hostname}\nIP: {ip}")
+    await user.send(f"hostname: {hostname}\nIP: {ip}\nPi user: {piUser}")
 
     #setup the bot name and profile picture
     guild=bot.get_guild(FUNLOCK_SERVER_ID)
