@@ -78,7 +78,11 @@ async def on_ready():
     #send ME the hostname and ip of the raspberry so errors can be fixed
     import socket
     hostname=socket.gethostname()
-    ip=socket.gethostbyname(hostname)
+    s=socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.connect(("8.8.8.8", 80))
+    ip=s.getsockname()[0]
+    s.close()
+    #ip=socket.gethostbyname(hostname)
     user=await bot.fetch_user(ME)
     await user.send(f"hostname: {hostname}\nIP: {ip}")
 
