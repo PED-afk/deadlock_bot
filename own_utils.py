@@ -1,7 +1,7 @@
 
 import random
 from discord.ext import commands
-from datetime import datetime
+from datetime import datetime, timedelta
 import time
 
 from constants import ME, BOT_ROLE, MOD_ROLE, AUTODELETE_TIME_SECONDS
@@ -222,3 +222,22 @@ def formatedCurTime():
     Returns the current time in Year-Month-Day Hour:Minute:Second format
     """
     return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+
+def future_date(amount: int, unit: str) -> str:
+    """
+    returns the curent date + <amount> in <unit>
+    """
+    now=datetime.now()
+
+    if unit=="day":
+        future=now+timedelta(days=amount)
+    elif unit=="hour":
+        future=now+timedelta(hours=amount)
+    elif unit=="minute":
+        future=now+timedelta(minutes=amount)
+    else:
+        raise ValueError("unit must be 'day', 'hour', or 'minute'")
+
+    return future.strftime("%Y.%m.%d %H:%M:%S")
+

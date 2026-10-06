@@ -4,11 +4,12 @@ import discord
 from discord.ext import commands, tasks
 import random
 
-from own_utils import chooseFaceFromCategory, canUseCommand
+from own_utils import chooseFaceFromCategory, canUseCommand, future_date
 from constants import WHO_AM_I_ROLES
 from constants import CHANNEL_IDS
 from debug import printLogToDc, printLog
 from classes.file_paths import BotPaths
+from data_manage import save_json
 
 #tools for everyone
 
@@ -161,6 +162,22 @@ class Tools(commands.Cog):
             else:
                 await ctx.reply("I can't give you a random thing in that category."+chooseFaceFromCategory("nervous"))
 
+    @commands.command()
+    async def remind(self, ctx, user:discord.Member=None, text:str=None, time:int=None, mesure:str=None):
+        if user==None or text==None or time==None or mesure==None:
+            await ctx.reply("`!remind @<person_to_be_reminded> <reminder text> <number of> <minute/hour/day>`")
+        else:
+            message=user.mention+"! Here is your reminder:\n\n"+text
+            mesDict={}
+            mesDict["toWhere"]="main"
+            mesDict["done"]=False
+            mesDict["allowedDiference"]={}
+            mesDict["allowedDiference"]["amount"]=1
+            mesDict["allowedDiference"]["measurement"]="hour"
+            mesDict["date"]=future_date(time,mesure.removesuffix("s"))
+            self.bot.autoMessages[message]=mesDict
+            save_json(BotPaths.autoMessage_file_gitignored,self.bot.autoMessages)
+            await ctx.reply("Your reminder has been set.")
 
    
 async def setup(bot):
