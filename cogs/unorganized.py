@@ -78,6 +78,8 @@ class Unorganized(commands.Cog):
     async def help_me(self, ctx, section:str=None):
         senderID=ctx.author.id
         if canUseCommand(ctx,3):
+            from datetime import datetime
+            tz=datetime.now().astimezone().tzinfo
             anyView=True
             if section==None:
                 anyView=True
@@ -146,7 +148,8 @@ class Unorganized(commands.Cog):
                 botcommands=[
                     "`!rand X Y`: All sorts of randomly given stuff. (use `!rand` to learn more)",
                     "`!people_at_rank <rank> <radius> <online>`: Give you the names of people who have ranks around `<rank>`(±`<radius>` (if present)). If `<online>` is present and is set to `1`, will only search from people currently online. If `<rank>` is omited I will use your rank as base.",
-                    "`!remind @<person_to_be_reminded> <reminder text> <number of> <minute/hour/day later>`: I will send a message after the specified amount of time, to remind someone about something."
+                    "`!remind @<person_to_be_reminded> <reminder text> <number of> <minute/hour/day later>`: I will send a message after the specified amount of time, to remind someone about something.",
+                    f"`!countdown <name of the cd or message> <date on which the cd expires in {tz}>`: "
                 ]
             elif section=="moderation":
                 anyView=True

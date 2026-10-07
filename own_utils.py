@@ -6,7 +6,7 @@ import time
 
 from constants import ME, BOT_ROLE, MOD_ROLE, AUTODELETE_TIME_SECONDS
 from constants import CHANNEL_IDS
-from debug import printLog
+from debug import printLog, printLogToDc
 from classes.bot_faces import Faces
 from classes.dc_colors import Colors
 
@@ -240,4 +240,41 @@ def future_date(amount: int, unit: str) -> str:
         raise ValueError("unit must be 'day', 'hour', or 'minute'")
 
     return future.strftime("%Y.%m.%d %H:%M:%S")
+
+
+def countdown_dates(target_date: str) -> dict[str, str]:
+    target=datetime.strptime(target_date, "%Y.%m.%d %H:%M:%S")
+    now=datetime.now()
+
+    offsets={
+        "5sec": timedelta(seconds=5),
+        "10sec": timedelta(seconds=10),
+        "30sec": timedelta(seconds=30),
+        "1min": timedelta(minutes=1),
+        "5min": timedelta(minutes=5),
+        "10min": timedelta(minutes=10),
+        "1hour": timedelta(hours=1),
+    }
+
+    result={}
+
+    for name, offset in offsets.items():
+        if now>=target-offset:
+            result[name]=(target-offset).strftime("%Y.%m.%d %H:%M:%S")
+
+    return result
+
+
+def add_auto_message(bot:commands.Bot, message:str,where:str,difA:int,difMes:str,date:str):
+    if difMes.removesuffix("s") not in ["hour","day","minute"]:
+        printLog
+        raise KeyError(f"Argument difMes is incorrect.\nExpected: ['hour','day','minute']\nWas given: {difMes}")
+    mesDict={}
+    mesDict["toWhere"]=where
+    mesDict["done"]=False
+    mesDict["allowedDiference"]={}
+    mesDict["allowedDiference"]["amount"]=difA
+    mesDict["allowedDiference"]["measurement"]=difMes.removesuffix("s")
+    mesDict["date"]=date
+    bot.autoMessages[message]=mesDict
 

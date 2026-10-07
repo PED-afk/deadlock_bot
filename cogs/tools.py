@@ -4,7 +4,7 @@ import discord
 from discord.ext import commands, tasks
 import random
 
-from own_utils import chooseFaceFromCategory, canUseCommand, future_date
+from own_utils import chooseFaceFromCategory, canUseCommand, future_date, countdown_dates, add_auto_message
 from constants import WHO_AM_I_ROLES
 from constants import CHANNEL_IDS
 from debug import printLogToDc, printLog
@@ -168,17 +168,30 @@ class Tools(commands.Cog):
             await ctx.reply("`!remind @<person_to_be_reminded> <reminder text> <number of> <minute/hour/day>`")
         else:
             message=user.mention+"! Here is your reminder:\n\n"+text
-            mesDict={}
+            date=future_date(time,mesure.removesuffix("s"))
+            add_auto_message(self.bot,message,"main",1,"hour",date)
+            """mesDict={}
             mesDict["toWhere"]="main"
             mesDict["done"]=False
             mesDict["allowedDiference"]={}
             mesDict["allowedDiference"]["amount"]=1
             mesDict["allowedDiference"]["measurement"]="hour"
             mesDict["date"]=future_date(time,mesure.removesuffix("s"))
-            self.bot.autoMessages[message]=mesDict
+            self.bot.autoMessages[message]=mesDict"""
             save_json(BotPaths.autoMessage_file_gitignored,self.bot.autoMessages)
             await ctx.reply("Your reminder has been set.")
 
+    @commands.command()
+    async def countdown(self, ctx, name:str, date=None):
+        if date==None or name==None:
+            from datetime import datetime
+            tz=datetime.now().astimezone().tzinfo
+            ctx.reply(f"`!countdown <countdown name> <date in {tz}*>`\n\n-# *Date format: YYYY.MM.DD hh:mm:ss")
+        else:
+            cdDates=countdown_dates(date)
+            for key, date in cdDates.items():
+                add_auto_message(self.bot,name,"main",2,"second",date)
+            ctx.reply("A countdown has been started.")
    
 async def setup(bot):
     await bot.add_cog(Tools(bot))
