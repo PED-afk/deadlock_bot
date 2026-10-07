@@ -136,7 +136,8 @@ class Unorganized(commands.Cog):
             elif section=="extra":
                 anyView=True
                 botcommands=[
-                    "`!minigame`: Play some games while you wait for matchmaking.",
+                    "`!minigame`: Play some games while you wait for matchmaking. (W.I.P.)",
+                    "`!shop`: Buy items for our minigames.",
                     "`!source`: Lobotomy (source code).",
                     "`!credit`: Give credit to people we use the works of."
                 ]
@@ -144,7 +145,8 @@ class Unorganized(commands.Cog):
                 anyView=True
                 botcommands=[
                     "`!rand X Y`: All sorts of randomly given stuff. (use `!rand` to learn more)",
-                    "`!people_at_rank <rank> <radius> <online>`: Give you the names of people who have ranks around `<rank>`(±`<radius>` (if present)). If `<online>` is present and is set to `1`, will only search from people currently online. If `<rank>` is omited I will use your rank as base."
+                    "`!people_at_rank <rank> <radius> <online>`: Give you the names of people who have ranks around `<rank>`(±`<radius>` (if present)). If `<online>` is present and is set to `1`, will only search from people currently online. If `<rank>` is omited I will use your rank as base.",
+                    "`!remind @<person_to_be_reminded> <reminder text> <number of> <minute/hour/day later>`: I will send a message after the specified amount of time, to remind someone about something."
                 ]
             elif section=="moderation":
                 anyView=True

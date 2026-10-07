@@ -46,7 +46,7 @@ VOICE_CHANNEL_CAT_NAME_PREFIX="Standard Matches "
 #server
 FUNLOCK_SERVER_ID=1510049699695165471
 
-#users
+#bot owner
 ME=616710497378631709
 
 #can use funlock bot role id
