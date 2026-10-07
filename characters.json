@@ -264,5 +264,47 @@
         "perLvl":47,
         "color":[100,0,100],
         "colorStr":"purple"
+    },
+    "Baba":{
+        "base_HP":780,
+        "maxLvl":35,
+        "perLvl":-1,
+        "color":[150,25,71],
+        "colorStr":"pink"
+    },
+    "Deadman Danny":{
+        "base_HP":-1,
+        "maxLvl":35,
+        "perLvl":-1,
+        "color":[150,150,0],
+        "colorStr":"yellow"
+    },
+    "Solomon":{
+        "base_HP":-1,
+        "maxLvl":35,
+        "perLvl":-1,
+        "color":[0,125,0],
+        "colorStr":"green"
+    },
+    "Rat King":{
+        "base_HP":-1,
+        "maxLvl":35,
+        "perLvl":-1,
+        "color":[150,20,20],
+        "colorStr":"red"
+    },
+    "Violet":{
+        "base_HP":-1,
+        "maxLvl":35,
+        "perLvl":-1,
+        "color":[127,0,255],
+        "colorStr":"violet"
+    },
+    "Nurse Harrow":{
+        "base_HP":-1,
+        "maxLvl":35,
+        "perLvl":-1,
+        "color":[143,250,143],
+        "colorStr":"green"
     }
 }
