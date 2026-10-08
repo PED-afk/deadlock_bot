@@ -126,7 +126,22 @@ COLORED_ROLES={
 }
 
 IAM_MESSAGE_ID=1548721180603842654
-IAM_MESSAGE_CONTENT="What do you do?\nWhat notifications do you want?\nYou can choose more than 1.\n\n- If you usualy available to play with (you will be pinged by people looking for players): 🎮\n- If someone is loooking for players and you want to be pinged only if you appear as online: 👻\n- If you know programing: ⌨️\n- If you want to edit the bot's code(\*)(\*2): 🤖\n- If you want to get notifications about all server announcements: 📢\n\n-# (*)We will periodically check this role to give access to the github repository; until we do use `!source` to get the active link to it.\n-# (*2)Getting this role won't necessarily mean you get access, we may deny your 'application'"
+IAM_MESSAGE_CONTENT=(
+    "What do you do?"
+    "\nWhat notifications do you want?"
+    "\nYou can choose more than 1."
+    "\n"
+    "\n- If you usualy available to play with (you will be pinged by people looking for players): 🎮"
+    "\n- If someone is loooking for players and you want to be pinged only if you appear as online: 👻"
+    "\n- If you know programing: ⌨️"
+    "\n- If you want to edit the bot's code(\*)(\*2): 🤖"
+    "\n- If you want to get notifications about all server announcements(\*3): 📢"
+    "\n"
+    "\n-# (*)We will periodically check this role to give access to the github repository; until we do use `!source` to get the active link to it."
+    "\n-# (*2)Getting this role won't necessarily mean you get access, we may deny your 'application'"
+    "\n-# (\*3) By \"default\" we use `@everyone` when an important announcement is posted; for less important announcement we will use this role to ping you."
+    )
+
 WHO_AM_I_ROLES={
     "programer":{
         "id":ROLES.PROGRAMMER,
