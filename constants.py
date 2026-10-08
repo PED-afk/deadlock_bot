@@ -35,6 +35,47 @@ HERO_ID_MAP = {
 }
 
 
+
+class ROLES():
+    BOT_PROGRAMMER=1523561168956817578
+    GITHUB_HELPER=1542983727632752740
+    GITHUB_HELPER_APLICANT=1543929441225412608
+    BOT_ROLE_NOT_AUTO_CREATED=1544310435451248660
+    ANNOUNCEMENTS=1557693455772164096
+    PROGRAMMER=1543698321279946874
+    REGULAR=1530270967736041712
+    IFONLINE=1550424746720624640
+    BOT_PROGRAMMER_APLICANT=1543929441225412608
+    class COLORS():
+        PURPLE=1543693742031249418
+        BLUE=1535060305116401704
+        GREEN=1543685911328460980
+        PINK=1534677907358879765
+        YELLOW=1543685960292900884
+        ORANGE=1543689973117489212
+        RED=1543686317228167311
+        BLACK=1557696742420512811
+        WHITE=1557696656990801971
+
+class CHANNEL_IDS():
+    FLOOR_PLAN_CHANNEL_ID=1554145604840456222
+    RULES_CHANNEL_ID=1526999395092922469
+    ROLE_CHANNEL_ID=1543701162581168228
+        
+    BOTS_CHANNEL_ID=1515333724269445270
+    BOT_DEBUG_CHANNEL=1524176375903420466
+    LOUNGE_CHANNEL_ID=1510049700416327753
+    
+    JUST_ZIPLINE_ID=1520781404315848736
+    PA_ID=1535310773684019201
+    LOBBY_CODES_ID=1515295871028432977
+    CURIOSITY_ID=1544085021156184214
+    SEMINAR_ROOM_ID=1521993492572799037
+    PROJECTOR_ID=1515343404383473775
+    PROJECT_SHARE=1523560126806622298
+    SUGGESTIONS_CHANNEL_ID=1544060319263883324
+    STAT_TRACKER_CHANNEL_ID=1515053044813791282
+
 APP_NAME="FUNLOCK_BOT"
 
 MESSAGE_CD=60*60*0.1  #6 minutes
@@ -73,33 +114,39 @@ GREET_SEARCH_LIMIT=10
 COLOR_CHOOSER_MESSAGE_ID=1543703073992745011
 COLOR_CHOOSER_MESSAGE_CONTENT="React to this message to set your name's color.\n You can only have 1."
 COLORED_ROLES={
-    "purple":{"id":1543693742031249418,"emoji":"🟣"},
-    "blue":{"id":1535060305116401704,"emoji":"🔵"},
-    "green":{"id":1543685911328460980,"emoji":"🟢"},
-    "pink":{"id":1534677907358879765,"emoji":"🩷"},
-    "yellow":{"id":1543685960292900884,"emoji":"🟡"},
-    "orange":{"id":1543689973117489212,"emoji":"🟠"},
-    "red":{"id":1543686317228167311,"emoji":"🔴"}
+    "purple":{"id":ROLES.COLORS.PURPLE,"emoji":"🟣"},
+    "blue":{"id":ROLES.COLORS.BLUE,"emoji":"🔵"},
+    "green":{"id":ROLES.COLORS.GREEN,"emoji":"🟢"},
+    "pink":{"id":ROLES.COLORS.PINK,"emoji":"🩷"},
+    "yellow":{"id":ROLES.COLORS.YELLOW,"emoji":"🟡"},
+    "orange":{"id":ROLES.COLORS.ORANGE,"emoji":"🟠"},
+    "red":{"id":ROLES.COLORS.RED,"emoji":"🔴"},
+    "black":{"id":ROLES.COLORS.BLACK,"emoji":"⚫"},
+    "white":{"id":ROLES.COLORS.WHITE,"emoji":"⚪"}
 }
 
 IAM_MESSAGE_ID=1548721180603842654
-IAM_MESSAGE_CONTENT="What do you do?\nWhat notifications do you want?\nYou can choose more than 1.\n\n- If you usualy available to play with (you will be pinged by people looking for players): 🎮\n- If someone is loooking for players and you want to be pinged only if you appear as online: 👻\n- If you know programing: ⌨️\n- If you want to edit the bot's code(\*)(\*2): 🤖\n\n-# (*)We will periodically check this role to give access to the github repository; until we do use `!source` to get the active link to it.\n-# (*2)Getting this role won't necessarily mean you get access, we may deny your 'application'"
+IAM_MESSAGE_CONTENT="What do you do?\nWhat notifications do you want?\nYou can choose more than 1.\n\n- If you usualy available to play with (you will be pinged by people looking for players): 🎮\n- If someone is loooking for players and you want to be pinged only if you appear as online: 👻\n- If you know programing: ⌨️\n- If you want to edit the bot's code(\*)(\*2): 🤖\n- If you want to get notifications about all server announcements: 📢\n\n-# (*)We will periodically check this role to give access to the github repository; until we do use `!source` to get the active link to it.\n-# (*2)Getting this role won't necessarily mean you get access, we may deny your 'application'"
 WHO_AM_I_ROLES={
     "programer":{
-        "id":1543698321279946874,
+        "id":ROLES.PROGRAMMER,
         "emoji":"⌨️"
     },
     "regular_gamer":{
-        "id":1530270967736041712,
+        "id":ROLES.REGULAR,
         "emoji":"🎮"
     },
     "ping_if_online":{
-        "id":1550424746720624640,
+        "id":ROLES.IFONLINE,
         "emoji":"👻"
     },
     "bot_coder_wannabe":{
-        "id":1543929441225412608,
+        "id":ROLES.BOT_PROGRAMMER_APLICANT,
         "emoji":"🤖"
+    },
+    "announcements":{
+        "id":ROLES.ANNOUNCEMENTS,
+        "emoji":"📢"
     }
 }
 
@@ -128,32 +175,6 @@ DEGEN_TIMER_ASK_MESSAGES=["the timer","what's the time","!the_timer"]
 
 THANKING_MESSAGES=["thank you!","thank you","thanks!","thanks"]
 
-
-class ROLES():
-    BOT_PROGRAMMER=1523561168956817578
-    GITHUB_HELPER=1542983727632752740
-    GITHUB_HELPER_APLICANT=1543929441225412608
-    BOT_ROLE_NOT_AUTO_CREATED=1544310435451248660
-    
-class CHANNEL_IDS():
-    FLOOR_PLAN_CHANNEL_ID=1554145604840456222
-    RULES_CHANNEL_ID=1526999395092922469
-    ROLE_CHANNEL_ID=1543701162581168228
-        
-    BOTS_CHANNEL_ID=1515333724269445270
-    BOT_DEBUG_CHANNEL=1524176375903420466
-    LOUNGE_CHANNEL_ID=1510049700416327753
-    
-    JUST_ZIPLINE_ID=1520781404315848736
-    PA_ID=1535310773684019201
-    LOBBY_CODES_ID=1515295871028432977
-    CURIOSITY_ID=1544085021156184214
-    SEMINAR_ROOM_ID=1521993492572799037
-    PROJECTOR_ID=1515343404383473775
-    PROJECT_SHARE=1523560126806622298
-    SUGGESTIONS_CHANNEL_ID=1544060319263883324
-    STAT_TRACKER_CHANNEL_ID=1515053044813791282
-    
 
 FLOOR_PLAN_MESSAGE=("Here are the channels and what they are used for!\n"
                     "- Reception\n"
