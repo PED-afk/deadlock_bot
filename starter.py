@@ -207,7 +207,7 @@ while True:
                     #start ssh so can acces from other machines to fix errors
                     enable_ssh()
 
-                    process = subprocess.Popen(["python3", bot_file],stderr=subprocess.PIPE,text=True)
+                    process = subprocess.Popen([sys.executable, bot_file],stderr=subprocess.PIPE,text=True)
 
 
                 stdout, stderr = process.communicate()
