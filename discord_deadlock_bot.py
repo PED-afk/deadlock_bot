@@ -393,6 +393,7 @@ async def tick():
                 latest_time=target_time+difference
 
                 if target_time<=now:
+                    await printLogToDc(bot,"info","Sending auto message.")
                     bot.autoMessages[key]["done"]=True
                     if now<=latest_time:
                         await channel.send(key)
