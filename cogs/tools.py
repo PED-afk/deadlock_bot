@@ -176,7 +176,7 @@ class Tools(commands.Cog):
 
     @commands.command()
     async def countdown(self, ctx, *, txt:str=None):
-        if canUseCommand(ctx):
+        if await canUseCommand(ctx):
             if txt==None or "|" not in txt:
                 from datetime import datetime
                 tz=datetime.now().astimezone().tzinfo
@@ -193,7 +193,7 @@ class Tools(commands.Cog):
             
     @commands.command()
     async def countdownRemainingTime(self, ctx, *, txt:str=None):
-        if canUseCommand(ctx):
+        if await canUseCommand(ctx):
             if txt==None or "|" not in txt:
                 await ctx.reply(f'`!countdownRemainingTime <countdown name> | <time remaining*>`\n\n-# *Format: YYYY.MM.DD hh:mm:ss')
             else:
@@ -205,7 +205,7 @@ class Tools(commands.Cog):
 
     @commands.command()
     async def dumpAutoMes(self,ctx):
-        if canUseCommand(ctx,0):
+        if await canUseCommand(ctx,0):
             await printLogToDc(self.bot,"debug","Dump",BotPaths.autoMessage_file_gitignored)
    
 async def setup(bot):

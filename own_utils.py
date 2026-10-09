@@ -260,7 +260,6 @@ def add_duration_string(time_str: str) -> datetime:
 
 def countdown_dates(target_date: str) -> dict[str, str]:
     target=datetime.strptime(target_date, DATE_FORMAT)
-    now=datetime.now()
     offsets={
         "5sec": timedelta(seconds=5),
         "10sec": timedelta(seconds=10),
@@ -270,16 +269,12 @@ def countdown_dates(target_date: str) -> dict[str, str]:
         "10min": timedelta(minutes=10),
         "1hour": timedelta(hours=1),
     }
-    result={}
-    for name, offset in offsets.items():
-        if now>=target-offset:
-            result[name]=(target-offset).strftime(DATE_FORMAT)
-
-    return result
+    return {name: (target - offset).strftime(DATE_FORMAT) for name, offset in offsets.items()}
 
 
 def add_auto_message(bot:commands.Bot, message:str,where:str,difA:int,difMes:str,date:str):
     if difMes.removesuffix("s") not in ["hour","day","minute","second"]:
+        printLogToDc(bot,"error",f"Argument difMes is incorrect.\nExpected: ['hour','day','minute']\nWas given: {difMes}")
         raise KeyError(f"Argument difMes is incorrect.\nExpected: ['hour','day','minute']\nWas given: {difMes}")
     mesDict={}
     mesDict["toWhere"]=where
