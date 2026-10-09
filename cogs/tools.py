@@ -4,8 +4,9 @@ import discord
 from discord.ext import commands, tasks
 import random
 
-from own_utils import chooseFaceFromCategory, canUseCommand, future_date, countdown_dates, add_auto_message
+from own_utils import chooseFaceFromCategory, canUseCommand, countdown_dates, add_auto_message, add_duration_string, add_time_offset
 from constants import WHO_AM_I_ROLES
+from constants import DATE_FORMAT
 from constants import CHANNEL_IDS
 from debug import printLogToDc, printLog
 from classes.file_paths import BotPaths
@@ -163,35 +164,41 @@ class Tools(commands.Cog):
                 await ctx.reply("I can't give you a random thing in that category."+chooseFaceFromCategory("nervous"))
 
     @commands.command()
-    async def remind(self, ctx, user:discord.Member=None, text:str=None, time:int=None, mesure:str=None):
+    async def remind(self, ctx, user:discord.Member=None, time:int=None, mesure:str=None, *, text:str=None):
         if user==None or text==None or time==None or mesure==None:
-            await ctx.reply("`!remind @<person_to_be_reminded> <reminder text> <number of> <minute/hour/day>`")
+            await ctx.reply("`!remind @<person_to_be_reminded> <number of> <minute/hour/day> <reminder text>`")
         else:
             message=user.mention+"! Here is your reminder:\n\n"+text
-            date=future_date(time,mesure.removesuffix("s"))
+            date=add_time_offset(time,mesure.removesuffix("s"))
             add_auto_message(self.bot,message,"main",1,"hour",date)
-            """mesDict={}
-            mesDict["toWhere"]="main"
-            mesDict["done"]=False
-            mesDict["allowedDiference"]={}
-            mesDict["allowedDiference"]["amount"]=1
-            mesDict["allowedDiference"]["measurement"]="hour"
-            mesDict["date"]=future_date(time,mesure.removesuffix("s"))
-            self.bot.autoMessages[message]=mesDict"""
             save_json(BotPaths.autoMessage_file_gitignored,self.bot.autoMessages)
             await ctx.reply("Your reminder has been set.")
 
     @commands.command()
-    async def countdown(self, ctx, name:str, date=None):
-        if date==None or name==None:
+    async def countdown(self, ctx, *, txt:str=None):
+        if txt==None or "|" not in txt:
             from datetime import datetime
             tz=datetime.now().astimezone().tzinfo
-            ctx.reply(f"`!countdown <countdown name> <date in {tz}*>`\n\n-# *Date format: YYYY.MM.DD hh:mm:ss")
+            await ctx.reply(f'`!countdown <countdown name> | <date in {tz}*>`\n\n-# *Date format: YYYY.MM.DD hh:mm:ss')
         else:
-            cdDates=countdown_dates(date)
+            name, inDate=txt.rsplit("|",1)
+            name=name.strip()
+            inDate=inDate.strip()
+            cdDates=countdown_dates(inDate)
             for key, date in cdDates.items():
                 add_auto_message(self.bot,name,"main",2,"second",date)
-            ctx.reply("A countdown has been started.")
+            await ctx.reply("A countdown has been started.")
+            
+    @commands.command()
+    async def countdownRemainingTime(self, ctx, *, txt:str=None):
+        if txt==None or "|" not in txt:
+            await ctx.reply(f'`!countdown <countdown name> | <time remaining*>`\n\n-# *Format: YYYY.MM.DD hh:mm:ss')
+        else:
+            name, date=txt.rsplit("|",1)
+            cdDates=countdown_dates(add_duration_string(date).strftime(DATE_FORMAT))
+            for key, date in cdDates.items():
+                add_auto_message(self.bot,name,"main",2,"second",date)
+            await ctx.reply("A countdown has been started.")
    
 async def setup(bot):
     await bot.add_cog(Tools(bot))

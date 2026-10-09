@@ -4,7 +4,8 @@ from discord.ext import commands
 from datetime import datetime, timedelta
 import time
 
-from constants import ME, BOT_ROLE, MOD_ROLE, AUTODELETE_TIME_SECONDS
+from constants import ME, BOT_ROLE, MOD_ROLE
+from constants import DATE_FORMAT
 from constants import CHANNEL_IDS
 from debug import printLog, printLogToDc
 from classes.bot_faces import Faces
@@ -224,7 +225,7 @@ def formatedCurTime():
     return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
 
-def future_date(amount: int, unit: str) -> str:
+def add_time_offset(amount: int, unit: str) -> str:
     """
     returns the curent date + <amount> in <unit>
     """
@@ -239,13 +240,27 @@ def future_date(amount: int, unit: str) -> str:
     else:
         raise ValueError("unit must be 'day', 'hour', or 'minute'")
 
-    return future.strftime("%Y.%m.%d %H:%M:%S")
+    return future.strftime(DATE_FORMAT)
 
+def add_duration_string(time_str: str) -> datetime:
+    from dateutil.relativedelta import relativedelta
+    years, months, days = map(int, time_str.split()[0].split("."))
+    hours, minutes, seconds = map(int, time_str.split()[1].split(":"))
+    
+    now=datetime.now()
+    result=now+relativedelta(
+        years=years,
+        months=months,
+        days=days,
+        hours=hours,
+        minutes=minutes,
+        seconds=seconds
+    )
+    return result
 
 def countdown_dates(target_date: str) -> dict[str, str]:
-    target=datetime.strptime(target_date, "%Y.%m.%d %H:%M:%S")
+    target=datetime.strptime(target_date, DATE_FORMAT)
     now=datetime.now()
-
     offsets={
         "5sec": timedelta(seconds=5),
         "10sec": timedelta(seconds=10),
@@ -255,12 +270,10 @@ def countdown_dates(target_date: str) -> dict[str, str]:
         "10min": timedelta(minutes=10),
         "1hour": timedelta(hours=1),
     }
-
     result={}
-
     for name, offset in offsets.items():
         if now>=target-offset:
-            result[name]=(target-offset).strftime("%Y.%m.%d %H:%M:%S")
+            result[name]=(target-offset).strftime(DATE_FORMAT)
 
     return result
 

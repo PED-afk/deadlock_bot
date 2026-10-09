@@ -75,47 +75,47 @@ def loadItemsProper(items:list[str])->list[DeadlockItem]:
 
 @bot.event
 async def on_ready():
-    #send ME the hostname and ip of the raspberry so errors can be fixed
-    import socket
-    import getpass
-    hostname=socket.gethostname()
-    s=socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    s.connect(("8.8.8.8", 80))
-    ip=s.getsockname()[0]
-    s.close()
-    piUser=getpass.getuser()
-    #ip=socket.gethostbyname(hostname)
-    user=await bot.fetch_user(ME)
-    await user.send(f"hostname: {hostname}\nIP: {ip}\nPi user: {piUser}")
+    if bot.opSys: #skip these running on windows (this asumes we test on windows and run on linux (or other op sys))
+        #send ME the hostname and ip of the raspberry so errors can be fixed
+        import socket
+        import getpass
+        hostname=socket.gethostname()
+        s=socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))
+        ip=s.getsockname()[0]
+        s.close()
+        piUser=getpass.getuser()
+        user=await bot.fetch_user(ME)
+        await user.send(f"hostname: {hostname}\nIP: {ip}\nPi user: {piUser}")
 
-    #setup the bot name and profile picture
-    guild=bot.get_guild(FUNLOCK_SERVER_ID)
-    name=BOT_SERVER_SPEC_NAME[FUNLOCK_SERVER_ID]
-    if guild:
-        await guild.me.edit(nick=name)
+        #setup the bot name and profile picture
+        guild=bot.get_guild(FUNLOCK_SERVER_ID)
+        name=BOT_SERVER_SPEC_NAME[FUNLOCK_SERVER_ID]
+        if guild:
+            await guild.me.edit(nick=name)
 
-    pfp_files=list(BotPaths.pfp_folder.glob("*.jpg"))
-    if pfp_files:
-        pfp_path=random.choice(pfp_files)
-        printLog("info",f"Chosen pfp: {pfp_path}")
-        with pfp_path.open("rb") as f:
-            await bot.user.edit(avatar=f.read())
-        printLog("info",f"Changed PFP to {pfp_path.name}")
-        
-        #change name(role) color accordingly
-        botRole=guild.get_role(ROLES.BOT_ROLE_NOT_AUTO_CREATED)
-        if botRole is not None:
-            find=pfp_path.name.lower()
-            rgb=next((bot.characters[i]["color"] for i in bot.characters if i.lower().removeprefix("the ").split(" ")[0] in find),None)
-            if rgb is None:
-                printLog("error",f"Couldn't find color to match profile picture {pfp_path.name}.")
-                await printLogToDc(bot,"error",f"Couldn't find color to match profile picture {pfp_path.name}.")
-                rgb=[200,0,200]
-            color=discord.Color.from_rgb(*rgb)
-            await botRole.edit(color=color)
-            printLog("info","Changed role color.")
-    else:
-        printLog("error",f"No .jpg files found in {BotPaths.pfp_folder}")
+        pfp_files=list(BotPaths.pfp_folder.glob("*.jpg"))
+        if pfp_files:
+            pfp_path=random.choice(pfp_files)
+            printLog("info",f"Chosen pfp: {pfp_path}")
+            with pfp_path.open("rb") as f:
+                await bot.user.edit(avatar=f.read())
+            printLog("info",f"Changed PFP to {pfp_path.name}")
+            
+            #change name(role) color accordingly
+            botRole=guild.get_role(ROLES.BOT_ROLE_NOT_AUTO_CREATED)
+            if botRole is not None:
+                find=pfp_path.name.lower()
+                rgb=next((bot.characters[i]["color"] for i in bot.characters if i.lower().removeprefix("the ").split(" ")[0] in find),None)
+                if rgb is None:
+                    printLog("error",f"Couldn't find color to match profile picture {pfp_path.name}.")
+                    await printLogToDc(bot,"error",f"Couldn't find color to match profile picture {pfp_path.name}.")
+                    rgb=[200,0,200]
+                color=discord.Color.from_rgb(*rgb)
+                await botRole.edit(color=color)
+                printLog("info","Changed role color.")
+        else:
+            printLog("error",f"No .jpg files found in {BotPaths.pfp_folder}")
 
 
     printLog("info",f"Bot connected as {bot.user}")
@@ -131,6 +131,7 @@ async def on_ready():
             await bot.get_channel(CHANNEL_IDS.BOTS_CHANNEL_ID).send("I'm awake!\nGood morning!\n"+face)
         else:
             await bot.get_channel(CHANNEL_IDS.BOTS_CHANNEL_ID).send("Back online! "+face)
+
 
     #print debug about updates
     #something is broken here
@@ -506,6 +507,19 @@ bot.items=loadItemsProper(load_txt(BotPaths.items_file))
 bot.map_graph=load_json(BotPaths.map_graph_file)
 
 bot.ranks=load_json(BotPaths.ranks_file)
+
+
+
+def opsysCheck():
+    import platform
+    try:
+        platform.freedesktop_os_release()
+    except:
+        return False
+    return True
+
+bot.opSys=opsysCheck()
+
 
 load_dotenv()
 bot.run(os.getenv("DISCORD_TOKEN"))
