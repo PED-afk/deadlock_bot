@@ -186,7 +186,7 @@ class Tools(commands.Cog):
             inDate=inDate.strip()
             cdDates=countdown_dates(inDate)
             for key, date in cdDates.items():
-                add_auto_message(self.bot,name,"main",2,"second",date)
+                add_auto_message(self.bot,name+"\n"+key,"main",2,"second",date)
             await ctx.reply("A countdown has been started.")
             
     @commands.command()
@@ -197,7 +197,7 @@ class Tools(commands.Cog):
             name, date=txt.rsplit("|",1)
             cdDates=countdown_dates(add_duration_string(date).strftime(DATE_FORMAT))
             for key, date in cdDates.items():
-                add_auto_message(self.bot,name,"main",2,"second",date)
+                add_auto_message(self.bot,name+"\n"+key,"main",2,"second",date)
             await ctx.reply("A countdown has been started.")
    
 async def setup(bot):
