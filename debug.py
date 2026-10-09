@@ -8,10 +8,12 @@ from pathlib import Path
 import shutil
 from discord.ext import commands
 import inspect
+import discord
 
 from constants import BASE
 from constants import CHANNEL_IDS
 from classes.dc_colors import Colors
+from classes.file_paths import BotPaths
 
 
 def setupFolders():
@@ -105,7 +107,7 @@ def printLog(type:str, content:any, colorAll:bool=False):
     print(Colors.DARK_GRAY+formatedCurTime()+" "+extra+f"[{type.upper()}]"+f"\t[{fromFunction.upper()}]"+(Colors.END if not colorAll else "")+f"  {content}"+(Colors.END if colorAll else ""),flush=True)
 
 
-async def printLogToDc(bot:commands.Bot,type:str, content:str):
+async def printLogToDc(bot:commands.Bot,type:str, content:str, file:str=None):
     """
 
         type can also be the function the print is from
@@ -126,7 +128,12 @@ async def printLogToDc(bot:commands.Bot,type:str, content:str):
     extra+=Colors.BOLD
     
     fromFunction = inspect.currentframe().f_back.f_code.co_name
-    await bot.get_channel(CHANNEL_IDS.BOT_DEBUG_CHANNEL).send("```ansi\n"+colorTextForDc(f"[{type.upper()}]",extra,False)+colorTextForDc(f" [{fromFunction.upper()}]",Colors.BLUE,False)+f"  {content}"+"\n```")
+    
+    if file!=None:
+        sendFile=discord.File(file)
+        await bot.get_channel(CHANNEL_IDS.BOT_DEBUG_CHANNEL).send("```ansi\n"+colorTextForDc(f"[{type.upper()}]",extra,False)+colorTextForDc(f" [{fromFunction.upper()}]",Colors.BLUE,False)+f"  {content}"+"\n```",file=sendFile)
+    else:
+        await bot.get_channel(CHANNEL_IDS.BOT_DEBUG_CHANNEL).send("```ansi\n"+colorTextForDc(f"[{type.upper()}]",extra,False)+colorTextForDc(f" [{fromFunction.upper()}]",Colors.BLUE,False)+f"  {content}"+"\n```")
 
 def readback(what:str="all",deleteAfter:bool=False)->str:
     """
