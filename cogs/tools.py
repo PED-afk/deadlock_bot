@@ -192,7 +192,7 @@ class Tools(commands.Cog):
     @commands.command()
     async def countdownRemainingTime(self, ctx, *, txt:str=None):
         if txt==None or "|" not in txt:
-            await ctx.reply(f'`!countdown <countdown name> | <time remaining*>`\n\n-# *Format: YYYY.MM.DD hh:mm:ss')
+            await ctx.reply(f'`!countdownRemainingTime <countdown name> | <time remaining*>`\n\n-# *Format: YYYY.MM.DD hh:mm:ss')
         else:
             name, date=txt.rsplit("|",1)
             cdDates=countdown_dates(add_duration_string(date).strftime(DATE_FORMAT))

@@ -291,3 +291,18 @@ def add_auto_message(bot:commands.Bot, message:str,where:str,difA:int,difMes:str
     mesDict["date"]=date
     bot.autoMessages[message]=mesDict
 
+
+async def cleanChannel(bot:commands.Bot, channelID:int,cleanRange:int):
+    import discord
+    async for msg in bot.get_channel(channelID).history(limit=cleanRange):
+        try:
+            await msg.delete()
+        except discord.Forbidden:
+            printLog("error","I don't have permission to delete this messages.")
+            break
+        except discord.HTTPException:
+            pass
+    printLog("info",f"Finished deleting all messages in channel: {channelID}")
+
+
+

@@ -9,6 +9,7 @@ import random
 from own_utils import chooseFaceFromCategory, activeTimerExists, canUseCommand, getDictStr, colorTextForDc, colorTextForDcRainbow
 from data_manage import save_json, load_json, load_txt, deep_save_json, deep_save_txt
 from constants import ME, BOT_ROLE
+from constants import DATE_FORMAT
 from pi_specific import getAll
 from debug import printLog, printLogToDc
 from data_manage import load_json
@@ -148,8 +149,10 @@ class Unorganized(commands.Cog):
                 botcommands=[
                     "`!rand X Y`: All sorts of randomly given stuff. (use `!rand` to learn more)",
                     "`!people_at_rank <rank> <radius> <online>`: Give you the names of people who have ranks around `<rank>`(±`<radius>` (if present)). If `<online>` is present and is set to `1`, will only search from people currently online. If `<rank>` is omited I will use your rank as base.",
-                    "`!remind @<person_to_be_reminded> <reminder text> <number of> <minute/hour/day later>`: I will send a message after the specified amount of time, to remind someone about something.",
-                    f"`!countdown <name of the cd or message> <date on which the cd expires in {tz}>`: "
+                    "`!remind @<person_to_be_reminded> <number of> <minute/hour/day later> <reminder text>`: I will send a message after the specified amount of time, to remind someone about something.",
+                    f"`!countdown <countdown name> | <date in {tz}(*)>`: I will send multiple reminder before the countdown expires.",
+                    '`!countdownRemainingTime <countdown name> | <time remaining(*)>`: I will send multiple reminder before the countdown expires but instead of a date you can define the time until the countdown finishes.'
+                    f"\n\n-# (*) The date/time format: {DATE_FORMAT}"
                 ]
             elif section=="moderation":
                 anyView=True
@@ -165,12 +168,15 @@ class Unorganized(commands.Cog):
                     "`!shh clear`: Use this in a reply to a user to clear their \"votes\". -# Moderators only!"
                 ]
             else:
+                anyView=True
                 await ctx.reply("No command 'folder' exist with that name.")
                 return
 
             if (senderID==ME or any(role.id == BOT_ROLE for role in ctx.author.roles)) or anyView:
                 if len(botcommands)!=0:
                     await ctx.reply('\n'.join(botcommands))
+            else:
+                await ctx.reply("You are not allowed to view these commands.")
 
     @commands.command()
     async def status(self,ctx):

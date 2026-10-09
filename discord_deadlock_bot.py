@@ -8,9 +8,10 @@ from dotenv import load_dotenv
 import time
 import random
 from datetime import datetime, timedelta
+import asyncio
 
 from data_manage import save_json, load_json, load_txt, deep_load_json, deep_load_txt
-from own_utils import chooseFaceFromCategory, canUseCommand, getShhValue, updateShh
+from own_utils import chooseFaceFromCategory, canUseCommand, getShhValue, updateShh, cleanChannel
 from debug import printLog, printLogToDc
 from constants import MESSAGE_CD, VOICE_CHANNEL_CAT_NAME_PREFIX, BOT_SECRET_NICKNAMES, GREET_CD
 from constants import WHO_AM_I_ROLES, COLOR_CHOOSER_MESSAGE_ID, IAM_MESSAGE_ID, IAM_MESSAGE_CONTENT, COLOR_CHOOSER_MESSAGE_CONTENT, COLORED_ROLES
@@ -76,6 +77,7 @@ def loadItemsProper(items:list[str])->list[DeadlockItem]:
 @bot.event
 async def on_ready():
     if bot.opSys: #skip these running on windows (this asumes we test on windows and run on linux (or other op sys))
+        asyncio.create_task(cleanChannel(bot,CHANNEL_IDS.BOT_DEBUG_CHANNEL,None))
         #send ME the hostname and ip of the raspberry so errors can be fixed
         import socket
         import getpass
@@ -466,7 +468,7 @@ bot.lastShhCheck=time.time()//1
 
 
 bot.bootTime=time.time()//1
-bot.version="0.12.7"
+bot.version="0.12.8"
 bot.versionSTR="The Shop is now available\nBuy items to participate in the next updates minigame(s)"
 
 

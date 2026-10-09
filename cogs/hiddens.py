@@ -5,7 +5,7 @@ import asyncio
 import time
 import random
 
-from own_utils import chooseFaceFromCategory, canUseCommand, format_duration
+from own_utils import chooseFaceFromCategory, canUseCommand, format_duration, cleanChannel
 from constants import CHANNEL_IDS
 from user_bot_interaction import interact, getInteractValue, getGlobalInteractValue
 from debug import printLogToDc, printLog
@@ -65,14 +65,15 @@ class Hiddens(commands.Cog):
             else:
                 if many==-1:
                     many=None
-                async for msg in self.bot.get_channel(CHANNEL_IDS.BOTS_CHANNEL_ID).history(limit=many):
+                await cleanChannel(self.bot,CHANNEL_IDS.BOTS_CHANNEL_ID,many)
+                """async for msg in self.bot.get_channel(CHANNEL_IDS.BOTS_CHANNEL_ID).history(limit=many):
                     try:
                         await msg.delete()
                     except discord.Forbidden:
                         printLog("error","I don't have permission to delete this messages.")
                         break
                     except discord.HTTPException:
-                        pass
+                        pass"""
 
 
     async def petFunc(self,ctx):
