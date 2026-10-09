@@ -39,7 +39,7 @@ def install_requirements():
     printLog("info","Installing requirements...")
     req_file = BASE / "requirements.txt"
     if req_file.exists():
-        subprocess.run([sys.executable, "-m", "pip", "install", "-r", str(req_file)],capture_output=True)
+        subprocess.run([sys.executable, "-m", "pip", "install", "-r", str(req_file)])
     printLog("info","Installed requirements!")
 
 def enable_ssh():
