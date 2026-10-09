@@ -469,7 +469,7 @@ bot.lastShhCheck=time.time()//1
 
 
 bot.bootTime=time.time()//1
-bot.version="0.12.10"
+bot.version="0.12.11"
 bot.versionSTR="The Shop is now available\nBuy items to participate in the next updates minigame(s)"
 
 
