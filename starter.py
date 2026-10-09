@@ -35,7 +35,7 @@ with open(BotPaths.update_check_file,"w") as f:
 pauseStart=4
 pauseEnd=12
 
-def install_requirements():
+"""def install_requirements():
     printLog("info","Installing requirements...")
     req_file = BASE / "requirements.txt"
     if req_file.exists():
@@ -44,7 +44,62 @@ def install_requirements():
     
     subprocess.run([sys.executable, "-c","from dateutil.relativedelta import relativedelta; print('Import successful!')"], check=True)
     print("Python executable:", sys.executable)
-    subprocess.run([sys.executable, "-m", "pip", "show", "python-dateutil"])
+    subprocess.run([sys.executable, "-m", "pip", "show", "python-dateutil"])"""
+
+
+def install_requirements():
+    printLog("info", "Installing requirements...")
+    req_file = BASE / "requirements.txt"
+
+    printLog("info", f"BASE: {BASE}")
+    printLog("info", f"Python executable: {sys.executable}")
+    printLog("info", f"Python version: {sys.version}")
+
+    if req_file.exists():
+        result = subprocess.run(
+            [
+                sys.executable, "-m", "pip",
+                "install", "-r", str(req_file)
+            ],
+            capture_output=True,
+            text=True
+        )
+        print(result.stdout)
+        print(result.stderr)
+
+        if result.returncode != 0:
+            raise RuntimeError("Requirements installation failed")
+
+    # Test the import using the exact same interpreter.
+    result = subprocess.run(
+        [
+            sys.executable, "-c",
+            (
+                "import sys, dateutil; "
+                "print('Python:', sys.executable); "
+                "print('dateutil location:', dateutil.__file__); "
+                "from dateutil.relativedelta import relativedelta; "
+                "print('Import successful!')"
+            )
+        ],
+        capture_output=True,
+        text=True
+    )
+
+    print("Import test stdout:", result.stdout)
+    print("Import test stderr:", result.stderr)
+    print("Import test return code:", result.returncode)
+
+    if result.returncode != 0:
+        raise RuntimeError("dateutil import test failed")
+
+    printLog("info", "Installed requirements!")
+
+
+
+
+
+
 
 def enable_ssh():
     subprocess.run(["sudo", "systemctl", "enable", "--now", "ssh"],check=True)
