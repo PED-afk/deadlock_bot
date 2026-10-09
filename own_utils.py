@@ -3,6 +3,7 @@ import random
 from discord.ext import commands
 from datetime import datetime, timedelta
 import time
+from dateutil.relativedelta import relativedelta
 
 from constants import ME, BOT_ROLE, MOD_ROLE
 from constants import DATE_FORMAT
@@ -243,7 +244,6 @@ def add_time_offset(amount: int, unit: str) -> str:
     return future.strftime(DATE_FORMAT)
 
 def add_duration_string(time_str: str) -> datetime:
-    from dateutil.relativedelta import relativedelta
     years, months, days = map(int, time_str.split()[0].split("."))
     hours, minutes, seconds = map(int, time_str.split()[1].split(":"))
     
