@@ -188,6 +188,7 @@ class Tools(commands.Cog):
                 cdDates=countdown_dates(inDate)
                 for key, date in cdDates.items():
                     add_auto_message(self.bot,name+"\n"+key,"main",2,"second",date)
+                save_json(BotPaths.autoMessage_file_gitignored,self.bot.autoMessages)
                 await ctx.reply("A countdown has been started.")
             
     @commands.command()
