@@ -197,9 +197,11 @@ class Tools(commands.Cog):
             if txt==None or "|" not in txt:
                 await ctx.reply(f'`!countdownRemainingTime <countdown name> | <time remaining*>`\n\n-# *Format: YYYY.MM.DD hh:mm:ss')
             else:
-                name, date=txt.rsplit("|",1)
-                cdDates=countdown_dates(add_duration_string(date).strftime(DATE_FORMAT))
-                printLog("infor",name+"\n"+date+"\n"+cdDates)
+                name, inDate=txt.rsplit("|",1)
+                name=name.strip()
+                inDate=inDate.strip()
+                cdDates=countdown_dates(add_duration_string(inDate).strftime(DATE_FORMAT))
+                printLog("info",name+"\n"+inDate+"\n"+cdDates)
                 for key, date in cdDates.items():
                     add_auto_message(self.bot,name+"\n"+key,"main",2,"second",date)
                 await ctx.reply("A countdown has been started.")
