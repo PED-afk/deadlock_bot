@@ -203,6 +203,7 @@ class Tools(commands.Cog):
                 cdDates=countdown_dates(add_duration_string(inDate).strftime(DATE_FORMAT))
                 for key, date in cdDates.items():
                     add_auto_message(self.bot,name+"\n"+key,"main",2,"second",date)
+                printLog("debug",self.bot.autoMessages)
                 await ctx.reply("A countdown has been started.")
 
     @commands.command()
