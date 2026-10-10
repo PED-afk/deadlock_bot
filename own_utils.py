@@ -284,6 +284,9 @@ def add_auto_message(bot:commands.Bot, message:str,where:str,difA:int,difMes:str
     mesDict["allowedDiference"]["measurement"]=difMes.removesuffix("s")
     mesDict["date"]=date
     bot.autoMessages[message]=mesDict
+    printLog("debug","Added auto message:")
+    printLog("debug",message)
+    printLog("debug",mesDict)
 
 
 async def cleanChannel(bot:commands.Bot, channelID:int,cleanRange:int):
