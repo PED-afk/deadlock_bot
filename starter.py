@@ -41,16 +41,6 @@ def install_requirements():
     if req_file.exists():
         subprocess.run([sys.executable, "-m", "pip", "install", "-r", str(req_file)])
     printLog("info","Installed requirements!")
-    
-    subprocess.run([sys.executable, "-c","from dateutil.relativedelta import relativedelta; print('Import successful!')"], check=True)
-    print("Python executable:", sys.executable)
-    subprocess.run([sys.executable, "-m", "pip", "show", "python-dateutil"])
-
-
-
-
-
-
 
 def enable_ssh():
     subprocess.run(["sudo", "systemctl", "enable", "--now", "ssh"],check=True)

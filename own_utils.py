@@ -274,8 +274,8 @@ def countdown_dates(target_date: str) -> dict[str, str]:
 
 def add_auto_message(bot:commands.Bot, message:str,where:str,difA:int,difMes:str,date:str):
     if difMes.removesuffix("s") not in ["hour","day","minute","second"]:
-        printLogToDc(bot,"error",f"Argument difMes is incorrect.\nExpected: ['hour','day','minute']\nWas given: {difMes}")
-        raise KeyError(f"Argument difMes is incorrect.\nExpected: ['hour','day','minute']\nWas given: {difMes}")
+        printLogToDc(bot,"error",f"Argument difMes is incorrect.\nExpected: ['hour','day','minute','second']\nWas given: {difMes}")
+        raise KeyError(f"Argument difMes is incorrect.\nExpected: ['hour','day','minute','second']\nWas given: {difMes}")
     mesDict={}
     mesDict["toWhere"]=where
     mesDict["done"]=False
