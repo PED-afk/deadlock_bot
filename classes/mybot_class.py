@@ -43,7 +43,13 @@ class MyBot(commands.Bot):
                 newItems.append(DeadlockItem(curItemParts[0],int(curItemParts[1]),curItemParts[2]))
             return newItems
         
-        
+        def opsysCheck():
+            import platform
+            try:
+                platform.freedesktop_os_release()
+            except:
+                return False
+            return True
         
         self.autoMessages=load_json(BotPaths.autoMessage_file)
         self.autoMessagesOld=load_json(BotPaths.autoMessage_file_gitignored)
@@ -67,7 +73,7 @@ class MyBot(commands.Bot):
 
 
         self.bootTime=time.time()//1
-        self.version="0.12.11"
+        self.version="0.12.12"
         self.versionSTR="The Shop is now available\nBuy items to participate in the next updates minigame(s)"
 
 
@@ -108,15 +114,5 @@ class MyBot(commands.Bot):
         self.map_graph=load_json(BotPaths.map_graph_file)
 
         self.ranks=load_json(BotPaths.ranks_file)
-
-
-
-        def opsysCheck():
-            import platform
-            try:
-                platform.freedesktop_os_release()
-            except:
-                return False
-            return True
 
         self.opSys=opsysCheck()
