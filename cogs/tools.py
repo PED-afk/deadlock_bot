@@ -201,7 +201,8 @@ class Tools(commands.Cog):
                 name=name.strip()
                 inDate=inDate.strip()
                 cdDates=countdown_dates(add_duration_string(inDate).strftime(DATE_FORMAT))
-                printLog("info",name+"\n"+inDate+"\n"+cdDates)
+                printLog("info",name+"\n"+inDate)
+                printLog("info",cdDates)
                 for key, date in cdDates.items():
                     add_auto_message(self.bot,name+"\n"+key,"main",2,"second",date)
                 await ctx.reply("A countdown has been started.")

@@ -139,11 +139,11 @@ while True:
                 else:
                     #runs on linux
                     printLog("info","Running on Linux")
-                    install_requirements()
                     with open(BotPaths.lookForUpdates,"r") as f:
                         tryUpdate=int(f.readline().strip())
                     if tryUpdate==1:
                         update()
+                    install_requirements()
 
                     #start ssh so can acces from other machines to fix errors
                     enable_ssh()
