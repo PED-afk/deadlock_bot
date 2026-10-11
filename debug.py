@@ -107,7 +107,7 @@ def printLog(type:str, content:any, colorAll:bool=False):
     print(Colors.DARK_GRAY+formatedCurTime()+" "+extra+f"[{type.upper()}]"+f"\t[{fromFunction.upper()}]"+(Colors.END if not colorAll else "")+f"  {content}"+(Colors.END if colorAll else ""),flush=True)
 
 
-async def printLogToDc(bot:commands.Bot,type:str, content:str, file:str=None):
+async def printLogToDc(bot:commands.Bot,type:str, content:str, file:str=None,fileName:str=None):
     """
 
         type can also be the function the print is from
@@ -130,8 +130,15 @@ async def printLogToDc(bot:commands.Bot,type:str, content:str, file:str=None):
     fromFunction = inspect.currentframe().f_back.f_code.co_name
     
     if file!=None:
-        sendFile=discord.File(file)
-        await bot.get_channel(CHANNEL_IDS.BOT_DEBUG_CHANNEL).send("```ansi\n"+colorTextForDc(f"[{type.upper()}]",extra,False)+colorTextForDc(f" [{fromFunction.upper()}]",Colors.BLUE,False)+f"  {content}"+"\n```",file=sendFile)
+        try:
+            sendFile=discord.File(file)
+            if fileName!=None:
+                await bot.get_channel(CHANNEL_IDS.BOT_DEBUG_CHANNEL).send("```ansi\n"+colorTextForDc(f"[{type.upper()}]",extra,False)+colorTextForDc(f" [{fromFunction.upper()}]",Colors.BLUE,False)+f"  {content}"+"\n```",file=sendFile,filename=fileName)
+            else:
+                await bot.get_channel(CHANNEL_IDS.BOT_DEBUG_CHANNEL).send("```ansi\n"+colorTextForDc(f"[{type.upper()}]",extra,False)+colorTextForDc(f" [{fromFunction.upper()}]",Colors.BLUE,False)+f"  {content}"+"\n```",file=sendFile)
+        except Exception as e:
+            printLog("error",e)
+            printLogToDc(bot,"error",e)
     else:
         await bot.get_channel(CHANNEL_IDS.BOT_DEBUG_CHANNEL).send("```ansi\n"+colorTextForDc(f"[{type.upper()}]",extra,False)+colorTextForDc(f" [{fromFunction.upper()}]",Colors.BLUE,False)+f"  {content}"+"\n```")
 

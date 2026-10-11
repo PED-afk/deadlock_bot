@@ -209,7 +209,7 @@ class Tools(commands.Cog):
     @commands.command()
     async def dumpAutoMes(self,ctx):
         if await canUseCommand(ctx,0):
-            await printLogToDc(self.bot,"debug","Dump",BotPaths.autoMessage_file_gitignored)
+            await printLogToDc(self.bot,"debug","Dump",BotPaths.autoMessage_file_gitignored,"Auto message dump")
    
 async def setup(bot):
     await bot.add_cog(Tools(bot))
