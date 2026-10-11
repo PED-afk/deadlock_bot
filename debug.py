@@ -132,8 +132,10 @@ async def printLogToDc(bot:commands.Bot,type:str, content:str, file:str=None,fil
     if file!=None:
         try:
             sendFile=discord.File(file)
+            oldFileName=sendFile.filename
+            oldFileExtention=oldFileName.split(".")[-1]
             if fileName!=None:
-                sendFile.filename=fileName
+                sendFile.filename=fileName+"."+oldFileExtention
             await bot.get_channel(CHANNEL_IDS.BOT_DEBUG_CHANNEL).send("```ansi\n"+colorTextForDc(f"[{type.upper()}]",extra,False)+colorTextForDc(f" [{fromFunction.upper()}]",Colors.BLUE,False)+f"  {content}"+"\n```",file=sendFile)
         except Exception as e:
             printLog("error",e)
