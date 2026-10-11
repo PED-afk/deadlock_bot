@@ -43,6 +43,15 @@ def install_requirements():
     printLog("info","Installed requirements!")
 
 def enable_ssh():
+    enabled=subprocess.run(["systemctl", "is-enabled", "ssh"],capture_output=True,text=True).stdout.strip()
+    active=subprocess.run(["systemctl", "is-active", "ssh"],capture_output=True,text=True).stdout.strip()
+
+    if enabled=="enabled" and active=="active":
+        printLog("info", "SSH is already enabled and running.")
+        with open(BotPaths.update_check_file, "a") as f:
+            f.write("\nSSH was already enabled and running.")
+        return
+
     subprocess.run(["sudo", "systemctl", "enable", "--now", "ssh"],check=True)
 
     result=subprocess.run(["systemctl", "is-active", "ssh"],capture_output=True,text=True)
