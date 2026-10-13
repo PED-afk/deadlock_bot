@@ -8,9 +8,10 @@ from dotenv import load_dotenv
 import time
 import random
 from datetime import datetime, timedelta
+import asyncio
 
 from data_manage import save_json, load_json, load_txt, deep_load_json, deep_load_txt
-from own_utils import chooseFaceFromCategory, canUseCommand, getShhValue, updateShh
+from own_utils import chooseFaceFromCategory, canUseCommand, getShhValue, updateShh, cleanChannel
 from debug import printLog, printLogToDc
 from constants import MESSAGE_CD, VOICE_CHANNEL_CAT_NAME_PREFIX, BOT_SECRET_NICKNAMES, GREET_CD
 from constants import WHO_AM_I_ROLES, COLOR_CHOOSER_MESSAGE_ID, IAM_MESSAGE_ID, IAM_MESSAGE_CONTENT, COLOR_CHOOSER_MESSAGE_CONTENT, COLORED_ROLES
@@ -24,6 +25,7 @@ from constants import ME
 
 from classes.item import DeadlockItem
 from classes.file_paths import BotPaths
+from classes.mybot_class import MyBot
 from user_bot_interaction import interact, getGlobalInteractValue, getInteractValue, wasGreeted, botGreets
 
 
@@ -39,83 +41,56 @@ intents.guilds = True
 
 intents.presences = True
 
-class MyBot(commands.Bot):
-    async def setup_hook(self):
-        await self.load_extension("cogs.hiddens")
-        await self.load_extension("cogs.timer")
-        await self.load_extension("cogs.power")
-        await self.load_extension("cogs.unorganized")
-        await self.load_extension("cogs.debug_cog")
-        await self.load_extension("cogs.moderator")
-        await self.load_extension("cogs.tools")
-        await self.load_extension("cogs.spok_cog")
-        await self.load_extension("cogs.thread_cog")
-        await self.load_extension("cogs.reactions_cog")
-        await self.load_extension("cogs.member_join_cog")
-        await self.load_extension("cogs.show_errors_cog")
-        await self.load_extension("cogs.games_cog")
-        #await self.load_extension("cogs.priority_cog")
-
 #bot=commands.Bot(command_prefix='!', intents=intents)
 #this does NOT work with cogs for some reason
 
 bot=MyBot(command_prefix='!', intents=intents)
 
-def loadItemsProper(items:list[str])->list[DeadlockItem]:
-    """
-    Creates and returns a list of DeadlockItem objects from a list of str
-    Str-s must have at least 3 arguments in them searated by ` `
-    """
-    newItems=[]
-    for curItem in items:
-        curItemParts=curItem.split(" ")
-        newItems.append(DeadlockItem(curItemParts[0],int(curItemParts[1]),curItemParts[2]))
-    return newItems
-
 
 @bot.event
 async def on_ready():
-    #send ME the hostname and ip of the raspberry so errors can be fixed
-    import socket
-    import getpass
-    hostname=socket.gethostname()
-    s=socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    s.connect(("8.8.8.8", 80))
-    ip=s.getsockname()[0]
-    s.close()
-    piUser=getpass.getuser()
-    #ip=socket.gethostbyname(hostname)
-    user=await bot.fetch_user(ME)
-    await user.send(f"hostname: {hostname}\nIP: {ip}\nPi user: {piUser}")
+    if bot.opSys: #skip these running on windows (this asumes we test on windows and run on linux (or other op sys))
+        asyncio.create_task(cleanChannel(bot,CHANNEL_IDS.BOT_DEBUG_CHANNEL,None))
+        #send ME the hostname and ip of the raspberry so errors can be fixed
+        import socket
+        import getpass
+        hostname=socket.gethostname()
+        s=socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))
+        ip=s.getsockname()[0]
+        s.close()
+        piUser=getpass.getuser()
+        user=await bot.fetch_user(ME)
+        await user.send(f"hostname: {hostname}\nIP: {ip}\nPi user: {piUser}")
 
-    #setup the bot name and profile picture
-    guild=bot.get_guild(FUNLOCK_SERVER_ID)
-    name=BOT_SERVER_SPEC_NAME[FUNLOCK_SERVER_ID]
-    if guild:
-        await guild.me.edit(nick=name)
+        #setup the bot name and profile picture
+        guild=bot.get_guild(FUNLOCK_SERVER_ID)
+        name=BOT_SERVER_SPEC_NAME[FUNLOCK_SERVER_ID]
+        if guild:
+            await guild.me.edit(nick=name)
 
-    pfp_files=list(BotPaths.pfp_folder.glob("*.jpg"))
-    if pfp_files:
-        pfp_path=random.choice(pfp_files)
-        printLog("info",f"Chosen pfp: {pfp_path}")
-        with pfp_path.open("rb") as f:
-            await bot.user.edit(avatar=f.read())
-        printLog("info",f"Changed PFP to {pfp_path.name}")
-        
-        #change name(role) color accordingly
-        botRole=guild.get_role(ROLES.BOT_ROLE_NOT_AUTO_CREATED)
-        if botRole is not None:
-            find=pfp_path.name.lower()
-            rgb=next((bot.characters[i]["color"] for i in bot.characters if i.lower().removeprefix("the ").split(" ")[0] in find),None)
-            if rgb is None:
-                printLog("error",f"Couldn't find color to match profile picture {pfp_path.name}.")
-                await printLogToDc(bot,"error",f"Couldn't find color to match profile picture {pfp_path.name}.")
-                rgb=[200,0,200]
-            color=discord.Color.from_rgb(*rgb)
-            await botRole.edit(color=color)
-            printLog("info","Changed role color.")
-    else:
-        printLog("error",f"No .jpg files found in {BotPaths.pfp_folder}")
+        pfp_files=list(BotPaths.pfp_folder.glob("*.jpg"))
+        if pfp_files:
+            pfp_path=random.choice(pfp_files)
+            printLog("info",f"Chosen pfp: {pfp_path}")
+            with pfp_path.open("rb") as f:
+                await bot.user.edit(avatar=f.read())
+            printLog("info",f"Changed PFP to {pfp_path.name}")
+            
+            #change name(role) color accordingly
+            botRole=guild.get_role(ROLES.BOT_ROLE_NOT_AUTO_CREATED)
+            if botRole is not None:
+                find=pfp_path.name.lower()
+                rgb=next((bot.characters[i]["color"] for i in bot.characters if i.lower().removeprefix("the ").split(" ")[0] in find),None)
+                if rgb is None:
+                    printLog("error",f"Couldn't find color to match profile picture {pfp_path.name}.")
+                    await printLogToDc(bot,"error",f"Couldn't find color to match profile picture {pfp_path.name}.")
+                    rgb=[200,0,200]
+                color=discord.Color.from_rgb(*rgb)
+                await botRole.edit(color=color)
+                printLog("info","Changed role color.")
+        else:
+            printLog("error",f"No .jpg files found in {BotPaths.pfp_folder}")
 
 
     printLog("info",f"Bot connected as {bot.user}")
@@ -131,6 +106,7 @@ async def on_ready():
             await bot.get_channel(CHANNEL_IDS.BOTS_CHANNEL_ID).send("I'm awake!\nGood morning!\n"+face)
         else:
             await bot.get_channel(CHANNEL_IDS.BOTS_CHANNEL_ID).send("Back online! "+face)
+
 
     #print debug about updates
     #something is broken here
@@ -390,6 +366,7 @@ async def tick():
                 latest_time=target_time+difference
 
                 if target_time<=now:
+                    await printLogToDc(bot,"info","Sending auto message.")
                     bot.autoMessages[key]["done"]=True
                     if now<=latest_time:
                         await channel.send(key)
@@ -442,70 +419,6 @@ async def tick():
                 bot.timers[name]["time"]=None
 
 
-
-bot.autoMessages=load_json(BotPaths.autoMessage_file)
-bot.autoMessagesOld=load_json(BotPaths.autoMessage_file_gitignored)
-
-bot.autoMessagesOld.update(bot.autoMessages)
-save_json(BotPaths.autoMessage_file_gitignored,bot.autoMessagesOld)
-bot.autoMessages=bot.autoMessagesOld
-del bot.autoMessagesOld
-for key, value in bot.autoMessages.items():
-    if key=="delAll":
-        bot.autoMessages={}
-        save_json(BotPaths.autoMessage_file_gitignored,bot.autoMessages)
-        break
-
-
-bot.startTimers={"A":11*60,"B":11*60}
-bot.timers={"A":{"time":None,"paused":False},"B":{"time":None,"paused":False}}
-
-bot.shhMod={}
-bot.lastShhCheck=time.time()//1
-
-
-bot.bootTime=time.time()//1
-bot.version="0.12.6"
-bot.versionSTR="The Shop is now available\nBuy items to participate in the next updates minigame(s)"
-
-
-
-bot.messageCD=MESSAGE_CD
-bot.greetCD=GREET_CD
-bot.degenTimer=int(float(deep_load_txt(BotPaths.degen_timer_file)))
-
-bot.user_data=deep_load_json(BotPaths.user_data_file)
-idSTR="global"
-if idSTR not in bot.user_data.keys():
-    bot.user_data[idSTR]={}
-    bot.user_data[idSTR]["main"]="None"
-    bot.user_data[idSTR]["steamID"]="None"
-    bot.user_data[idSTR]["steamID3"]="None"
-    bot.user_data[idSTR]["steamID64"]="None"
-    bot.user_data[idSTR]["rank"]="None"
-    bot.user_data[idSTR]["lvl"]=1
-    bot.user_data[idSTR]["XP"]=0
-    bot.user_data[idSTR]["wins"]=0
-if "money" not in bot.user_data[idSTR].keys():
-    bot.user_data[idSTR]["money"]={}
-    bot.user_data[idSTR]["money"]["unsecured"]=0
-    bot.user_data[idSTR]["money"]["secured"]=0
-if "items" not in bot.user_data[idSTR].keys():
-    bot.user_data[idSTR]["items"]=[]
-if "hidden" not in bot.user_data[idSTR].keys():
-    bot.user_data[idSTR]["hidden"]={}
-    bot.user_data[idSTR]["hidden"]["messageCD"]=0
-    bot.user_data[idSTR]["hidden"]["greetMessageCD"]=0
-if "interact" not in bot.user_data[idSTR]["hidden"].keys():
-    bot.user_data[idSTR]["hidden"]["interact"]={}
-
-bot.characters=load_json(BotPaths.characters_file_json)
-bot.maxLevel=bot.characters[list(bot.characters.keys())[0]]["maxLvl"]
-
-bot.items=loadItemsProper(load_txt(BotPaths.items_file))
-bot.map_graph=load_json(BotPaths.map_graph_file)
-
-bot.ranks=load_json(BotPaths.ranks_file)
 
 load_dotenv()
 bot.run(os.getenv("DISCORD_TOKEN"))

@@ -36,11 +36,22 @@ pauseStart=4
 pauseEnd=12
 
 def install_requirements():
+    printLog("info","Installing requirements...")
     req_file = BASE / "requirements.txt"
     if req_file.exists():
         subprocess.run([sys.executable, "-m", "pip", "install", "-r", str(req_file)],capture_output=True)
+    printLog("info","Installed requirements!")
 
 def enable_ssh():
+    enabled=subprocess.run(["systemctl", "is-enabled", "ssh"],capture_output=True,text=True).stdout.strip()
+    active=subprocess.run(["systemctl", "is-active", "ssh"],capture_output=True,text=True).stdout.strip()
+
+    if enabled=="enabled" and active=="active":
+        printLog("info", "SSH is already enabled and running.")
+        with open(BotPaths.update_check_file, "a") as f:
+            f.write("\nSSH was already enabled and running.")
+        return
+
     subprocess.run(["sudo", "systemctl", "enable", "--now", "ssh"],check=True)
 
     result=subprocess.run(["systemctl", "is-active", "ssh"],capture_output=True,text=True)
@@ -136,6 +147,7 @@ while True:
                     process = subprocess.Popen([sys.executable, bot_file],stderr=subprocess.PIPE,text=True)
                 else:
                     #runs on linux
+                    printLog("info","Running on Linux")
                     with open(BotPaths.lookForUpdates,"r") as f:
                         tryUpdate=int(f.readline().strip())
                     if tryUpdate==1:
@@ -145,7 +157,7 @@ while True:
                     #start ssh so can acces from other machines to fix errors
                     enable_ssh()
 
-                    process = subprocess.Popen(["python3", bot_file],stderr=subprocess.PIPE,text=True)
+                    process = subprocess.Popen([sys.executable, bot_file],stderr=subprocess.PIPE,text=True)
 
 
                 stdout, stderr = process.communicate()
