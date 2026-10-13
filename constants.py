@@ -228,7 +228,7 @@ RULES_MESSAGE_ID=1554150097887957173
 
 
 PRIVATE_MESSAGE_CONTENT=(
-    "###Hello friend! Welcome to the Funlock server!"
+    "### Hello friend! Welcome to the Funlock server!"
     "\n\tI am the server's dedicated bot!"
     "\n"
     "\n## What you should do:"
