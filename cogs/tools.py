@@ -187,10 +187,23 @@ class Tools(commands.Cog):
                 inDate=inDate.strip()
                 cdDates=countdown_dates(inDate)
                 for key, date in cdDates.items():
-                    add_auto_message(self.bot,name+"\n"+key,"main",2,"second",date)
+                    putS=""
+                    if key.startswith("1 "):
+                        putS="s"
+                    if "second" in key:
+                        add_auto_message(self.bot,name+"\n"+key+f" remain{putS}!!!","main",2,"second",date)
+                    elif "minutes" in key or "hour" in key:
+                        add_auto_message(self.bot,name+"\n"+key+f" remain{putS}...","main",2,"second",date)
+                    elif key=="NOW":
+                        add_auto_message(self.bot,name.removesuffix("soon...")+"\n"+key+f"!!!","main",2,"second",date)
+                    else:
+                        add_auto_message(self.bot,name+"\n"+key+f" remain{putS}.","main",2,"second",date)
                 save_json(BotPaths.autoMessage_file_gitignored,self.bot.autoMessages)
                 await ctx.reply("A countdown has been started.")
-            
+
+#duplicate code in these 2
+#figure it out later
+
     @commands.command()
     async def countdownRemainingTime(self, ctx, *, txt:str=None):
         if await canUseCommand(ctx):
@@ -202,7 +215,17 @@ class Tools(commands.Cog):
                 inDate=inDate.strip()
                 cdDates=countdown_dates(add_duration_string(inDate).strftime(DATE_FORMAT))
                 for key, date in cdDates.items():
-                    add_auto_message(self.bot,name+"\n"+key,"main",2,"second",date)
+                    putS=""
+                    if key.startswith("1 "):
+                        putS="s"
+                    if "second" in key:
+                        add_auto_message(self.bot,name+"\n"+key+f" remain{putS}!!!","main",2,"second",date)
+                    elif "minutes" in key or "hour" in key:
+                        add_auto_message(self.bot,name+"\n"+key+f" remain{putS}...","main",2,"second",date)
+                    elif key=="NOW":
+                        add_auto_message(self.bot,name.removesuffix("soon...")+"\n"+key+f"!!!","main",2,"second",date)
+                    else:
+                        add_auto_message(self.bot,name+"\n"+key+f" remain{putS}.","main",2,"second",date)
                 save_json(BotPaths.autoMessage_file_gitignored,self.bot.autoMessages)
                 await ctx.reply("A countdown has been started.")
 

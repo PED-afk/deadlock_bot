@@ -261,13 +261,15 @@ def add_duration_string(time_str: str) -> datetime:
 def countdown_dates(target_date: str) -> dict[str, str]:
     target=datetime.strptime(target_date, DATE_FORMAT)
     offsets={
-        "5sec": timedelta(seconds=5),
-        "10sec": timedelta(seconds=10),
-        "30sec": timedelta(seconds=30),
-        "1min": timedelta(minutes=1),
-        "5min": timedelta(minutes=5),
-        "10min": timedelta(minutes=10),
-        "1hour": timedelta(hours=1),
+        "NOW": timedelta(seconds=0),
+        "5 seconds": timedelta(seconds=5),
+        "10 seconds": timedelta(seconds=10),
+        "30 seconds": timedelta(seconds=30),
+        "1 minute": timedelta(minutes=1),
+        "5 minutes": timedelta(minutes=5),
+        "10 minutes": timedelta(minutes=10),
+        "30 minutes": timedelta(minutes=30),
+        "1 hour": timedelta(hours=1),
     }
     return {name: (target - offset).strftime(DATE_FORMAT) for name, offset in offsets.items()}
 
