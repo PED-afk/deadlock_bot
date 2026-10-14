@@ -195,7 +195,7 @@ async def getDictStr(d: dict, hideSome:bool=False, hideThese:dict={"hidden":"nor
             inData+="\t"*indent+str(innerKey)+":\n"
             inData+="\t"*indent+await getDictStr(innerData, hideSome, hideThese, format, indent+1)
         else:
-            inData+="\t"*indent+str(innerKey)+":\n"
+            inData+="\t"*indent+str(innerKey)+": "
             inData+="\t"*(indent+1)+str(innerData)+"\n"
     return inData
 
