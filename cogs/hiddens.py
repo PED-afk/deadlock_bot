@@ -49,8 +49,7 @@ class Hiddens(commands.Cog):
                 vc.stop()
 
             finished=asyncio.Event()
-            #source=discord.PCMAudio(open(path,"rb"))
-            source = discord.FFmpegOpusAudio(path,before_options="-f s16le -ar 48000 -ac 2")
+            source=discord.FFmpegPCMAudio(path)
             vc.play(source, after=after_playing)
 
             printLog("debug", f"Started playback: {path}")
@@ -100,6 +99,10 @@ class Hiddens(commands.Cog):
     async def cogTest(self,ctx):
         if await canUseCommand(ctx):
             await ctx.reply("cog works")
+
+    @commands.command()
+    async def testaudio(self,ctx):
+        await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.TEST))
 
     @commands.command()
     async def silly(self,ctx):
