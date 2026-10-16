@@ -19,6 +19,7 @@ class Hiddens(commands.Cog):
     def __init__(self,bot):
         self.bot=bot
 
+    """
     async def play_sound(self,ctx,path:str):
         if await canUseCommand(ctx,2):
             finished = asyncio.Event()
@@ -48,7 +49,6 @@ class Hiddens(commands.Cog):
             if vc.is_playing():
                 vc.stop()
 
-            finished=asyncio.Event()
             source=discord.FFmpegPCMAudio(path)
             vc.play(source, after=after_playing)
 
@@ -59,6 +59,57 @@ class Hiddens(commands.Cog):
             finally:
                 if not was_in and vc.is_connected():
                     await vc.disconnect()
+    """
+    async def play_sound(self, ctx, path: str):
+        if not await canUseCommand(ctx, 2):
+            return
+
+        if ctx.author.voice is None or ctx.author.voice.channel is None:
+            await ctx.send("You must be in a voice channel.")
+            return
+
+        channel=ctx.author.voice.channel
+        vc=ctx.voice_client
+        was_connected=vc is not None
+
+        if vc is None:
+            vc=await channel.connect()
+        elif vc.channel!=channel:
+            await vc.move_to(channel)
+
+        # Stop any previous playback before creating the new source.
+        if vc.is_playing() or vc.is_paused():
+            vc.stop()
+
+        loop=asyncio.get_running_loop()
+        finished=asyncio.Event()
+        start_time=time.monotonic()
+
+        def after_playing(error):
+            elapsed=time.monotonic()-start_time
+            if error:
+                printLog("error",f"Playback error after {elapsed:.2f}s: {error!r}")
+            else:
+                printLog("debug",f"Playback finished after {elapsed:.2f}s")
+            loop.call_soon_threadsafe(finished.set)
+
+        source=None
+
+        try:
+            source=discord.FFmpegPCMAudio(path,before_options="-nostdin",options="-loglevel warning",)
+            vc.play(source, after=after_playing)
+            printLog("debug", f"Started playback: {path}")
+            await finished.wait()
+        except Exception as e:
+            printLog("error",f"Could not play {path}: {e!r}")
+            raise
+
+        finally:
+            if source is not None:
+                source.cleanup()
+
+            if not was_connected and vc.is_connected():
+                await vc.disconnect()
 
 
 
