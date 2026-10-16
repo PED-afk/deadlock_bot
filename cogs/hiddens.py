@@ -50,13 +50,7 @@ class Hiddens(commands.Cog):
 
             finished=asyncio.Event()
             #source=discord.PCMAudio(open(path,"rb"))
-            #vc.play(source, after=after_playing)
-
-            source = discord.FFmpegPCMAudio(
-                path,
-                before_options="-f s16le -ar 48000 -ac 2",
-                options="-ar 48000 -ac 2"
-            )
+            source = discord.FFmpegOpusAudio(path,before_options="-f s16le -ar 48000 -ac 2")
             vc.play(source, after=after_playing)
 
             printLog("debug", f"Started playback: {path}")
