@@ -78,7 +78,7 @@ class MyBot(commands.Bot):
 
 
         self.bootTime=time.time()//1
-        self.version="0.12.13"
+        self.version="0.12.14"
         self.versionSTR="The Shop is now available\nBuy items to participate in the next updates minigame(s)"
 
 
