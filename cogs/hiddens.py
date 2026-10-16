@@ -112,6 +112,38 @@ class Hiddens(commands.Cog):
                 await vc.disconnect()
 
 
+    @commands.command()
+    async def audiodebug(self, ctx):
+        if ctx.author.voice is None:
+            return await ctx.reply("Join a voice channel first.")
+
+        vc = ctx.voice_client
+        if vc is None:
+            vc = await ctx.author.voice.channel.connect()
+
+        if vc.is_playing():
+            vc.stop()
+
+        path = str(BotPaths.sounds_folder / BotPaths.vcSounds.PORTAL)
+
+        source = discord.FFmpegPCMAudio(
+            path,
+            options="-loglevel warning"
+        )
+
+        def after(error):
+            print(f"AUDIO DEBUG: finished; error={error!r}")
+
+        vc.play(source, after=after)
+
+        for i in range(30):
+            await asyncio.sleep(1)
+            print(
+                f"t={i+1}s",
+                f"playing={vc.is_playing()}",
+                f"connected={vc.is_connected()}",
+                f"latency={vc.latency:.3f}"
+            )
 
 
     @commands.command()
