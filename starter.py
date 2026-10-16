@@ -4,12 +4,21 @@ import time
 import os
 from datetime import datetime
 from zoneinfo import ZoneInfo
-from pathlib import Path
 import platform
 import shutil
 
+from pathlib import Path
+
+import importlib.util
+
 from debug import setupFolders, writeLog, printLog, clean, readback
 from classes.file_paths import BotPaths
+from constants import SECOND_BASE
+
+spec = importlib.util.spec_from_file_location("second", SECOND_BASE / "second_main.py")
+module = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(module)
+print(module.test())
 
 setupFolders()
 
@@ -86,6 +95,29 @@ def update():
 
     except Exception as e:
         printLog("warning",f"Git pull error: {e}\nTrying USB method.")
+        with open(BotPaths.update_check_file,"a") as f:
+            f.write("\n")
+            f.write(e)
+
+    #leave this here
+    try:
+        from dotenv import load_dotenv
+        load_dotenv()
+        result = subprocess.run(["git", "-C", SECOND_BASE,"pull"],cwd=Path(__file__).resolve().parent,capture_output=True, text=True, timeout=30)
+        if result.returncode == 0:
+            printLog("log",f"2nd git pull successful: {result.stdout.strip()}")
+            with open(BotPaths.update_check_file,"a") as f:
+                f.write("\n")
+                f.write("An update was found and applied from github. (2)")
+            return
+        else:
+            printLog("warning",f"Git pull failed: {result.stderr.strip()} (2)")
+            with open(BotPaths.update_check_file,"a") as f:
+                f.write("\n")
+                f.write(result.stderr.strip())
+
+    except Exception as e:
+        printLog("warning",f"Git pull error: {e} (2)")
         with open(BotPaths.update_check_file,"a") as f:
             f.write("\n")
             f.write(e)

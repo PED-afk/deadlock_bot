@@ -7,3 +7,4 @@ aiosqlite
 platformdirs
 pathlib
 python-dateutil
+davey

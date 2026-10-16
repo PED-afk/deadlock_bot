@@ -5,14 +5,17 @@ from discord.ext import commands, tasks
 from discord.ext.commands.bot import _default
 
 import time
+import sys
+from pathlib import Path
 
 from classes.file_paths import BotPaths
 from classes.item import DeadlockItem
 from data_manage import load_json, save_json, deep_load_txt, deep_load_json, load_txt
-from constants import GREET_CD, MESSAGE_CD
+from constants import GREET_CD, MESSAGE_CD, SECOND_BASE
 
 
 class MyBot(commands.Bot):
+    sys.path.insert(0, str(SECOND_BASE))
     async def setup_hook(self):
         await self.load_extension("cogs.hiddens")
         await self.load_extension("cogs.timer")
@@ -28,6 +31,8 @@ class MyBot(commands.Bot):
         await self.load_extension("cogs.show_errors_cog")
         await self.load_extension("cogs.games_cog")
         #await self.load_extension("cogs.priority_cog")
+
+        await self.load_extension("external_cogs.debug_cog")
     
     def __init__(self, command_prefix, intents):
         super().__init__(command_prefix, intents=intents)
