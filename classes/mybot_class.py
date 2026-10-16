@@ -70,7 +70,7 @@ class MyBot(commands.Bot):
                 break
 
 
-        self.startTimers={"A":11*60,"B":11*60}
+        self.startTimers={"A":9*60,"B":9*60}
         self.timers={"A":{"time":None,"paused":False},"B":{"time":None,"paused":False}}
 
         self.shhMod={}

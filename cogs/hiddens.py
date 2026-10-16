@@ -21,9 +21,14 @@ class Hiddens(commands.Cog):
 
     async def play_sound(self,ctx,path:str):
         if await canUseCommand(ctx,2):
+            finished = asyncio.Event()
+            start_time = time.monotonic()
             def after_playing(error):
                 if error:
                     printLog("error",f"Playback error: {error}")
+                elapsed = time.monotonic() - start_time
+
+                printLog("error" if error else "debug",f"Audio callback after {elapsed:.2f}s; error={error!r}")
                 self.bot.loop.call_soon_threadsafe(finished.set)
                 
             if ctx.author.voice is None or ctx.author.voice.channel is None:
@@ -46,6 +51,7 @@ class Hiddens(commands.Cog):
             finished=asyncio.Event()
             source=discord.PCMAudio(open(path,"rb"))
             vc.play(source, after=after_playing)
+            printLog("debug", f"Started playback: {path}")
 
             try:
                 await finished.wait()
@@ -66,14 +72,6 @@ class Hiddens(commands.Cog):
                 if many==-1:
                     many=None
                 await cleanChannel(self.bot,CHANNEL_IDS.BOTS_CHANNEL_ID,many)
-                """async for msg in self.bot.get_channel(CHANNEL_IDS.BOTS_CHANNEL_ID).history(limit=many):
-                    try:
-                        await msg.delete()
-                    except discord.Forbidden:
-                        printLog("error","I don't have permission to delete this messages.")
-                        break
-                    except discord.HTTPException:
-                        pass"""
 
 
     async def petFunc(self,ctx):
@@ -103,36 +101,36 @@ class Hiddens(commands.Cog):
 
     @commands.command()
     async def silly(self,ctx):
-        await self.play_sound(ctx,str(BotPaths.sounds_folder / "voicechat" / "silly(128k).pcm"))
+        await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.SILLY))
 
     @commands.command()
     async def sillyer(self,ctx):
-        await self.play_sound(ctx,str(BotPaths.sounds_folder / "voicechat" / "sillyer(128k).pcm"))
+        await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.SILLYER))
 
     @commands.command()
     async def fish(self,ctx):
-        await self.play_sound(ctx,str(BotPaths.sounds_folder / "voicechat" / "FIH(128k).pcm"))
+        await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.FIH))
 
     @commands.command()
     async def FISH(self,ctx):
-        await self.play_sound(ctx,str(BotPaths.sounds_folder / "voicechat" / "FISH.pcm"))
+        await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.FISH))
 
     @commands.command()
     async def portal(self,ctx):
-        await self.play_sound(ctx,str(BotPaths.sounds_folder / "voicechat" / "portal.pcm"))
+        await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.PORTAL))
 
     @commands.command()
     async def dc_ping(self,ctx):
         await ctx.message.delete()
         for i in range(random.randint(1,5)):
-            await self.play_sound(ctx,str(BotPaths.sounds_folder / "voicechat" / "dc_ping.pcm"))
+            await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.PING))
             await asyncio.sleep(round(random.uniform(0.1,1),2))
 
     @commands.command()
     async def dc_ping_long(self,ctx):
         await ctx.message.delete()
         for i in range(random.randint(3,5)):
-            await self.play_sound(ctx,str(BotPaths.sounds_folder / "voicechat" / "dc_ping.pcm"))
+            await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.PING))
             await asyncio.sleep(round(random.uniform(10,2*60),2))
 
 

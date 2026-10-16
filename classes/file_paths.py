@@ -23,6 +23,13 @@ class BotPaths():
     ranks_file=BASE / "ranks.json"
 
     sounds_folder=BASE / "sounds"
+    class vcSounds():
+        SILLY="voicechat" / "silly(128k).pcm"
+        SILLYER="voicechat" / "sillyer(128k).pcm"
+        FIH="voicechat" / "FIH(128k).pcm"
+        FISH="voicechat" / "FISH.pcm"
+        PORTAL="voicechat" / "portal.pcm"
+        PING="voicechat" / "dc_ping.pcm"
 
     pfp_folder=BASE / "images" / "pfp"
 
