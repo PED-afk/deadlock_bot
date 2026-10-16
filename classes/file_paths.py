@@ -25,12 +25,12 @@ class BotPaths():
 
     sounds_folder=BASE / "sounds"
     class vcSounds():
-        SILLY=Path("voicechat" / "silly(128k).pcm")
-        SILLYER=Path("voicechat" / "sillyer(128k).pcm")
-        FIH=Path("voicechat" / "FIH(128k).pcm")
-        FISH=Path("voicechat" / "FISH.pcm")
-        PORTAL=Path("voicechat" / "portal.pcm")
-        PING=Path("voicechat" / "dc_ping.pcm")
+        SILLY=Path("voicechat") / "silly(128k).pcm"
+        SILLYER=Path("voicechat") / "sillyer(128k).pcm"
+        FIH=Path("voicechat") / "FIH(128k).pcm"
+        FISH=Path("voicechat") / "FISH.pcm"
+        PORTAL=Path("voicechat") / "portal.pcm"
+        PING=Path("voicechat") / "dc_ping.pcm"
 
     pfp_folder=BASE / "images" / "pfp"
 
