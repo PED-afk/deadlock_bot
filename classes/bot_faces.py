@@ -28,7 +28,9 @@ class Faces():
     he="he?"
     excited="excited"
     wink="wink"
+    disgust="disgust"
 
     class FaceBigCategory:
         happies=["love","blush_happy","pat","spark","excited"]
         eye_only=["small_eyes","big_eyes"]
+        clever=["disgust","sad"]

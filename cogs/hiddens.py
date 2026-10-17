@@ -10,6 +10,8 @@ from constants import CHANNEL_IDS
 from user_bot_interaction import interact, getInteractValue, getGlobalInteractValue
 from debug import printLogToDc, printLog
 from classes.file_paths import BotPaths
+from constants import USER_CLEVER, FUNLOCK_SERVER_ID
+from classes.bot_faces import Faces
 
 #"hidden" commands (they are not listed in bot_help; KEEP IT THIS WAY)
 #"a secret for everyone"
@@ -189,9 +191,17 @@ class Hiddens(commands.Cog):
 
 
     @commands.command()
-    async def reset_the_timer(self,ctx):
-        await ctx.reply(f"The Degenerate Timer has been reset.\nTime before reset: {format_duration(time.time()-self.bot.degenTimer)}")
+    async def reset_the_timer(self,ctx, mention=None):
+        guild=self.bot.get_guild(FUNLOCK_SERVER_ID)
+        clever=guild.get_member(USER_CLEVER)
+        extra=""
+        if clever and clever.voice and clever.voice.channel:
+            extra="\n<@534796790105505794> was here. "+chooseFaceFromCategory(Faces.FaceBigCategory.clever)
+        if mention==None:
+            extra+="\n\n-# mention a user in the command to add a point to the leaderboard "+chooseFaceFromCategory(Faces.nervous+" (not done yet)")
+        await ctx.reply(f"The Degenerate Timer has been reset.\nTime before reset: {format_duration(time.time()-self.bot.degenTimer)}"+extra)
         self.bot.degenTimer=time.time()
+    
     @commands.command()
     async def the_timer(self,ctx):
         await ctx.reply(f"The Degenerate Timer's time: {format_duration(time.time()-self.bot.degenTimer)}")
