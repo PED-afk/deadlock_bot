@@ -195,7 +195,7 @@ class Tools(commands.Cog):
                     elif "minutes" in key or "hour" in key:
                         add_auto_message(self.bot,name+"\n"+key+f" remain{putS}...","main",2,"second",date)
                     elif key=="NOW":
-                        add_auto_message(self.bot,name.removesuffix("soon...").removesuffix("soon")+"\n"+key+f"!!!","main",2,"second",date)
+                        add_auto_message(self.bot,name.removesuffix("soon:").removesuffix("soon...").removesuffix("soon")+"\n"+key+f"!!!","main",2,"second",date)
                     else:
                         add_auto_message(self.bot,name+"\n"+key+f" remain{putS}.","main",2,"second",date)
                 save_json(BotPaths.autoMessage_file_gitignored,self.bot.autoMessages)
