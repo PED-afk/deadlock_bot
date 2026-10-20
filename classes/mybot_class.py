@@ -32,7 +32,7 @@ class MyBot(commands.Bot):
         await self.load_extension("cogs.games_cog")
         #await self.load_extension("cogs.priority_cog")
 
-        #await self.load_extension("external_cogs.debug_cog")
+        await self.load_extension("external_cogs.debug_cog")
     
     def __init__(self, command_prefix, intents):
         super().__init__(command_prefix, intents=intents)

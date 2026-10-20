@@ -62,6 +62,7 @@ class Hiddens(commands.Cog):
                 if not was_in and vc.is_connected():
                     await vc.disconnect()
     """
+    
     async def play_sound(self, ctx, path: str):
         if not await canUseCommand(ctx, 2):
             return
