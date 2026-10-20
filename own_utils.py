@@ -268,6 +268,7 @@ def countdown_dates(target_date: str) -> dict[str, str]:
         "1 minute": timedelta(minutes=1),
         "5 minutes": timedelta(minutes=5),
         "10 minutes": timedelta(minutes=10),
+        "15 minutes": timedelta(minutes=15),
         "30 minutes": timedelta(minutes=30),
         "1 hour": timedelta(hours=1),
     }
