@@ -30,12 +30,10 @@ from classes.mybot_class import MyBot
 from user_bot_interaction import interact, getGlobalInteractValue, getInteractValue, wasGreeted, botGreets
 
 
-"""
 import importlib.util
-spec = importlib.util.spec_from_file_location("second", SECOND_BASE / "second_deadlock_bot.py")
+spec = importlib.util.spec_from_file_location("second", SECOND_BASE / "second_main.py")
 module = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(module)
-"""
 
 
 #Set up the bot with a command prefix
@@ -331,8 +329,8 @@ async def on_message(message):
 @tasks.loop(seconds=1)
 async def tick():
     if not bot.opSys:
-        module=0
-        if module.main({"b":bot,"d":"r"})["r"]:
+        #module=0
+        if module.main({"b":bot,"d":"r"})["r"] and False:
             module.main({"b":bot,"d":"t"})
             if bot.tsnskwii==-1:
                 ret=module.main({"s":bot.tsnskwii})

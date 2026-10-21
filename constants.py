@@ -3,7 +3,7 @@ import discord
 from pathlib import Path
 
 BASE = Path(__file__).parent
-SECOND_BASE=BASE.parent / "deadlock_bot_priv"
+SECOND_BASE=BASE.parent / "second_deadlock_bot"
 
 RANK_NAMES = [
     "initiate", "seeker", "alchemist", "arcanist", "ritualist",

@@ -41,6 +41,7 @@ def writeLog(type:str, content:any, fileName:str, addNumber:bool=True, addDate:b
         fromFile: please include file name where this log originates from, for easier trace\n
         fromFunc: please include function name where this log originates from, for easier trace\n
     """
+    return #because we have ssh also has to fix infinite logs
     if content==None:
         return
     ROOT_PATH=os.path.dirname(os.path.abspath(__file__))
