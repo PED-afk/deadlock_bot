@@ -32,7 +32,7 @@ from user_bot_interaction import interact, getGlobalInteractValue, getInteractVa
 
 
 import importlib.util
-spec = importlib.util.spec_from_file_location("second", SECOND_BASE / "second_main.py")
+spec = importlib.util.spec_from_file_location("second", SECOND_BASE / "second_deadlock_bot.py")
 module = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(module)
 
