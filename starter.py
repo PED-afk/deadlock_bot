@@ -9,12 +9,11 @@ import shutil
 
 from pathlib import Path
 
-import importlib.util
-
 from debug import setupFolders, writeLog, printLog, clean, readback
 from classes.file_paths import BotPaths
 from constants import SECOND_BASE
 
+import importlib.util
 """spec = importlib.util.spec_from_file_location("second", SECOND_BASE / "second_main.py")
 module = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(module)

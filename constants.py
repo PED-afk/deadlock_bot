@@ -3,7 +3,7 @@ import discord
 from pathlib import Path
 
 BASE = Path(__file__).parent
-SECOND_BASE=BASE.parent / "second_deadlock_bot"
+SECOND_BASE=BASE.parent / "deadlock_bot_priv"
 
 RANK_NAMES = [
     "initiate", "seeker", "alchemist", "arcanist", "ritualist",
@@ -76,6 +76,10 @@ class CHANNEL_IDS():
     PROJECT_SHARE=1523560126806622298
     SUGGESTIONS_CHANNEL_ID=1544060319263883324
     STAT_TRACKER_CHANNEL_ID=1515053044813791282
+    
+    class VC():
+        GENERAL=1510049700416327754
+        TEST=1562412044144349194
 
 APP_NAME="FUNLOCK_BOT"
 
@@ -90,6 +94,9 @@ FUNLOCK_SERVER_ID=1510049699695165471
 
 #bot owner
 ME=616710497378631709
+
+#bot id
+BOT_ID=1322673965633638511
 
 #can use funlock bot role id
 BOT_ROLE=1516075439347470437

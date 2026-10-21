@@ -8,6 +8,7 @@ from dateutil.relativedelta import relativedelta
 from constants import ME, BOT_ROLE, MOD_ROLE
 from constants import DATE_FORMAT
 from constants import CHANNEL_IDS
+from constants import BOT_ID
 from debug import printLog, printLogToDc
 from classes.bot_faces import Faces
 from classes.dc_colors import Colors
@@ -105,6 +106,11 @@ async def canUseCommand(ctx:commands.Context, mode:int=3, inChannel:bool=True, i
         if tellReason:
             await ctx.reply("You must be in a voice channel to use this command.")
         return False
+
+    if mode==-1 and ctx.author.id!=BOT_ID:
+            if tellReason:
+                await ctx.reply("You are not me.")
+            return False
     
     if mode==0 and ctx.author.id!=ME:
         if tellReason:

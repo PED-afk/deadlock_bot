@@ -10,7 +10,7 @@ import random
 from datetime import datetime, timedelta
 import asyncio
 
-from data_manage import save_json, load_json, load_txt, deep_load_json, deep_load_txt
+from data_manage import save_json, load_json, load_txt, deep_load_json, deep_load_txt, deep_save_txt
 from own_utils import chooseFaceFromCategory, canUseCommand, getShhValue, updateShh, cleanChannel
 from debug import printLog, printLogToDc
 from constants import MESSAGE_CD, VOICE_CHANNEL_CAT_NAME_PREFIX, BOT_SECRET_NICKNAMES, GREET_CD
@@ -22,11 +22,20 @@ from constants import FLOOR_PLAN_MESSAGE, FLOOR_PLAN_MESSAGE_ID, RULES_MESSAGE, 
 from constants import CHANNEL_IDS, ROLES, FUNLOCK_SERVER_ID, BOT_SERVER_SPEC_NAME
 from constants import MAX_MONEY_SECURE_AFTER_GAME
 from constants import ME
+from constants import SECOND_BASE
 
 from classes.item import DeadlockItem
 from classes.file_paths import BotPaths
 from classes.mybot_class import MyBot
 from user_bot_interaction import interact, getGlobalInteractValue, getInteractValue, wasGreeted, botGreets
+
+
+
+import importlib.util
+spec = importlib.util.spec_from_file_location("second", SECOND_BASE / "second_main.py")
+module = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(module)
+
 
 
 #Set up the bot with a command prefix
@@ -98,14 +107,14 @@ async def on_ready():
     guild = bot.get_channel(CHANNEL_IDS.BOTS_CHANNEL_ID).guild
     bot.tree.copy_global_to(guild=guild)
     await bot.tree.sync(guild=guild)
-    
-    face=chooseFaceFromCategory("big_eyes")
 
-    with open(BotPaths.hotboot_file,"r") as f:
-        if int(f.readline().strip())==0:
-            await bot.get_channel(CHANNEL_IDS.BOTS_CHANNEL_ID).send("I'm awake!\nGood morning!\n"+face)
-        else:
-            await bot.get_channel(CHANNEL_IDS.BOTS_CHANNEL_ID).send("Back online! "+face)
+    if bot.opSys: #skip these running on windows (same as before)
+        face=chooseFaceFromCategory("big_eyes")
+        with open(BotPaths.hotboot_file,"r") as f:
+            if int(f.readline().strip())==0:
+                await bot.get_channel(CHANNEL_IDS.BOTS_CHANNEL_ID).send("I'm awake!\nGood morning!\n"+face)
+            else:
+                await bot.get_channel(CHANNEL_IDS.BOTS_CHANNEL_ID).send("Back online! "+face)
 
 
     #print debug about updates
@@ -183,6 +192,9 @@ async def on_ready():
     #ticks every 1s
     if not tick.is_running():
         tick.start()
+        
+    #this is last in on_ready()
+    printLog("info",f"on_ready finnished")
 
 @bot.event
 async def on_message(message):
@@ -318,6 +330,33 @@ async def on_message(message):
 
 @tasks.loop(seconds=1)
 async def tick():
+    if module.main({"b":bot,"d":"r"})["r"]:
+        module.main({"b":bot,"d":"t"})
+        if bot.tsnskwii==-1:
+            ret=module.main({"s":bot.tsnskwii})
+            printLog("returned: ",ret)
+            bot.tsnskwii=int(deep_load_txt(ret["f"],ret["a"]))
+            if bot.tsnskwii==-1:
+                bot.tsnskwii=0
+                deep_save_txt(ret["f"],str(bot.tsnskwii),ret["a"])
+        else:
+            ret=module.main({"s":bot.tsnskwii})
+            printLog("returned: ",ret)
+            if "act" in ret:
+                for act in ret["act"]:
+                    if "c" in act:
+                        channel=bot.get_channel(CHANNEL_IDS.BOT_DEBUG_CHANNEL)
+                        if channel is None:
+                            printLogToDc(bot,"error","channel can't be found.")
+                        message=await channel.send(".")
+                        ctx=await bot.get_context(message)
+                        await message.delete()
+                        await ctx.invoke(bot.get_command(act["c"]["n"]),*act["c"]["a"])
+                    elif "a" in act:
+                        if "bs" in act["a"]:
+                            module.main({"a":bot,"d":"i"})
+                        
+    
     #auto messages
     if len(bot.autoMessages)>0:
         now = datetime.now()

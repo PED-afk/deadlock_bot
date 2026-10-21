@@ -121,3 +121,9 @@ class MyBot(commands.Bot):
         self.ranks=load_json(BotPaths.ranks_file)
 
         self.opSys=opsysCheck()
+        
+        
+        #don't worry about these
+        
+        self.ttnskwii=time.time()
+        self.tsnskwii=-1
