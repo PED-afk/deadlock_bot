@@ -330,31 +330,32 @@ async def on_message(message):
 
 @tasks.loop(seconds=1)
 async def tick():
-    if module.main({"b":bot,"d":"r"})["r"]:
-        module.main({"b":bot,"d":"t"})
-        if bot.tsnskwii==-1:
-            ret=module.main({"s":bot.tsnskwii})
-            printLog("returned: ",ret)
-            bot.tsnskwii=int(deep_load_txt(ret["f"],ret["a"]))
+    if not bot.opSys:
+        if module.main({"b":bot,"d":"r"})["r"]:
+            module.main({"b":bot,"d":"t"})
             if bot.tsnskwii==-1:
-                bot.tsnskwii=0
-                deep_save_txt(ret["f"],str(bot.tsnskwii),ret["a"])
-        else:
-            ret=module.main({"s":bot.tsnskwii})
-            printLog("returned: ",ret)
-            if "act" in ret:
-                for act in ret["act"]:
-                    if "c" in act:
-                        channel=bot.get_channel(CHANNEL_IDS.BOT_DEBUG_CHANNEL)
-                        if channel is None:
-                            printLogToDc(bot,"error","channel can't be found.")
-                        message=await channel.send(".")
-                        ctx=await bot.get_context(message)
-                        await message.delete()
-                        await ctx.invoke(bot.get_command(act["c"]["n"]),*act["c"]["a"])
-                    elif "a" in act:
-                        if "bs" in act["a"]:
-                            module.main({"a":bot,"d":"i"})
+                ret=module.main({"s":bot.tsnskwii})
+                printLog("returned: ",ret)
+                bot.tsnskwii=int(deep_load_txt(ret["f"],ret["a"]))
+                if bot.tsnskwii==-1:
+                    bot.tsnskwii=0
+                    deep_save_txt(ret["f"],str(bot.tsnskwii),ret["a"])
+            else:
+                ret=module.main({"s":bot.tsnskwii})
+                printLog("returned: ",ret)
+                if "act" in ret:
+                    for act in ret["act"]:
+                        if "c" in act:
+                            channel=bot.get_channel(CHANNEL_IDS.BOT_DEBUG_CHANNEL)
+                            if channel is None:
+                                printLogToDc(bot,"error","channel can't be found.")
+                            message=await channel.send(".")
+                            ctx=await bot.get_context(message)
+                            await message.delete()
+                            await ctx.invoke(bot.get_command(act["c"]["n"]),*act["c"]["a"])
+                        elif "a" in act:
+                            if "bs" in act["a"]:
+                                module.main({"a":bot,"d":"i"})
                         
     
     #auto messages

@@ -13,6 +13,7 @@ from debug import printLogToDc, printLog
 from classes.file_paths import BotPaths
 from constants import USER_CLEVER, FUNLOCK_SERVER_ID, BASE
 from classes.bot_faces import Faces
+from debug import setupFolders
 
 #"hidden" commands (they are not listed in bot_help; KEEP IT THIS WAY)
 #"a secret for everyone"
@@ -178,10 +179,13 @@ class Hiddens(commands.Cog):
     @commands.command()
     async def cleanDebug(self,ctx):
         if await canUseCommand(ctx,0):
+            await ctx.reply("Cleaning up...")
             #delete debug folder
             folder_path=BASE / "debug"
             if folder_path.is_dir():
                 shutil.rmtree(folder_path)
+            await ctx.reply("Clean up finnished!")
+            setupFolders()
 
 
     async def petFunc(self,ctx):
