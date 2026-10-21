@@ -179,12 +179,12 @@ class Hiddens(commands.Cog):
     @commands.command()
     async def cleanDebug(self,ctx):
         if await canUseCommand(ctx,0):
-            await ctx.reply("Cleaning up...")
             #delete debug folder
+            await ctx.reply("Cleaning up...")
             folder_path=BASE / "debug"
             if folder_path.is_dir():
                 shutil.rmtree(folder_path)
-            await ctx.reply("Clean up finnished!")
+            await ctx.reply(f"Clean up finnished!\nCleaned{folder_path}")
             setupFolders()
 
 
