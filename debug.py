@@ -20,14 +20,14 @@ def setupFolders():
     """
     This automatically gets called on startup.\nDO NOT CALL AGAIN!
     """
-    ROOT_PATH=str(BASE)
-    folder=Path(ROOT_PATH+"\\debug")
+    ROOT_PATH=BASE
+    folder=ROOT_PATH / "debug"
     folder.mkdir(parents=True, exist_ok=True)
-    folder=Path(ROOT_PATH+"\\debug\\crash_reports")
+    folder=ROOT_PATH / "debug" / "crash_reports"
     folder.mkdir(parents=True, exist_ok=True)
-    folder=Path(ROOT_PATH+"\\debug\\logs")
+    folder=ROOT_PATH / "debug" / "logs"
     folder.mkdir(parents=True, exist_ok=True)
-    folder=Path(ROOT_PATH+"\\debug\\logs\\log_errors")
+    folder=ROOT_PATH / "debug" / "logs" / "log_errors"
     folder.mkdir(parents=True, exist_ok=True)
 
 def writeLog(type:str, content:any, fileName:str, addNumber:bool=True, addDate:bool=True, writeType:str="w", fromFile:str="UNKNOWN", fromFunc:str="UNKNOWN"):
@@ -47,13 +47,13 @@ def writeLog(type:str, content:any, fileName:str, addNumber:bool=True, addDate:b
     folderPath=ROOT_PATH
     fileExtention=".txt"
     if type=="crash" or type=="error":
-        folderPath+="\\debug\\crash_reports"
+        folderPath=folderPath / "debug" / "crash_reports"
         fileExtention="txt"
     elif type=="log":
-        folderPath+="\\debug\\logs"
+        folderPath=folderPath / "debug" / "logs"
         fileExtention="log"
     elif type=="log_e":
-        folderPath+="\\debug\\logs\\log_errors"
+        folderPath=folderPath / "debug" / "logs" / "log_errors"
         fileExtention="log"
     else:
         writeLog("log_e",f"Log with unknown type from: {fromFile}; {fromFunc}\nWith type: {type}","LogError",True,False,"w","debug.py","writeLog")
@@ -76,7 +76,7 @@ def writeLog(type:str, content:any, fileName:str, addNumber:bool=True, addDate:b
             i += 1
         return
     if addDate:
-        fullPath=folderPath+"\\"+fileName+str(datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S"))+"."+fileExtention
+        fullPath=folderPath / (fileName+str(datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S"))+"."+fileExtention)
         with open(fullPath,writeType) as f:
             f.write(fromFile)
             f.write("; ")
