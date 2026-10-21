@@ -4,13 +4,14 @@ from discord.ext import commands, tasks
 import asyncio
 import time
 import random
+import shutil
 
 from own_utils import chooseFaceFromCategory, canUseCommand, format_duration, cleanChannel
 from constants import CHANNEL_IDS
 from user_bot_interaction import interact, getInteractValue, getGlobalInteractValue
 from debug import printLogToDc, printLog
 from classes.file_paths import BotPaths
-from constants import USER_CLEVER, FUNLOCK_SERVER_ID
+from constants import USER_CLEVER, FUNLOCK_SERVER_ID, BASE
 from classes.bot_faces import Faces
 
 #"hidden" commands (they are not listed in bot_help; KEEP IT THIS WAY)
@@ -173,6 +174,14 @@ class Hiddens(commands.Cog):
                 if many==-1:
                     many=None
                 await cleanChannel(self.bot,CHANNEL_IDS.BOTS_CHANNEL_ID,many)
+    
+    @commands.command()
+    async def cleanDebug(self,ctx):
+        if await canUseCommand(ctx,0):
+            #delete debug folder
+            folder_path=BASE / "debug"
+            if folder_path.is_dir():
+                shutil.rmtree(folder_path)
 
 
     async def petFunc(self,ctx):
