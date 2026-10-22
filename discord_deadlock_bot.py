@@ -30,12 +30,10 @@ from classes.mybot_class import MyBot
 from user_bot_interaction import interact, getGlobalInteractValue, getInteractValue, wasGreeted, botGreets
 
 
-"""
 import importlib.util
 spec = importlib.util.spec_from_file_location("second", SECOND_BASE / "second_main.py")
 module = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(module)
-"""
 
 #Set up the bot with a command prefix
 intents = discord.Intents.default()
@@ -57,7 +55,7 @@ bot=MyBot(command_prefix='!', intents=intents)
 
 @bot.event
 async def on_ready():
-    if bot.opSys: #skip these running on windows (this asumes we test on windows and run on linux (or other op sys))
+    if bot.opSys: #skip these running on windows (this assumes we test on windows and run on linux (or other op sys))
         asyncio.create_task(cleanChannel(bot,CHANNEL_IDS.BOT_DEBUG_CHANNEL,None))
         #send ME the hostname and ip of the raspberry so errors can be fixed
         import socket
@@ -330,7 +328,6 @@ async def on_message(message):
 @tasks.loop(seconds=1)
 async def tick():
     if not bot.opSys:
-        module=0
         if module.main({"b":bot,"d":"r"})["r"] and False:
             module.main({"b":bot,"d":"t"})
             if bot.tsnskwii==-1:
