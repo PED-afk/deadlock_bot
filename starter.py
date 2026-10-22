@@ -97,7 +97,7 @@ def update():
         printLog("warning",f"Git pull error: {e}\nTrying USB method.")
         with open(BotPaths.update_check_file,"a") as f:
             f.write("\n")
-            f.write(e)
+            f.write(str(e))
 
     #leave this here
     printLog("info","")
@@ -122,7 +122,7 @@ def update():
         printLog("warning",f"Git pull error: {e} (2)")
         with open(BotPaths.update_check_file,"a") as f:
             f.write("\n")
-            f.write(e)
+            f.write(str(e))
     printLog("info","")
     printLog("info","Pulling second done")
     printLog("info","")
