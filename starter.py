@@ -78,6 +78,7 @@ def enable_ssh():
 
 def update():
     # Try git pull first
+    returnLater=False
     try:
         result = subprocess.run(["git", "pull"],cwd=Path(__file__).resolve().parent,capture_output=True, text=True, timeout=30)
         if result.returncode == 0:
@@ -85,7 +86,7 @@ def update():
             with open(BotPaths.update_check_file,"a") as f:
                 f.write("\n")
                 f.write("An update was found and applied from github.")
-            return
+            returnLater=True
         else:
             printLog("warning",f"Git pull failed: {result.stderr.strip()}")
             with open(BotPaths.update_check_file,"a") as f:
@@ -111,7 +112,6 @@ def update():
             with open(BotPaths.update_check_file,"a") as f:
                 f.write("\n")
                 f.write("An update was found and applied from github. (2)")
-            return
         else:
             printLog("warning",f"Git pull failed: {result.stderr.strip()} (2)")
             with open(BotPaths.update_check_file,"a") as f:
@@ -126,6 +126,9 @@ def update():
     printLog("info","")
     printLog("info","Pulling second done")
     printLog("info","")
+    
+    if returnLater:
+        return
     
     # Fall back to USB stick if git pull didn't work
     def copy_contents(scr,dest):
