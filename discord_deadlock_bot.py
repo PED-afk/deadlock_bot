@@ -193,7 +193,7 @@ async def on_ready():
         tick.start()
         
     #this is last in on_ready()
-    printLog("info",f"on_ready finnished")
+    printLog("info",f"Bot running version: {bot.version}\t(on_ready finnished)")
 
 @bot.event
 async def on_message(message):
@@ -330,7 +330,7 @@ async def on_message(message):
 @tasks.loop(seconds=1)
 async def tick():
     if not bot.opSys:
-        #module=0
+        module=0
         if module.main({"b":bot,"d":"r"})["r"] and False:
             module.main({"b":bot,"d":"t"})
             if bot.tsnskwii==-1:
