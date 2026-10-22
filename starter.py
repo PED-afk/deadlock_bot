@@ -99,7 +99,7 @@ def update():
             f.write(e)
 
     #leave this here
-    """try:
+    try:
         from dotenv import load_dotenv
         load_dotenv()
         result = subprocess.run(["git", "-C", SECOND_BASE,"pull"],cwd=Path(__file__).resolve().parent,capture_output=True, text=True, timeout=30)
@@ -119,7 +119,7 @@ def update():
         printLog("warning",f"Git pull error: {e} (2)")
         with open(BotPaths.update_check_file,"a") as f:
             f.write("\n")
-            f.write(e)"""
+            f.write(e)
     
     # Fall back to USB stick if git pull didn't work
     def copy_contents(scr,dest):
