@@ -99,6 +99,9 @@ def update():
             f.write(e)
 
     #leave this here
+    printLog("info","")
+    printLog("info","Pulling second")
+    printLog("info","")
     try:
         from dotenv import load_dotenv
         load_dotenv()
@@ -120,6 +123,9 @@ def update():
         with open(BotPaths.update_check_file,"a") as f:
             f.write("\n")
             f.write(e)
+    printLog("info","")
+    printLog("info","Pulling second done")
+    printLog("info","")
     
     # Fall back to USB stick if git pull didn't work
     def copy_contents(scr,dest):
