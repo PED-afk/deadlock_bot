@@ -30,11 +30,12 @@ from classes.mybot_class import MyBot
 from user_bot_interaction import interact, getGlobalInteractValue, getInteractValue, wasGreeted, botGreets
 
 
+"""
 import importlib.util
 spec = importlib.util.spec_from_file_location("second", SECOND_BASE / "second_main.py")
 module = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(module)
-
+"""
 
 #Set up the bot with a command prefix
 intents = discord.Intents.default()
