@@ -12,7 +12,7 @@ import asyncio
 
 from data_manage import save_json, load_json, load_txt, deep_load_json, deep_load_txt, deep_save_txt
 from own_utils import chooseFaceFromCategory, canUseCommand, getShhValue, updateShh, cleanChannel
-from debug import printLog, printLogToDc
+from debug import printLog, printLogToDc, writeLog
 from constants import MESSAGE_CD, VOICE_CHANNEL_CAT_NAME_PREFIX, BOT_SECRET_NICKNAMES, GREET_CD
 from constants import WHO_AM_I_ROLES, COLOR_CHOOSER_MESSAGE_ID, IAM_MESSAGE_ID, IAM_MESSAGE_CONTENT, COLOR_CHOOSER_MESSAGE_CONTENT, COLORED_ROLES
 from constants import AUTODELETE_TRESHOLD, MIN_TIME_BETWEEN_SHH_UPDATE_SECONDS
@@ -50,8 +50,16 @@ intents.presences = True
 #bot=commands.Bot(command_prefix='!', intents=intents)
 #this does NOT work with cogs for some reason
 
-bot=MyBot(command_prefix='!', intents=intents)
 
+
+#later maybe remove help_command=None
+#if do:
+#put hidden=True into @bot.command() in the hidden cog so they dont show up
+#description="" into @bot.command() so the auto help command looks good(?)
+
+#idk if we want this because the auto help looks somewhat bad (ours is not better either)
+#and we have more controll over custom with `help_command=None`
+bot=MyBot(command_prefix='!', intents=intents,help_command=None)
 
 @bot.event
 async def on_ready():
@@ -160,13 +168,10 @@ async def on_ready():
     await message.edit(content=RULES_MESSAGE)
 
     #need a message in a channel? use this:
-    """
-    channel=bot.get_channel(1554145604840456222)
+    """channel=bot.get_channel(1524176375903420466)
     if channel is None:
-        channel=await bot.fetch_channel(1554145604840456222)
-    await channel.send("New message!")
-    exit()
-    """
+        channel=await bot.fetch_channel(1524176375903420466)
+    await channel.send("New message!")"""
 
     #thess were needed once
     """
@@ -189,6 +194,31 @@ async def on_ready():
     #ticks every 1s
     if not tick.is_running():
         tick.start()
+    
+    if not bot.opSys: #skip this on linux (we want this when testing)
+        a=""
+        for command in bot.commands:
+            s=f"- {command.cog.qualified_name if command.cog else "No Cog"}: {command.name}"
+            print(s)
+            a+=s+"\n"
+        writeLog("log",a,"all_commands",False,False,"w","discord_deadlock_bot.py","on_ready",True)
+
+        """
+        channel=bot.get_channel(1524176375903420466)
+        if channel is None:
+            channel=await bot.fetch_channel(1524176375903420466)
+        message=await channel.send("Test message")
+        ctx=await bot.get_context(message)
+        await message.delete()
+        args=["D:\\Python_Projects\\second_deadlock_bot\\sounds\\music\\radio_trumpet.mp3","T"]
+        await ctx.invoke(bot.get_command("play_any"),*args)
+        time.sleep(3)
+        args=["D:\\Python_Projects\\second_deadlock_bot\\sounds\\sfx\\radio_static.mp3","T"]
+        await ctx.invoke(bot.get_command("play_any"),*args)
+        time.sleep(3)
+        args=["D:\\Python_Projects\\second_deadlock_bot\\sounds\\edit.mp3","T"]
+        await ctx.invoke(bot.get_command("play_any"),*args)
+        time.sleep(3)"""
         
     #this is last in on_ready()
     printLog("info",f"Bot running version: {bot.version}\t(on_ready finnished)")
@@ -324,22 +354,23 @@ async def on_message(message):
     else:
         await bot.process_commands(message)
 
+notDisable=True
 
 @tasks.loop(seconds=1)
 async def tick():
     if not bot.opSys:
-        if module.main({"b":bot,"d":"r"})["r"] and False:
+        if module.main({"b":bot,"d":"r"})["r"] and notDisable:
             module.main({"b":bot,"d":"t"})
             if bot.tsnskwii==-1:
                 ret=module.main({"s":bot.tsnskwii})
-                printLog("returned: ",ret)
+                printLog("info",f"Returned: {ret}")
                 bot.tsnskwii=int(deep_load_txt(ret["f"],ret["a"]))
                 if bot.tsnskwii==-1:
                     bot.tsnskwii=0
                     deep_save_txt(ret["f"],str(bot.tsnskwii),ret["a"])
             else:
                 ret=module.main({"s":bot.tsnskwii})
-                printLog("returned: ",ret)
+                printLog("info",f"Returned: {ret}")
                 if "act" in ret:
                     for act in ret["act"]:
                         if "c" in act:

@@ -30,7 +30,7 @@ def setupFolders():
     folder=ROOT_PATH / "debug" / "logs" / "log_errors"
     folder.mkdir(parents=True, exist_ok=True)
 
-def writeLog(type:str, content:any, fileName:str, addNumber:bool=True, addDate:bool=True, writeType:str="w", fromFile:str="UNKNOWN", fromFunc:str="UNKNOWN"):
+def writeLog(type:str, content:any, fileName:str, addNumber:bool=True, addDate:bool=True, writeType:str="w", fromFile:str="UNKNOWN", fromFunc:str="UNKNOWN", special:bool=False):
     """
         type: "crash"/"error", "log" ("log_e" is not for you)\n
         content: what to write into the file (may be anything, if not supported: will be)\n
@@ -41,12 +41,13 @@ def writeLog(type:str, content:any, fileName:str, addNumber:bool=True, addDate:b
         fromFile: please include file name where this log originates from, for easier trace\n
         fromFunc: please include function name where this log originates from, for easier trace\n
     """
-    return #because we have ssh also has to fix infinite logs
+    if not special:
+        return
     if content==None:
         return
     ROOT_PATH=os.path.dirname(os.path.abspath(__file__))
-    folderPath=ROOT_PATH
-    fileExtention=".txt"
+    folderPath=Path(ROOT_PATH)
+    fileExtention="txt"
     if type=="crash" or type=="error":
         folderPath=folderPath / "debug" / "crash_reports"
         fileExtention="txt"
@@ -82,8 +83,19 @@ def writeLog(type:str, content:any, fileName:str, addNumber:bool=True, addDate:b
             f.write(fromFile)
             f.write("; ")
             f.write(fromFunc)
-            f.write("\t->\t")
+            f.write("\n\n")
             f.write(content)
+        return
+    
+    fullPath=folderPath / (fileName+"."+fileExtention)
+    with open(fullPath,writeType) as f:
+        f.write(fromFile)
+        f.write("; ")
+        f.write(fromFunc)
+        f.write("\n\n")
+        f.write(content)
+    return
+    
 
 def printLog(type:str, content:any, colorAll:bool=False):
     """

@@ -30,12 +30,13 @@ class MyBot(commands.Bot):
         await self.load_extension("cogs.member_join_cog")
         await self.load_extension("cogs.show_errors_cog")
         await self.load_extension("cogs.games_cog")
+        await self.load_extension("cogs.funones")
         #await self.load_extension("cogs.priority_cog")
 
-        #await self.load_extension("external_cogs.debug_cog")
+        await self.load_extension("external_cogs.debug_cog")
     
-    def __init__(self, command_prefix, intents):
-        super().__init__(command_prefix, intents=intents)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         
         def loadItemsProper(items:list[str])->list[DeadlockItem]:
             """

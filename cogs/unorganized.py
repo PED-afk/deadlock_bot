@@ -10,9 +10,11 @@ from own_utils import chooseFaceFromCategory, activeTimerExists, canUseCommand, 
 from data_manage import save_json, load_json, load_txt, deep_save_json, deep_save_txt
 from constants import ME, BOT_ROLE
 from constants import DATE_FORMAT
+from constants import CHANNEL_IDS
 from pi_specific import getAll
 from debug import printLog, printLogToDc
 from data_manage import load_json
+from classes.bot_faces import Faces
 
 from classes.button import Button, MultButton
 from classes.find_rem import FindRem
@@ -76,7 +78,7 @@ class Unorganized(commands.Cog):
 
 
     @commands.command()
-    async def help_me(self, ctx, section:str=None):
+    async def help(self, ctx, section:str=None):
         senderID=ctx.author.id
         if await canUseCommand(ctx,3):
             from datetime import datetime
@@ -92,11 +94,14 @@ class Unorganized(commands.Cog):
                     "`!help_me data`: Commands about a minigame that is in development.",
                     "`!help_me tools`: Commands about some 'tools' and tools I can provide to spice up your game.",
                     "`!help_me extra`: Commands about no particular topic.",
+                    "`!help_me regret`: We don't talk about these",
                 ]
             elif section=="timer":
                 anyView=True
                 botcommands=[
-                    "`!start`: Start an x minute timer. When the timer ends I put everyone into the `Deadlock [#]` channel (from lane channels).\n(Timer lenght is configureable; only 1 timer can be used at the same time (as right no there is only 1 set of lane channels))",
+                    "`!start`: Start an x minute timer. When the timer ends I put everyone into the `Deadlock [#]` channel (from lane channels).\n(Timer lenght is configureable)",
+                    "`!pause`: Pauses the timer for the voice channel."
+                    "`!unpause`: Resumes the timer for the voice channel."
                     "`!end`: Ends the timer and moves everyone immediately.",
                     "`!endit`: Ends the timer without sending people to the `Deadlock [#]` channel.",
                     "`!settimer x`: Set the timer lenght to x minutes.",
@@ -107,39 +112,48 @@ class Unorganized(commands.Cog):
                 face=chooseFaceFromCategory("annoyed")
                 anyView=True
                 botcommands=[
-                    "`!join`: I will join `Deadlock [#]` and will use an experimental feature to automate my timer functionality.",
-                    "`!leave`: I will leave `Deadlock [#]` but will contionue counting for the timer.",
-                    "(feature is not possible "+face+", but I can be there for emotional support."
+                    "`!join`: I will join you in a voice chat.",
+                    "`!leave`: I will leave the voice chat. (will contionue counting for the timer)"
                 ]
             elif section=="admin":
                 anyView=False
+                face1=chooseFaceFromCategory(Faces.sad)
+                face2=chooseFaceFromCategory(Faces.nervous)
                 botcommands=[
                     "`!ping`: I will send 'Pong!' if I'm alive.",
-                    "`!status`: My version, OS and hardware I run on.",
-                    "`!check_cogs`: Check if a cog is loaded.",
+                    "`!status`: The state of the machine I'm running on and my own. (Bot version, OS and hardware)",
+                    "`!version`: Current bot version.",
+                    "`!check_cog`: Check if a cog is loaded.",
                     "`!get_logs`: I send you certain logs.",
-                    "`!sleep`: I will sleep until a certain hour to save on energy and hardware integrity. (the bot is unavailable during sleep but will automatically start at* the designated hour)"
-                    "`!restart:` or `!reload`: I will restart and apply changes to my code.",
+                    "`!dumpAutoMes`: Sends the auto messages file into the debug channel",
+                    "`!save <deep>`: Save from variable to a file. (will save automaticaly on shutdown and restart). (<deep> can be left empty; set it to `deep` to save data to appdata folder)",
+                    "`!sleep`: I will sleep until a certain hour to save on energy and hardware integrity. (the bot is unavailable during sleep but will automatically start at* the designated hour)",
+                    "`!restart` or `!reload`: I will restart.",
+                    "`!update`: I will restart and apply changes to my code.",
                     "`!clear_loaded`: I forget stuff so I don't save incorrect data.",
                     "`!clear_user_data`: Clears user_data.json",
-                    "`!shutdown`: This kills me :("
+                    "`!shutdown`: This kills me "+face1+" (Only use in emergency no alternative "+face2+")"
                 ]
             elif section=="data":
                 anyView=True
                 botcommands=[
-                    "Some data collection for now, maybe roles or nicknames later?\n(Also steamid for lane assign logic if there ever be a way for it.)",
+                    "## The following are currently not really used.",
                     "`!set_main`: Set this to your most played character so others can know.",
-                    "`!set_steam_id <steamid64>`: Add your Steam ID64 — your rank will be fetched automatically from the Deadlock API and your Discord role will be assigned.",
-                    "`!update_rank`: Refresh your rank from the Deadlock API (use after ranking up/down).",
                     "`!set_rank`: Manually set your rank if the API can't fetch it.",
-                    "`!my_data`: I will tell you what data I have on you.",
-                    "`!remove_me`: I will remove your data from the \"database\"",
-                    "`!save`: Save from variable to a file. (will save automaticaly on shutdown and restart)",
+                    "`!my_data`: I will tell you what I know about you.",
+                    "`!remove_me`: I will remove your data from the \"database\""
+                    "## The following are currently disabled",
+                    "### And will remain disabled until determined date.",
+                    #"### These were (there is no credible evidence) AI generated. And we don't know if even the creator knows what is happening in them.",
+                    "`!set_steam_id <steamid64>`: Add your Steam ID64 — your rank will be fetched automatically from the Deadlock API and your Discord role will be assigned.",
+                    "`!profile`: Show your deadlock steam profile.",
+                    "`!update_rank`: Refresh your rank from the Deadlock API (use after ranking up/down)."
                 ]
             elif section=="extra":
                 anyView=True
                 botcommands=[
-                    "`!minigame`: Play some games while you wait for matchmaking. (W.I.P.)",
+                    "`!gl`: Wish good luck to people.",
+                    "`!minigames`: Play some games while you wait for matchmaking. (W.I.P.)",
                     "`!shop`: Buy items for our minigames.",
                     "`!source`: Lobotomy (source code).",
                     "`!credit`: Give credit to people we use the works of."
@@ -147,12 +161,14 @@ class Unorganized(commands.Cog):
             elif section=="tools":
                 anyView=True
                 botcommands=[
-                    "`!rand X Y`: All sorts of randomly given stuff. (use `!rand` to learn more)",
-                    "`!people_at_rank <rank> <radius> <online>`: Give you the names of people who have ranks around `<rank>`(±`<radius>` (if present)). If `<online>` is present and is set to `1`, will only search from people currently online. If `<rank>` is omited I will use your rank as base.",
+                    f'`!onlines`: Ping peopple who selected the "ping me if I\'m online" role in {self.bot.get_channel(CHANNEL_IDS.ROLE_CHANNEL_ID).mention}'
+                    "`!rand`: All sorts of randomly given stuff. (use `!rand` to learn more)",
                     "`!remind @<person_to_be_reminded> <number of> <minute/hour/day later> <reminder text>`: I will send a message after the specified amount of time, to remind someone about something.",
                     f"`!countdown <countdown name> | <date in {tz}(*)>`: I will send multiple reminder before the countdown expires.",
                     '`!countdownRemainingTime <countdown name> | <time remaining(*)>`: I will send multiple reminder before the countdown expires but instead of a date you can define the time until the countdown finishes.'
                     f"\n\n-# (*) The date/time format: {DATE_FORMAT}"
+                    "## The following are currently disfunctional/not in use",
+                    "`!people_at_rank <rank> <radius> <online>`: Give you the names of people who have ranks around `<rank>`(±`<radius>` (if present)). If `<online>` is present and is set to `1`, will only search from people currently online. If `<rank>` is omited I will use your rank as base.",
                 ]
             elif section=="moderation":
                 anyView=True
@@ -166,6 +182,12 @@ class Unorganized(commands.Cog):
                     "`!shh <Discord user id>`: You tell me that the user with this is is misbehaving; I will remember that!"
                     "`!shh`: If you use `!shh` as a reply to the message I will know that that message's author was misbehaving.",
                     "`!shh clear`: Use this in a reply to a user to clear their \"votes\". -# Moderators only!"
+                ]
+            elif section=="regret":
+                anyView=True
+                botcommands=[
+                    "`!reset_the_timer`: When someone said something 'bad'. You can also trigger this command by sending a clock emoji.",
+                    "`!the_timer`: I tell you how much time has passed since the last timer reset."
                 ]
             else:
                 anyView=True

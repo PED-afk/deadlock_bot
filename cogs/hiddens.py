@@ -209,15 +209,6 @@ class Hiddens(commands.Cog):
         await self.petFunc(ctx)
 
     @commands.command()
-    async def cogTest(self,ctx):
-        if await canUseCommand(ctx):
-            await ctx.reply("cog works")
-
-    @commands.command()
-    async def testaudio(self,ctx):
-        await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.TEST))
-
-    @commands.command()
     async def silly(self,ctx):
         await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.SILLY))
 
