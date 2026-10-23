@@ -132,15 +132,15 @@ class Hiddens(commands.Cog):
 
     @commands.command()
     async def sillyer(self,ctx):
-        await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.SILLYER),volume=0.05)
+        await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.SILLYER),volume=0.075)
 
     @commands.command()
     async def fish(self,ctx):
-        await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.FIH),volume=0.1)
+        await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.FIH),volume=0.05)
 
     @commands.command()
     async def FISH(self,ctx):
-        await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.FISH),volume=0.1)
+        await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.FISH),volume=0.4)
 
     @commands.command()
     async def portal(self,ctx):
