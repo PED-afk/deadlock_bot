@@ -22,148 +22,66 @@ from debug import setupFolders
 class Hiddens(commands.Cog):
     def __init__(self,bot):
         self.bot=bot
-
-    """
-    async def play_sound(self,ctx,path:str):
-        if await canUseCommand(ctx,2):
-            finished = asyncio.Event()
-            start_time = time.monotonic()
-            def after_playing(error):
-                if error:
-                    printLog("error",f"Playback error: {error}")
-                elapsed = time.monotonic() - start_time
-
-                printLog("error" if error else "debug",f"Audio callback after {elapsed:.2f}s; error={error!r}")
-                self.bot.loop.call_soon_threadsafe(finished.set)
-                
-            if ctx.author.voice is None or ctx.author.voice.channel is None:
-                await ctx.send("You must be in a voice channel.")
-                return
-            
-            channel=ctx.author.voice.channel
-            was_in=ctx.voice_client is not None
-
-            if was_in:
-                vc=ctx.voice_client
-                if vc.channel != channel:
-                    await vc.move_to(channel)
-            else:
-                vc=await channel.connect()
-
-            if vc.is_playing():
-                vc.stop()
-
-            source=discord.FFmpegPCMAudio(path)
-            vc.play(source, after=after_playing)
-
-            printLog("debug", f"Started playback: {path}")
-
-            try:
-                await finished.wait()
-            finally:
-                if not was_in and vc.is_connected():
-                    await vc.disconnect()
-    """
     
-    async def play_sound(self, ctx, path: str,vcID:int=None):
-        if vcID==None:
+    async def play_sound(self, ctx, path: str,vcID:int=None,volume:float=1.0):
+        if vcID==None: #normal exec
             if not await canUseCommand(ctx, 2):
                 return
             if ctx.author.voice is None or ctx.author.voice.channel is None:
                 await ctx.send("You must be in a voice channel.")
                 return
-
             channel=ctx.author.voice.channel
-            vc=ctx.voice_client
-            was_connected=vc is not None
-
-            if vc is None:
-                vc=await channel.connect()
-            elif vc.channel!=channel:
-                await vc.move_to(channel)
-
-            # Stop any previous playback before creating the new source.
-            if vc.is_playing() or vc.is_paused():
-                vc.stop()
-
-            loop=asyncio.get_running_loop()
-            finished=asyncio.Event()
-            start_time=time.monotonic()
-
-            def after_playing(error):
-                elapsed=time.monotonic()-start_time
-                if error:
-                    printLog("error",f"Playback error after {elapsed:.2f}s: {error!r}")
-                else:
-                    printLog("debug",f"Playback finished after {elapsed:.2f}s")
-                loop.call_soon_threadsafe(finished.set)
-
-            source=None
-
-            try:
-                source=discord.FFmpegPCMAudio(path,before_options="-nostdin",options="-loglevel warning",)
-                vc.play(source, after=after_playing)
-                printLog("debug", f"Started playback: {path}")
-                await finished.wait()
-            except Exception as e:
-                printLog("error",f"Could not play {path}: {e!r}")
-                raise
-
-            finally:
-                if source is not None:
-                    source.cleanup()
-
-                if not was_connected and vc.is_connected():
-                    await vc.disconnect()
         else:
-            printLog("debug","A")
-            beforeChannel=None
             channel=self.bot.get_channel(vcID)
-            vc=ctx.voice_client
-            was_connected=vc is not None
+        
+        beforeChannel=None
 
-            if vc is None:
-                vc=await channel.connect()
-            elif vc.channel!=channel:
-                beforeChannel=vc.channel
-                await vc.move_to(channel)
+        vc=ctx.voice_client
+        was_connected=vc is not None
 
-            # Stop any previous playback before creating the new source.
-            if vc.is_playing() or vc.is_paused():
-                vc.stop()
+        if vc is None:
+            vc=await channel.connect()
+        elif vc.channel!=channel:
+            beforeChannel=vc.channel
+            await vc.move_to(channel)
 
-            loop=asyncio.get_running_loop()
-            finished=asyncio.Event()
-            start_time=time.monotonic()
+        # Stop any previous playback before creating the new source.
+        if vc.is_playing() or vc.is_paused():
+            vc.stop()
 
-            def after_playing(error):
-                elapsed=time.monotonic()-start_time
-                if error:
-                    printLog("error",f"Playback error after {elapsed:.2f}s: {error!r}")
-                else:
-                    printLog("debug",f"Playback finished after {elapsed:.2f}s")
-                loop.call_soon_threadsafe(finished.set)
+        loop=asyncio.get_running_loop()
+        finished=asyncio.Event()
+        start_time=time.monotonic()
 
-            source=None
+        def after_playing(error):
+            elapsed=time.monotonic()-start_time
+            if error:
+                printLog("error",f"Playback error after {elapsed:.2f}s: {error!r}")
+            else:
+                printLog("debug",f"Playback finished after {elapsed:.2f}s")
+            loop.call_soon_threadsafe(finished.set)
 
-            try:
-                source=discord.FFmpegPCMAudio(path,before_options="-nostdin",options="-loglevel warning",)
-                vc.play(source, after=after_playing)
-                printLog("debug", f"Started playback: {path}")
-                await finished.wait()
-            except Exception as e:
-                printLog("error",f"Could not play {path}: {e!r}")
-                raise
+        source=None
 
-            finally:
-                if source is not None:
-                    source.cleanup()
+        try:
+            source=discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(path,before_options="-nostdin",options="-loglevel warning",),volume=max(0.0, min(2.0, volume)))
+            vc.play(source, after=after_playing)
+            printLog("debug", f"Started playback: {path}")
+            await finished.wait()
+        except Exception as e:
+            printLog("error",f"Could not play {path}: {e!r}")
+            raise
 
-                if not was_connected and vc.is_connected():
-                    await vc.disconnect()
-                
-                if beforeChannel!=None:
-                    vc.move_to(beforeChannel)
+        finally:
+            if source is not None:
+                source.cleanup()
+
+            if not was_connected and vc.is_connected():
+                await vc.disconnect()
+
+            if beforeChannel!=None:
+                vc.move_to(beforeChannel)
+        
 
     @commands.command()
     async def clean(self,ctx,many:int=None):
@@ -210,44 +128,44 @@ class Hiddens(commands.Cog):
 
     @commands.command()
     async def silly(self,ctx):
-        await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.SILLY))
+        await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.SILLY),volume=0.75)
 
     @commands.command()
     async def sillyer(self,ctx):
-        await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.SILLYER))
+        await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.SILLYER),volume=0.75)
 
     @commands.command()
     async def fish(self,ctx):
-        await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.FIH))
+        await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.FIH),volume=0.75)
 
     @commands.command()
     async def FISH(self,ctx):
-        await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.FISH))
+        await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.FISH),volume=0.75)
 
     @commands.command()
     async def portal(self,ctx):
-        await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.PORTAL))
+        await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.PORTAL),volume=0.75)
 
     @commands.command()
     async def dc_ping(self,ctx):
         await ctx.message.delete()
         for i in range(random.randint(1,5)):
-            await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.PING))
+            await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.PING),volume=0.75)
             await asyncio.sleep(round(random.uniform(0.1,1),2))
 
     @commands.command()
     async def dc_ping_long(self,ctx):
         await ctx.message.delete()
         for i in range(random.randint(3,5)):
-            await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.PING))
+            await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.PING),volume=0.75)
             await asyncio.sleep(round(random.uniform(10,2*60),2))
 
     @commands.command()
-    async def play_any(self,ctx,path:str,vcID=None):
+    async def play_any(self,ctx,path:str,vcID=None,volume:float=1.0):
         if await canUseCommand(ctx,-1,False,False,False):
             if vcID=="T":
                 vcID=CHANNEL_IDS.VC.TEST
-            await self.play_sound(ctx,path,vcID)
+            await self.play_sound(ctx,path,vcID,volume)
 
 
     @commands.command()
