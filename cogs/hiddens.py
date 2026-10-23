@@ -128,19 +128,19 @@ class Hiddens(commands.Cog):
 
     @commands.command()
     async def silly(self,ctx):
-        await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.SILLY),volume=0.75)
+        await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.SILLY),volume=0.1)
 
     @commands.command()
     async def sillyer(self,ctx):
-        await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.SILLYER),volume=0.75)
+        await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.SILLYER),volume=0.1)
 
     @commands.command()
     async def fish(self,ctx):
-        await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.FIH),volume=0.75)
+        await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.FIH),volume=0.1)
 
     @commands.command()
     async def FISH(self,ctx):
-        await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.FISH),volume=0.75)
+        await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.FISH),volume=0.1)
 
     @commands.command()
     async def portal(self,ctx):
@@ -150,14 +150,14 @@ class Hiddens(commands.Cog):
     async def dc_ping(self,ctx):
         await ctx.message.delete()
         for i in range(random.randint(1,5)):
-            await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.PING),volume=0.75)
+            await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.PING),volume=0.3)
             await asyncio.sleep(round(random.uniform(0.1,1),2))
 
     @commands.command()
     async def dc_ping_long(self,ctx):
         await ctx.message.delete()
         for i in range(random.randint(3,5)):
-            await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.PING),volume=0.75)
+            await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.PING),volume=0.3)
             await asyncio.sleep(round(random.uniform(10,2*60),2))
 
     @commands.command()
