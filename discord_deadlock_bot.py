@@ -198,7 +198,9 @@ async def on_ready():
     if not bot.opSys: #skip this on linux (we want this when testing)
         a=""
         for command in bot.commands:
-            s=f"- {command.cog.qualified_name if command.cog else "No Cog"}: {command.name}"
+            cogName=command.cog.qualified_name if command.cog else "No Cog"
+            commandName=command.name
+            s=f"- {cogName}: {commandName}"
             print(s)
             a+=s+"\n"
         writeLog("log",a,"all_commands",False,False,"w","discord_deadlock_bot.py","on_ready",True)
