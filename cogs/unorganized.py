@@ -10,7 +10,7 @@ from own_utils import chooseFaceFromCategory, activeTimerExists, canUseCommand, 
 from data_manage import save_json, load_json, load_txt, deep_save_json, deep_save_txt
 from constants import ME, BOT_ROLE
 from constants import DATE_FORMAT
-from constants import CHANNEL_IDS
+from constants import CHANNEL_IDS, SpecialCharacters
 from pi_specific import getAll
 from debug import printLog, printLogToDc
 from data_manage import load_json
@@ -212,6 +212,7 @@ class Unorganized(commands.Cog):
                     l="‎ " #this is not a 'space' character (that wouldn't work) this is an invisible character different from a 'space'
                     #DO NOT DELETE OR REPLACE
                     #WATCH OUT!!!
+                    l=SpecialCharacters.EMPTY
                     for i in face:
                         l+=" "
                     l+="(Why do you want to know?)"

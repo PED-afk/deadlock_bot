@@ -37,6 +37,11 @@ HERO_ID_MAP = {
 
 
 
+
+class SpecialCharacters():
+    EMPTY="‎ "
+
+
 class ROLES():
     BOT_PROGRAMMER=1523561168956817578
     GITHUB_HELPER=1542983727632752740
