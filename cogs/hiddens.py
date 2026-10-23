@@ -144,7 +144,7 @@ class Hiddens(commands.Cog):
 
     @commands.command()
     async def portal(self,ctx):
-        await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.PORTAL),volume=0.75)
+        await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.PORTAL),volume=0.1)
 
     @commands.command()
     async def dc_ping(self,ctx):
