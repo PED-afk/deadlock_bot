@@ -354,12 +354,12 @@ async def on_message(message):
     else:
         await bot.process_commands(message)
 
-notDisable=True
+Disable=True
 
 @tasks.loop(seconds=1)
 async def tick():
     if not bot.opSys:
-        if module.main({"b":bot,"d":"r"})["r"] and notDisable:
+        if module.main({"b":bot,"d":"r"})["r"] and not Disable:
             module.main({"b":bot,"d":"t"})
             if bot.tsnskwii==-1:
                 ret=module.main({"s":bot.tsnskwii})
