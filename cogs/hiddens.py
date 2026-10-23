@@ -128,11 +128,11 @@ class Hiddens(commands.Cog):
 
     @commands.command()
     async def silly(self,ctx):
-        await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.SILLY),volume=0.1)
+        await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.SILLY),volume=0.05)
 
     @commands.command()
     async def sillyer(self,ctx):
-        await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.SILLYER),volume=0.1)
+        await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.SILLYER),volume=0.05)
 
     @commands.command()
     async def fish(self,ctx):
@@ -144,7 +144,7 @@ class Hiddens(commands.Cog):
 
     @commands.command()
     async def portal(self,ctx):
-        await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.PORTAL),volume=0.1)
+        await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.PORTAL),volume=0.05)
 
     @commands.command()
     async def dc_ping(self,ctx):
