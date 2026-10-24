@@ -153,7 +153,15 @@ class Hiddens(commands.Cog):
         if id==0:
             await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.ELEVATOR0),volume=0.05)
         else:
-            await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.ELEVATOR1),volume=0.05)
+            await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.ELEVATOR1),volume=0.1)
+            
+    @commands.command()
+    async def elevator_long(self,ctx):
+        await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.ELEVATORLONG),volume=0.1)
+        
+    @commands.command()
+    async def stops(self,ctx):
+        await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.SILENCE),volume=1.0)
 
     @commands.command()
     async def dc_ping(self,ctx):
