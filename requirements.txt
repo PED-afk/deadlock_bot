@@ -9,3 +9,4 @@ pathlib
 python-dateutil
 davey
 pydub
+numpy
