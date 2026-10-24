@@ -32,6 +32,9 @@ class BotPaths():
         PING=Path("voicechat") / "dc_ping.mp3"
         TEST="placeholder.mp3"
 
+        ELEVATOR0=Path("voicechat") / "elevator_music0.mp3"
+        ELEVATOR1=Path("voicechat") / "elevator_music1.mp3"
+
     pfp_folder=BASE / "images" / "pfp"
 
     credits_file=BASE / "data" / "3rd_party_credits.json"

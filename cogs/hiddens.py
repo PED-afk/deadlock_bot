@@ -145,6 +145,15 @@ class Hiddens(commands.Cog):
     @commands.command()
     async def portal(self,ctx):
         await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.PORTAL),volume=0.05)
+        
+    @commands.command()
+    async def elevator(self,ctx,id:int=None):
+        if id==None:
+            id=random.randint(0,1)
+        if id==0:
+            await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.ELEVATOR0),volume=0.05)
+        else:
+            await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.ELEVATOR1),volume=0.05)
 
     @commands.command()
     async def dc_ping(self,ctx):
