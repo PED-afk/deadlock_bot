@@ -31,6 +31,7 @@ class MyBot(commands.Bot):
         await self.load_extension("cogs.show_errors_cog")
         await self.load_extension("cogs.games_cog")
         await self.load_extension("cogs.funones")
+        await self.load_extension("cogs.voicechat")
         #await self.load_extension("cogs.priority_cog")
 
         await self.load_extension("external_cogs.debug_cog")
