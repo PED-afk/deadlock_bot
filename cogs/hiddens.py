@@ -189,7 +189,7 @@ class Hiddens(commands.Cog):
 
     #maybe move this to other non hidden cog
     @commands.command()
-    async def play(ctx, *, url: str):
+    async def play(self, ctx, *, url: str):
         def get_audio_info(url):
             with yt_dlp.YoutubeDL({"format": "bestaudio/best","noplaylist": True,"quiet": True,}) as ydl:
                 return ydl.extract_info(url, download=False)
