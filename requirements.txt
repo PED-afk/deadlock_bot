@@ -10,3 +10,6 @@ python-dateutil
 davey
 pydub
 numpy
+
+yt_dlp
+

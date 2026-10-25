@@ -6,6 +6,8 @@ import time
 import random
 import shutil
 
+import yt_dlp
+
 from own_utils import chooseFaceFromCategory, canUseCommand, format_duration, cleanChannel
 from constants import CHANNEL_IDS
 from user_bot_interaction import interact, getInteractValue, getGlobalInteractValue
@@ -183,6 +185,60 @@ class Hiddens(commands.Cog):
             if vcID=="T":
                 vcID=CHANNEL_IDS.VC.TEST
             await self.play_sound(ctx,path,vcID,volume)
+
+
+    #maybe move this to other non hidden cog
+    @commands.command()
+    async def play(ctx, *, url: str):
+        def get_audio_info(url):
+            with yt_dlp.YoutubeDL({"format": "bestaudio/best","noplaylist": True,"quiet": True,}) as ydl:
+                return ydl.extract_info(url, download=False)
+        if await canUseCommand(ctx,2,True,True,True):
+            channel = ctx.author.voice.channel
+            voice = ctx.voice_client
+
+            if voice is None:
+                voice = await channel.connect()
+            elif voice.channel!=channel:
+                await voice.move_to(channel)
+
+            if voice.is_playing() or voice.is_paused():
+                voice.stop()
+
+            await ctx.send("🔎 Loading audio...")
+
+            try:
+                info = await asyncio.to_thread(get_audio_info, url)
+                audio_url = info["url"]
+                title = info.get("title", "Unknown title")
+
+                FFMPEG_OPTIONS={
+                    "before_options": "-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5",
+                    "options": "-vn",
+                }
+                source = discord.FFmpegPCMAudio(
+                    audio_url,
+                    **FFMPEG_OPTIONS
+                )
+
+                voice.play(source)
+
+                await ctx.send(f"Now playing: **{title}**")
+
+            except Exception as e:
+                await ctx.send(f"Could not play audio: {e}")
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     @commands.command()
