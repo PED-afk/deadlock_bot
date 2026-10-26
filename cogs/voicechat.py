@@ -292,6 +292,7 @@ class VoiceChat(commands.Cog):
             self.curentPlayList.queue=None
             self.curentPlayList.curIDX=0
             return
+        await ctx.reply("Playing next video.")
         self.curentPlayList.supressLastAfterPlay=True
         future = asyncio.run_coroutine_threadsafe(
             self.play(ctx,self.curentPlayList.queue[self.curentPlayList.curIDX]),
@@ -313,6 +314,7 @@ class VoiceChat(commands.Cog):
             self.curentPlayList.curIDX=0
             await ctx.reply("You are at the beginning of the playlist.")
             return
+        await ctx.reply("Playing previous video.")
         self.curentPlayList.supressLastAfterPlay=True
         future = asyncio.run_coroutine_threadsafe(
             self.play(ctx,self.curentPlayList.queue[self.curentPlayList.curIDX]),
