@@ -167,6 +167,14 @@ class Hiddens(commands.Cog):
         await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.PORTAL),volume=0.05)
         
     @commands.command()
+    async def woo(self,ctx):
+        if not await canUseCommand(ctx,2,tellReason=False):
+            return
+        if self.bot.dangerousPlayAfter:
+            return
+        await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.WOO),volume=0.1)
+        
+    @commands.command()
     async def elevator(self,ctx,id:int=None):
         if not await canUseCommand(ctx,2,tellReason=False):
             return

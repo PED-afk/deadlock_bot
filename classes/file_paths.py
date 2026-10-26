@@ -37,6 +37,8 @@ class BotPaths():
         ELEVATOR1=Path("voicechat") / "elevator_music1.mp3"
         ELEVATORLONG=Path("voicechat") / "elevator_music1long.mp3"
 
+        WOO=Path("voicechat") / "gnome_woo.mp3"
+
         SILENCE=Path("voicechat") / "silence.mp3"
 
     pfp_folder=BASE / "images" / "pfp"
