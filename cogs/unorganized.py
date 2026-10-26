@@ -267,7 +267,6 @@ class Unorganized(commands.Cog):
 
     @commands.command()
     async def join(self,ctx):
-        senderID=ctx.author.id
         if await canUseCommand(ctx,2):
             if ctx.guild.voice_client!=None:
                 await ctx.reply("Sorry I'm busy in another channel. "+chooseFaceFromCategory("nervous"))
@@ -277,6 +276,7 @@ class Unorganized(commands.Cog):
                 else:
                     channel = ctx.author.voice.channel
                     await channel.connect()
+                    await ctx.invoke(self.bot.get_command("bot_join_vc"))
 
     @commands.command()
     async def leave(self,ctx):

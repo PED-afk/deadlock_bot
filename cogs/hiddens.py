@@ -213,11 +213,20 @@ class Hiddens(commands.Cog):
 
     @commands.command()
     async def play_any(self,ctx,path:str,vcID=None,volume:float=1.0):
-        if await canUseCommand(ctx,-1,False,False,False):
-            self.bot.dangerousPlayAfterOverride=True
-            if vcID=="T":
-                vcID=CHANNEL_IDS.VC.TEST
-            await self.play_sound(ctx,path,vcID,volume)
+        if not await canUseCommand(ctx,-1,False,False,False):
+            return
+        self.bot.dangerousPlayAfterOverride=True
+        if vcID=="T":
+            vcID=CHANNEL_IDS.VC.TEST
+        await self.play_sound(ctx,path,vcID,volume)
+    
+    @commands.command()
+    async def bot_join_vc(self,ctx):
+        if not await canUseCommand(ctx,-1,False,False,False):
+            return
+        if self.bot.dangerousPlayAfter:
+            return
+        await self.play_sound(ctx,str(BotPaths.vcSounds.JOIN),volume=0.3)
 
 
 

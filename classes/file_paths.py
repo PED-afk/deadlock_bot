@@ -31,6 +31,7 @@ class BotPaths():
         PORTAL=Path("voicechat") / "portal.mp3"
         PING=Path("voicechat") / "dc_ping.mp3"
         TEST="placeholder.mp3"
+        JOIN="join.mp3"
 
         ELEVATOR0=Path("voicechat") / "elevator_music0.mp3"
         ELEVATOR1=Path("voicechat") / "elevator_music1.mp3"
