@@ -27,8 +27,6 @@ class Hiddens(commands.Cog):
     
     async def play_sound(self, ctx, path: str,vcID:int=None,volume:float=1.0):
         if vcID==None: #normal exec
-            if not await canUseCommand(ctx, 2):
-                return
             if ctx.author.voice is None or ctx.author.voice.channel is None:
                 await ctx.send("You must be in a voice channel.")
                 return

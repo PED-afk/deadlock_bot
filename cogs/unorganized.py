@@ -277,7 +277,7 @@ class Unorganized(commands.Cog):
                     channel = ctx.author.voice.channel
                     await channel.connect()
                     printLog("debug","Joined vc")
-                    time.sleep(5)
+                    time.sleep(t)
                     message=await channel.send(".")
                     ctx2=await self.bot.get_context(message)
                     await message.delete()
