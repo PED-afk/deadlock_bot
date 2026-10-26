@@ -221,7 +221,7 @@ class Hiddens(commands.Cog):
         await self.play_sound(ctx,path,vcID,volume)
     
     @commands.command()
-    async def bot_join_vc(self,ctx):
+    async def join_vc_bot(self,ctx):
         if not await canUseCommand(ctx,-1,False,False,False):
             return
         if self.bot.dangerousPlayAfter:
