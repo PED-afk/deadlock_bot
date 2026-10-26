@@ -80,8 +80,8 @@ class MyBot(commands.Bot):
 
 
         self.bootTime=time.time()//1
-        self.version="0.13"
-        self.versionSTR="\n"
+        self.version="0.13.1"
+        self.versionSTR="\nMusic for everyone*"
 
 
 
