@@ -278,7 +278,10 @@ class Unorganized(commands.Cog):
                     await channel.connect()
                     printLog("debug","Joined vc")
                     time.sleep(5)
-                    await ctx.invoke(self.bot.get_command("join_vc_bot"))
+                    message=await channel.send(".")
+                    ctx2=await self.bot.get_context(message)
+                    await message.delete()
+                    await ctx2.invoke(self.bot.get_command("join_vc_bot"))
                     printLog("debug","Played audio")
 
     @commands.command()
