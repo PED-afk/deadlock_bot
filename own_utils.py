@@ -108,24 +108,21 @@ async def canUseCommand(ctx:commands.Context, mode:int=3, inChannel:bool=True, i
         return False
 
     if mode==-1 and ctx.author.id!=BOT_ID:
-            if tellReason:
-                await ctx.reply("You are not me.")
-            return False
+        if tellReason:
+            await ctx.reply("You are not me.")
+        return False
     
     if mode==0 and ctx.author.id!=ME:
         if tellReason:
             await ctx.reply("You are not the main guy.")
         return False
 
-    if mode==1:
-        if any(role.id == MOD_ROLE for role in ctx.author.roles):
-            return True
-        else:
-            if tellReason:
-                await ctx.reply("You are not a moderator.")
-            return False
+    elif mode==1 and not any(role.id == MOD_ROLE for role in ctx.author.roles) and not await canUseCommand(ctx,0,inChannel,inVoice,False):
+        if tellReason:
+            await ctx.reply("You are not a moderator.")
+        return False
 
-    elif mode==2 and not any(role.id==BOT_ROLE for role in ctx.author.roles):
+    elif mode==2 and not any(role.id==BOT_ROLE for role in ctx.author.roles) and not await canUseCommand(ctx,1,inChannel,inVoice,False):
         if tellReason:
             await ctx.reply("You do not have permission to use this command.")
         return False

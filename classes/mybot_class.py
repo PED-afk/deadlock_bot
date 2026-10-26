@@ -124,8 +124,15 @@ class MyBot(commands.Bot):
 
         self.opSys=opsysCheck()
         
+        self.dangerousPlayAfter=False
+        self.dangerousPlayAfterOverride=False
+        
         
         #don't worry about these
         
         self.ttnskwii=time.time()
         self.tsnskwii=-1
+        
+        
+
+

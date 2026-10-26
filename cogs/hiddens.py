@@ -130,26 +130,50 @@ class Hiddens(commands.Cog):
 
     @commands.command()
     async def silly(self,ctx):
+        if not await canUseCommand(ctx,2,tellReason=False):
+            return
+        if self.bot.dangerousPlayAfter:
+            return
         await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.SILLY),volume=0.05)
 
     @commands.command()
     async def sillyer(self,ctx):
+        if not await canUseCommand(ctx,2,tellReason=False):
+            return
+        if self.bot.dangerousPlayAfter:
+            return
         await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.SILLYER),volume=0.075)
 
     @commands.command()
     async def fish(self,ctx):
+        if not await canUseCommand(ctx,2,tellReason=False):
+            return
+        if self.bot.dangerousPlayAfter:
+            return
         await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.FIH),volume=0.05)
 
     @commands.command()
     async def FISH(self,ctx):
+        if not await canUseCommand(ctx,2,tellReason=False):
+            return
+        if self.bot.dangerousPlayAfter:
+            return
         await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.FISH),volume=0.4)
 
     @commands.command()
     async def portal(self,ctx):
+        if not await canUseCommand(ctx,2,tellReason=False):
+            return
+        if self.bot.dangerousPlayAfter:
+            return
         await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.PORTAL),volume=0.05)
         
     @commands.command()
     async def elevator(self,ctx,id:int=None):
+        if not await canUseCommand(ctx,2,tellReason=False):
+            return
+        if self.bot.dangerousPlayAfter:
+            return
         if id==None:
             id=random.randint(0,1)
         if id==0:
@@ -159,10 +183,18 @@ class Hiddens(commands.Cog):
             
     @commands.command()
     async def elevator_long(self,ctx):
+        if not await canUseCommand(ctx,2,tellReason=False):
+            return
+        if self.bot.dangerousPlayAfter:
+            return
         await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.ELEVATORLONG),volume=0.1)
 
     @commands.command()
     async def dc_ping(self,ctx):
+        if not await canUseCommand(ctx,1,tellReason=False):
+            return
+        if self.bot.dangerousPlayAfter:
+            return
         await ctx.message.delete()
         for i in range(random.randint(1,5)):
             await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.PING),volume=0.3)
@@ -170,6 +202,10 @@ class Hiddens(commands.Cog):
 
     @commands.command()
     async def dc_ping_long(self,ctx):
+        if not await canUseCommand(ctx,1,tellReason=False):
+            return
+        if self.bot.dangerousPlayAfter:
+            return
         await ctx.message.delete()
         for i in range(random.randint(3,5)):
             await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.PING),volume=0.3)
@@ -178,6 +214,7 @@ class Hiddens(commands.Cog):
     @commands.command()
     async def play_any(self,ctx,path:str,vcID=None,volume:float=1.0):
         if await canUseCommand(ctx,-1,False,False,False):
+            self.bot.dangerousPlayAfterOverride=True
             if vcID=="T":
                 vcID=CHANNEL_IDS.VC.TEST
             await self.play_sound(ctx,path,vcID,volume)

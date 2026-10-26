@@ -203,22 +203,6 @@ async def on_ready():
             s=f"- {cogName}: {commandName}"
             a+=s+"\n"
         writeLog("log",a,"all_commands",False,False,"w","discord_deadlock_bot.py","on_ready",True)
-
-        channel=bot.get_channel(1524176375903420466)
-        if channel is None:
-            channel=await bot.fetch_channel(1524176375903420466)
-        message=await channel.send("Test message")
-        ctx=await bot.get_context(message)
-        await message.delete()
-        args=["D:\\Python_Projects\\second_deadlock_bot\\sounds\\music\\radio_trumpet.mp3","T",0.3]
-        await ctx.invoke(bot.get_command("play_any"),*args)
-        time.sleep(3)
-        args=["D:\\Python_Projects\\second_deadlock_bot\\sounds\\sfx\\radio_static.mp3","T",0.5]
-        await ctx.invoke(bot.get_command("play_any"),*args)
-        time.sleep(3)
-        args=["D:\\Python_Projects\\second_deadlock_bot\\sounds\\edit.mp3","T",0.5]
-        await ctx.invoke(bot.get_command("play_any"),*args)
-        time.sleep(3)
         exit()
         
     #this is last in on_ready()
