@@ -29,7 +29,8 @@ class ErrorOverwrite(commands.Cog):
         
     @commands.Cog.listener()
     async def on_command_error(self,ctx, error):
-        await printLogToDc(self.bot,"error",f"Command error: {error}")
+        command_name = ctx.command.qualified_name if ctx.command else ctx.invoked_with
+        await printLogToDc(self.bot,"error",f"Command error: {command_name} {error}")
 
 
 async def setup(bot):
