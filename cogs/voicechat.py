@@ -256,6 +256,7 @@ class VoiceChat(commands.Cog):
         self.curentPlayList.userID=ctx.author.id
         self.curentPlayList.queue=list(self.bot.user_data[str(ctx.author.id)]["playlists"][name])
         await ctx.invoke(self.bot.get_command("play"),url=self.bot.user_data[str(ctx.author.id)]["playlists"][name][0])
+        await ctx.reply(f"Playing playlist {name}")
         
     @commands.command()
     async def stopPL(self,ctx):
@@ -272,6 +273,7 @@ class VoiceChat(commands.Cog):
         self.curentPlayList.curIDX=0
         self.curentPlayList.supressLastAfterPlay=True
         await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.SILENCE),volume=1.0)
+        await ctx.reply("Stoped playlist.")
 
     @commands.command()
     async def playNEXT(self,ctx):
