@@ -19,6 +19,7 @@ from classes.bot_faces import Faces
 class VoiceChat(commands.Cog):
     def __init__(self,bot):
         class PlayList():
+            PL_name=None
             queue=None
             userID=None
             curIDX=0
@@ -237,11 +238,14 @@ class VoiceChat(commands.Cog):
         await ctx.reply(f"Deleted playlist named {name}.")
         
     @commands.command()
-    async def playPL(self,ctx,name:str):
+    async def playPL(self,ctx,name:str=None):
         if not await canUseCommand(ctx,2):
             return
         if "playlists" not in self.bot.user_data[str(ctx.author.id)]:
             await ctx.reply("You don't have any playlists.\nCreate one with `!createPL <playlist name>`!")
+            return
+        if name is None:
+            await ctx.reply("Give me the name of the playlist you want to play.\nYou can view your playlists with `!playlists`!")
             return
         if name not in self.bot.user_data[str(ctx.author.id)]["playlists"]:
             await ctx.reply("You don't have a playlist with that name.\nCreate one with `!createPL <playlist name>`!\nSee your playlists with `!playlists`!")
@@ -255,6 +259,7 @@ class VoiceChat(commands.Cog):
         self.curentPlayList.curIDX=0
         self.curentPlayList.userID=ctx.author.id
         self.curentPlayList.queue=list(self.bot.user_data[str(ctx.author.id)]["playlists"][name])
+        self.curentPlayList.PL_name=name
         await ctx.invoke(self.bot.get_command("play"),url=self.bot.user_data[str(ctx.author.id)]["playlists"][name][0])
         await ctx.reply(f"Playing playlist {name}")
         
@@ -294,10 +299,7 @@ class VoiceChat(commands.Cog):
             return
         await ctx.reply("Playing next video.")
         self.curentPlayList.supressLastAfterPlay=True
-        future=asyncio.run_coroutine_threadsafe(
-            self.play(ctx,self.curentPlayList.queue[self.curentPlayList.curIDX]),
-            self.bot.loop,
-        )
+        await ctx.invoke(self.bot.get_command("play"),url=self.bot.user_data[str(ctx.author.id)]["playlists"][self.curentPlayList.PL_name][self.curentPlayList.curIDX])
         
     @commands.command()
     async def playPREV(self,ctx):
@@ -316,10 +318,7 @@ class VoiceChat(commands.Cog):
             return
         await ctx.reply("Playing previous video.")
         self.curentPlayList.supressLastAfterPlay=True
-        future=asyncio.run_coroutine_threadsafe(
-            self.play(ctx,self.curentPlayList.queue[self.curentPlayList.curIDX]),
-            self.bot.loop,
-        )
+        await ctx.invoke(self.bot.get_command("play"),url=self.bot.user_data[str(ctx.author.id)]["playlists"][self.curentPlayList.PL_name][self.curentPlayList.curIDX])
 
     @commands.command()
     async def addtoPL(self,ctx,name:str,url:str):
