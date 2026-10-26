@@ -80,21 +80,22 @@ class Unorganized(commands.Cog):
     @commands.command()
     async def help(self, ctx, section:str=None):
         senderID=ctx.author.id
-        if await canUseCommand(ctx,3):
+        if await canUseCommand(ctx,3) or await canUseCommand(ctx,0,False,tellReason=False):
             from datetime import datetime
             tz=datetime.now().astimezone().tzinfo
             anyView=True
             if section==None:
                 anyView=True
                 botcommands=[
-                    "`!help_me timer`: Commands about my timer functionality.",
-                    "`!help_me voice`: Commands about me using voice channels.",
-                    "`!help_me moderation`: Commands about moderating what's happening in the server",
-                    "`!help_me admin`: Commands that only 'important' people can use.",
-                    "`!help_me data`: Commands about a minigame that is in development.",
-                    "`!help_me tools`: Commands about some 'tools' and tools I can provide to spice up your game.",
-                    "`!help_me extra`: Commands about no particular topic.",
-                    "`!help_me regret`: We don't talk about these",
+                    "`!help timer`: Commands about my timer functionality.",
+                    "`!help voice`: Commands about me using voice channels.",
+                    "`!help music`: Commands to play music using the bot in voice channels.",
+                    "`!help moderation`: Commands about moderating what's happening in the server",
+                    "`!help admin`: Commands that only 'important' people can use.",
+                    "`!help data`: Commands about a minigame that is in development.",
+                    "`!help tools`: Commands about some 'tools' and tools I can provide to spice up your game.",
+                    "`!help extra`: Commands about no particular topic.",
+                    "`!help regret`: We don't talk about these",
                 ]
             elif section=="timer":
                 anyView=True
@@ -109,11 +110,30 @@ class Unorganized(commands.Cog):
                     "`!remaining:` Tells you how much time remains on the timer.",
                 ]
             elif section=="voice":
-                face=chooseFaceFromCategory("annoyed")
                 anyView=True
                 botcommands=[
                     "`!join`: I will join you in a voice chat.",
                     "`!leave`: I will leave the voice chat. (will contionue counting for the timer)"
+                ]
+            elif section=="music":
+                anyView=True
+                botcommands=[
+                    "## New and \"low level\" users may not have acces to these commands."
+                    "`!join`: I will join you in a voice chat.",
+                    "`!leave`: I will leave the voice chat.",
+                    "`!volume`: Set my loudnes in voice chat. (between 0 and 100)",
+                    "`!stops`: Stop all/any sound curently playing",
+                    "`!play <youtube url>`: I will play the sound from any youtube video.",
+                    "`!playlists`: I will list all your playlists.",
+                    "`!playlist <playlist name>`: I will list all videos in a playlist.",
+                    "`!createPL <playlist name>`: I will create a playlist for you with the given name.",
+                    "`!deletePL <playlist name>`: I will delete the playlist with the given name.",
+                    "`!playPL <playlist name>`: I will start playing the playlist.",
+                    "`!stopPL`: I will stop the playback of the curently active playlist.",
+                    "`!playNEXT` and `!playPREV`: Play the next or previous video in the playlist.",
+                    "`!addtoPL <playlist name> <youtube url>`: Add url to the given playlist.",
+                    "`!removeFromPL <playlist name> <youtube url or title:<video title>>`: I will remove the given url or video with the name (format must be \"title:<exact video title>\") from the playlist.",
+                    "`!removeFromPL_id <playlist name> <video number>`: I will remove the video at index <video number> from the playlist. (first video in the list is index 1)"
                 ]
             elif section=="admin":
                 anyView=False
@@ -173,7 +193,7 @@ class Unorganized(commands.Cog):
             elif section=="moderation":
                 anyView=True
                 botcommands=[
-                    "`!shh`: Tell me if a user is misbehaving and if enough people do it I will mute them for a bit.\nUse ```!help_me shh``` to learn more!"
+                    "`!shh`: Tell me if a user is misbehaving and if enough people do it I will mute them for a bit.\nUse ```!help shh``` to learn more!"
                 ]
             elif section=="shh":
                 anyView=True
@@ -236,6 +256,7 @@ class Unorganized(commands.Cog):
             await ctx.reply("Bot version: "+self.bot.version+" "+self.bot.versionSTR+"\nOS: "+winlin+"\nHardware I'm living on: "+cpu+"\nI've been running for: "+str(hours)+" hours, "+str(minutes)+" minutes and "+str(seconds)+" seconds."+extra)
             if lindistr!=None:
                 await ctx.reply(getAll()+lindistr["PRETTY_NAME"],delete_after=30)
+                printLog("info",getAll()+lindistr["PRETTY_NAME"])
                 #await ctx.send("Fun fact: Most likely I'm running on a rasberry pi 5. :D\nLinux dist: "+lindistr["PRETTY_NAME"],delete_after=30)
 
     @commands.command()

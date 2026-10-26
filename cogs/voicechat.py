@@ -9,7 +9,7 @@ import shutil
 import yt_dlp
 
 from own_utils import chooseFaceFromCategory, canUseCommand
-from constants import MAX_MESSAGE_LEN
+from constants import MAX_MESSAGE_LEN, MAX_PLAYLIST_PER_USER, MAX_PLAYLIST_PER_USER_HARD
 from debug import printLogToDc, printLog
 from classes.file_paths import BotPaths
 from classes.bot_faces import Faces
@@ -219,6 +219,12 @@ class VoiceChat(commands.Cog):
             self.bot.user_data[str(ctx.author.id)]["playlists"]={}
         if name in self.bot.user_data[str(ctx.author.id)]["playlists"]:
             await ctx.reply("You have a playlist with that name.\nSee your playlists with `!playlists`!")
+            return
+        if len(self.bot.user_data[str(ctx.author.id)]["playlists"])>=MAX_PLAYLIST_PER_USER and not await canUseCommand(ctx,1,tellReason=False):
+            await ctx.reply(f"You already have {MAX_PLAYLIST_PER_USER} playlists (which is the maximum).")
+            return
+        if len(self.bot.user_data[str(ctx.author.id)]["playlists"])>=MAX_PLAYLIST_PER_USER_HARD and await canUseCommand(ctx,1,tellReason=False):
+            await ctx.reply(f"You already have {MAX_PLAYLIST_PER_USER} playlists (which is the maximum).")
             return
         
         self.bot.user_data[str(ctx.author.id)]["playlists"][name]=[]
