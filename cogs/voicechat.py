@@ -16,14 +16,17 @@ from classes.bot_faces import Faces
 
 #commands to controll playing music/audio in voicechat
 
+class PlayList():
+    printLog("Info","Playlist reset.")
+    PL_name=None
+    queue=None
+    userID=None
+    curIDX=0
+    supressLastAfterPlay=False
+
+
 class VoiceChat(commands.Cog):
     def __init__(self,bot):
-        class PlayList():
-            PL_name=None
-            queue=None
-            userID=None
-            curIDX=0
-            supressLastAfterPlay=False
         self.bot=bot
         self.volume=1.0
         self.curentPlayList=PlayList()
@@ -112,10 +115,8 @@ class VoiceChat(commands.Cog):
                 return
             self.curentPlayList.curIDX+=1
             if self.curentPlayList.curIDX==len(self.curentPlayList.queue):
-                self.curentPlayList.userID=None
-                self.curentPlayList.queue=None
-                self.curentPlayList.curIDX=0
-                self.bot.dangerousPlayAfter=False
+                printLog("info","after_playing reset")
+                self.curentPlayList=PlayList()
                 return
             if self.curentPlayList.supressLastAfterPlay or self.bot.dangerousPlayAfterOverride:
                 self.curentPlayList.supressLastAfterPlay=False
@@ -260,8 +261,8 @@ class VoiceChat(commands.Cog):
         self.curentPlayList.userID=ctx.author.id
         self.curentPlayList.queue=list(self.bot.user_data[str(ctx.author.id)]["playlists"][name])
         self.curentPlayList.PL_name=name
-        await ctx.invoke(self.bot.get_command("play"),url=self.bot.user_data[str(ctx.author.id)]["playlists"][name][0])
         await ctx.reply(f"Playing playlist {name}")
+        await ctx.invoke(self.bot.get_command("play"),url=self.bot.user_data[str(ctx.author.id)]["playlists"][name][0])
         
     @commands.command()
     async def stopPL(self,ctx):
@@ -273,12 +274,12 @@ class VoiceChat(commands.Cog):
         if self.curentPlayList.userID!=ctx.author.id and not await canUseCommand(ctx,1,tellReason=False):
             await ctx.reply("You are not the user who started this playlist.\nThe playlist must end or the user must stop it.")
             return
-        self.curentPlayList.userID=None
-        self.curentPlayList.queue=None
-        self.curentPlayList.curIDX=0
+        
+        printLog("info","stopPL reset")
+        self.curentPlayList=PlayList()
         self.curentPlayList.supressLastAfterPlay=True
+        await ctx.reply("Stoping playlist.")
         await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.SILENCE),volume=1.0)
-        await ctx.reply("Stoped playlist.")
 
     @commands.command()
     async def playNEXT(self,ctx):
@@ -293,9 +294,8 @@ class VoiceChat(commands.Cog):
         self.curentPlayList.curIDX+=1
         if self.curentPlayList.curIDX>=len(self.curentPlayList.queue):
             await ctx.reply("You reached the end of the playlist.")
-            self.curentPlayList.userID=None
-            self.curentPlayList.queue=None
-            self.curentPlayList.curIDX=0
+            printLog("info","playNEXT reset")
+            self.curentPlayList=PlayList()
             return
         await ctx.reply("Playing next video.")
         self.curentPlayList.supressLastAfterPlay=True
