@@ -169,8 +169,8 @@ class VoiceChat(commands.Cog):
         if "playlists" not in self.bot.user_data[str(ctx.author.id)]:
             await ctx.reply("You don't have any playlists.\nCreate one with `!createPL <playlist name>`!")
             return
-        msg="You have the following playlist(s):\n"
-        extra="\n Play one with `!playPL <playlist name>`!\nSee what is in one of them with `!playlist <playlist name>`!"
+        msg="You have the following playlist(s):\n==============================="
+        extra="\n===============================\nPlay one with `!playPL <playlist name>`!\nSee what is in one of them with `!playlist <playlist name>`!"
         for i in self.bot.user_data[str(ctx.author.id)]["playlists"]:
             curMsgLen=len(msg)+len(f"\n{i}")+len(extra)
             if curMsgLen>=MAX_MESSAGE_LEN:
@@ -181,11 +181,14 @@ class VoiceChat(commands.Cog):
         await ctx.reply(msg)
         
     @commands.command()
-    async def playlist(self,ctx,name:str):
+    async def playlist(self,ctx,name:str=None):
         def get_audio_info(url):
             with yt_dlp.YoutubeDL({"format": "bestaudio/best","noplaylist": True,"quiet": True,}) as ydl:
                 return ydl.extract_info(url, download=False)
         if not await canUseCommand(ctx,2):
+            return
+        if name is None:
+            await ctx.reply("Give me the name of the playlist you want to view.\nSee your playlists with `!playlists`!")
             return
         if "playlists" not in self.bot.user_data[str(ctx.author.id)]:
             await ctx.reply("You don't have any playlists.\nCreate one with `!createPL <playlist name>`!")
@@ -193,11 +196,16 @@ class VoiceChat(commands.Cog):
         if name not in self.bot.user_data[str(ctx.author.id)]["playlists"]:
             await ctx.reply("You don't have a playlist with that name.\nSee your playlists with `!playlists`!")
             return
+        if len(self.bot.user_data[str(ctx.author.id)]["playlists"][name])==0:
+            await ctx.reply("This playlist doesn't have any videos.\nAdd videos with `!addtoPL <playlist name> <youtube url>")
+            return
         msg="This playlist has the following videos:"
         for url in self.bot.user_data[str(ctx.author.id)]["playlists"][name]:
-            info = await asyncio.to_thread(get_audio_info, url)
-            title = info.get("title", "Unknown title")
-            if len(msg)+len(f"\n{title}")>=MAX_MESSAGE_LEN:
+            info=await asyncio.to_thread(get_audio_info, url)
+            title=info.get("title", "Unknown title")
+            curMsgLen=len(msg)+len(f"\n{title}")
+            if curMsgLen>=MAX_MESSAGE_LEN:
+                printLog("info",f"message longer than limit:{curMsgLen}/{MAX_MESSAGE_LEN}")
                 break
             msg+=f"\n{title}"
         await ctx.reply(msg)
@@ -321,6 +329,7 @@ class VoiceChat(commands.Cog):
             await ctx.reply("You don't have a playlist with that name.\nCreate one with `!createPL <playlist name>`!\nSee your playlists with `!playlists`!")
             return
         self.bot.user_data[str(ctx.author.id)]["playlists"][name].append(url)
+        await ctx.reply("Added url to playlist.")
 
     @overload
     @commands.command()
@@ -338,6 +347,7 @@ class VoiceChat(commands.Cog):
                 await ctx.reply("You don't have this url in your playlist.")
                 return
             self.bot.user_data[str(ctx.author.id)]["playlists"][name].remove(url)
+            await ctx.reply(f"Removed video from playlist.")
         else:
             def get_audio_info(url):
                 with yt_dlp.YoutubeDL({"format": "bestaudio/best","noplaylist": True,"quiet": True,}) as ydl:
@@ -348,6 +358,7 @@ class VoiceChat(commands.Cog):
                 title = info.get("title", "Unknown title")
                 if title==delTitle:
                     self.bot.user_data[str(ctx.author.id)]["playlists"][name].remove(link)
+                    await ctx.reply(f"Removed {title} from playlist.")
                     break
                     
         
@@ -366,6 +377,7 @@ class VoiceChat(commands.Cog):
             await ctx.reply("You don't have this many items in your playlist")
             return
         self.bot.user_data[str(ctx.author.id)]["playlists"][name].pop(id-1)
+        await ctx.reply(f"Removed video from playlist.")
 
 
 
