@@ -276,7 +276,9 @@ class Unorganized(commands.Cog):
                 else:
                     channel = ctx.author.voice.channel
                     await channel.connect()
+                    printLog("debug","Joined vc")
                     await ctx.invoke(self.bot.get_command("join_vc_bot"))
+                    printLog("debug","Played audio")
 
     @commands.command()
     async def leave(self,ctx):
