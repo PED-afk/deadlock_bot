@@ -5,7 +5,6 @@ import asyncio
 import time
 import random
 import shutil
-from typing import overload
 
 import yt_dlp
 
@@ -331,7 +330,6 @@ class VoiceChat(commands.Cog):
         self.bot.user_data[str(ctx.author.id)]["playlists"][name].append(url)
         await ctx.reply("Added url to playlist.")
 
-    @overload
     @commands.command()
     async def removeFromPL(self,ctx,name:str,url:str):
         if not await canUseCommand(ctx,2):
@@ -362,9 +360,8 @@ class VoiceChat(commands.Cog):
                     break
                     
         
-    @overload
     @commands.command()
-    async def removeFromPL(self,ctx,name:str,id:int):
+    async def removeFromPL_id(self,ctx,name:str,sId:int):
         if not await canUseCommand(ctx,2):
             return
         if "playlists" not in self.bot.user_data[str(ctx.author.id)]:
@@ -373,10 +370,10 @@ class VoiceChat(commands.Cog):
         if name not in self.bot.user_data[str(ctx.author.id)]["playlists"]:
             await ctx.reply("You don't have a playlist with that name.\nCreate one with `!createPL <playlist name>`!\nSee your playlists with `!playlists`!")
             return
-        if id>len(self.bot.user_data[str(ctx.author.id)]["playlists"][name]):
-            await ctx.reply("You don't have this many items in your playlist")
+        if sId>len(self.bot.user_data[str(ctx.author.id)]["playlists"][name]):
+            await ctx.reply("You don't have this many songs in your playlist")
             return
-        self.bot.user_data[str(ctx.author.id)]["playlists"][name].pop(id-1)
+        self.bot.user_data[str(ctx.author.id)]["playlists"][name].pop(sId-1)
         await ctx.reply(f"Removed video from playlist.")
 
 
