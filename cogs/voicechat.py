@@ -169,11 +169,15 @@ class VoiceChat(commands.Cog):
         if "playlists" not in self.bot.user_data[str(ctx.author.id)]:
             await ctx.reply("You don't have any playlists.\nCreate one with `!createPL <playlist name>`!")
             return
-        msg="You have the following playlist(s).\n Play one with `!playPL <playlist name>`!\nSee what is in one of them with `!playlist <playlist name>`!"
+        msg="You have the following playlist(s):\n"
+        extra="\n Play one with `!playPL <playlist name>`!\nSee what is in one of them with `!playlist <playlist name>`!"
         for i in self.bot.user_data[str(ctx.author.id)]["playlists"]:
-            if len(msg)+len(f"\n{i}")>=MAX_MESSAGE_LEN:
+            curMsgLen=len(msg)+len(f"\n{i}")+len(extra)
+            if curMsgLen>=MAX_MESSAGE_LEN:
+                printLog("info",f"message longer than limit:{curMsgLen}/{MAX_MESSAGE_LEN}")
                 break
             msg+=f"\n{i}"
+        msg+=extra
         await ctx.reply(msg)
         
     @commands.command()
