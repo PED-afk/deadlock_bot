@@ -110,6 +110,10 @@ class VoiceChat(commands.Cog):
             if error:
                 printLog("error",f"Playback error: {error}")
             
+            if self.curentPlayList.supressLastAfterPlay or self.bot.dangerousPlayAfterOverride:
+                self.curentPlayList.supressLastAfterPlay=False
+                self.bot.dangerousPlayAfter=False
+                return
             if self.curentPlayList.queue==None:
                 self.bot.dangerousPlayAfter=False
                 return
@@ -117,10 +121,6 @@ class VoiceChat(commands.Cog):
             if self.curentPlayList.curIDX==len(self.curentPlayList.queue):
                 printLog("info","after_playing reset")
                 self.curentPlayList=PlayList()
-                return
-            if self.curentPlayList.supressLastAfterPlay or self.bot.dangerousPlayAfterOverride:
-                self.curentPlayList.supressLastAfterPlay=False
-                self.bot.dangerousPlayAfter=False
                 return
             future=asyncio.run_coroutine_threadsafe(
                 self.play(ctx,self.curentPlayList.queue[self.curentPlayList.curIDX]),
