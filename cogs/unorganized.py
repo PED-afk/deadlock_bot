@@ -118,7 +118,7 @@ class Unorganized(commands.Cog):
             elif section=="music":
                 anyView=True
                 botcommands=[
-                    "## New and \"low level\" users may not have access to these commands."
+                    "### New and \"low level\" users may not have access to these commands.",
                     "`!join`: I will join you in a voice chat.",
                     "`!leave`: I will leave the voice chat.",
                     "`!volume`: Set my loudnes in voice chat. (between 0 and 100)",
