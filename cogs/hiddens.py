@@ -228,6 +228,7 @@ class Hiddens(commands.Cog):
         printLog("debug","join_vc_bot command 2")
         if self.bot.dangerousPlayAfter:
             return
+        printLog("debug","join_vc_bot command 3")
         await self.play_sound(ctx,str(BotPaths.vcSounds.JOIN),volume=0.3)
 
 

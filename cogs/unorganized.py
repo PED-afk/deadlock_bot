@@ -266,7 +266,7 @@ class Unorganized(commands.Cog):
             await ctx.reply("Bot version: "+self.bot.version+"\n"+self.bot.versionSTR)
 
     @commands.command()
-    async def join(self,ctx):
+    async def join(self,ctx,t:int=0):
         if await canUseCommand(ctx,2):
             if ctx.guild.voice_client!=None:
                 await ctx.reply("Sorry I'm busy in another channel. "+chooseFaceFromCategory("nervous"))
