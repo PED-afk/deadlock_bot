@@ -120,17 +120,17 @@ class VoiceChat(commands.Cog):
                 self.curentPlayList.supressLastAfterPlay=False
                 self.bot.dangerousPlayAfter=False
                 return
-            future = asyncio.run_coroutine_threadsafe(
+            future=asyncio.run_coroutine_threadsafe(
                 self.play(ctx,self.curentPlayList.queue[self.curentPlayList.curIDX]),
                 self.bot.loop,
             )
         self.bot.dangerousPlayAfter=False
         
-        channel = ctx.author.voice.channel
-        voice = ctx.voice_client
+        channel=ctx.author.voice.channel
+        voice=ctx.voice_client
 
         if voice is None:
-            voice = await channel.connect()
+            voice=await channel.connect()
         elif voice.channel!=channel:
             await voice.move_to(channel)
 
@@ -140,15 +140,15 @@ class VoiceChat(commands.Cog):
         await ctx.send("Loading audio...")
 
         try:
-            info = await asyncio.to_thread(get_audio_info, url)
-            audio_url = info["url"]
-            title = info.get("title", "Unknown title")
+            info=await asyncio.to_thread(get_audio_info, url)
+            audio_url=info["url"]
+            title=info.get("title", "Unknown title")
 
             FFMPEG_OPTIONS={
                 "before_options": "-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5",
                 "options": "-vn",
             }
-            source = discord.PCMVolumeTransformer(
+            source=discord.PCMVolumeTransformer(
                 discord.FFmpegPCMAudio(audio_url, **FFMPEG_OPTIONS),
                 volume=self.volume
             )
@@ -294,7 +294,7 @@ class VoiceChat(commands.Cog):
             return
         await ctx.reply("Playing next video.")
         self.curentPlayList.supressLastAfterPlay=True
-        future = asyncio.run_coroutine_threadsafe(
+        future=asyncio.run_coroutine_threadsafe(
             self.play(ctx,self.curentPlayList.queue[self.curentPlayList.curIDX]),
             self.bot.loop,
         )
@@ -316,7 +316,7 @@ class VoiceChat(commands.Cog):
             return
         await ctx.reply("Playing previous video.")
         self.curentPlayList.supressLastAfterPlay=True
-        future = asyncio.run_coroutine_threadsafe(
+        future=asyncio.run_coroutine_threadsafe(
             self.play(ctx,self.curentPlayList.queue[self.curentPlayList.curIDX]),
             self.bot.loop,
         )
@@ -356,8 +356,8 @@ class VoiceChat(commands.Cog):
                     return ydl.extract_info(url, download=False)
             delTitle=url.removeprefix("title:")
             for link in self.bot.user_data[str(ctx.author.id)]["playlists"][name]:
-                info = await asyncio.to_thread(get_audio_info, link)
-                title = info.get("title", "Unknown title")
+                info=await asyncio.to_thread(get_audio_info, link)
+                title=info.get("title", "Unknown title")
                 if title==delTitle:
                     self.bot.user_data[str(ctx.author.id)]["playlists"][name].remove(link)
                     await ctx.reply(f"Removed {title} from playlist.")
