@@ -13,3 +13,4 @@ numpy
 
 yt_dlp
 
+Pillow
