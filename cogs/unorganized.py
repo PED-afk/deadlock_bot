@@ -274,16 +274,12 @@ class Unorganized(commands.Cog):
                 if ctx.author.voice==None:
                     await ctx.reply("You must be in a voice channel so I know which channel to join.")
                 else:
-                    channel = ctx.author.voice.channel
+                    channel=ctx.author.voice.channel
                     await channel.connect()
-                    printLog("debug","Joined vc")
-                    printLogToDc(self.bot,"debug","Joined vc")
                     message=await channel.send(".")
                     ctx2=await self.bot.get_context(message)
                     await message.delete()
                     await ctx2.invoke(self.bot.get_command("join_vc_bot"))
-                    printLog("debug","Played audio")
-                    printLogToDc(self.bot,"debug","Played audio")
 
     @commands.command()
     async def leave(self,ctx):
