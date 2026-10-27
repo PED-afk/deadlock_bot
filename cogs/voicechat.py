@@ -17,7 +17,7 @@ from classes.bot_faces import Faces
 #commands to controll playing music/audio in voicechat
 
 class PlayList():
-    printLog("Info","Playlist reset.")
+    #printLog("Info","Playlist reset.")
     PL_name=None
     queue=None
     userID=None
@@ -119,7 +119,7 @@ class VoiceChat(commands.Cog):
                 return
             self.curentPlayList.curIDX+=1
             if self.curentPlayList.curIDX==len(self.curentPlayList.queue):
-                printLog("info","after_playing reset")
+                #printLog("info","after_playing reset")
                 self.curentPlayList=PlayList()
                 return
             future=asyncio.run_coroutine_threadsafe(
@@ -281,7 +281,7 @@ class VoiceChat(commands.Cog):
             await ctx.reply("You are not the user who started this playlist.\nThe playlist must end or the user must stop it.")
             return
         
-        printLog("info","stopPL reset")
+        #printLog("info","stopPL reset")
         self.curentPlayList=PlayList()
         self.curentPlayList.supressLastAfterPlay=True
         await ctx.reply("Stoping playlist.")
@@ -300,7 +300,7 @@ class VoiceChat(commands.Cog):
         self.curentPlayList.curIDX+=1
         if self.curentPlayList.curIDX>=len(self.curentPlayList.queue):
             await ctx.reply("You reached the end of the playlist.")
-            printLog("info","playNEXT reset")
+            #printLog("info","playNEXT reset")
             self.curentPlayList=PlayList()
             return
         await ctx.reply("Playing next video.")

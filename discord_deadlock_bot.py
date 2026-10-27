@@ -203,7 +203,7 @@ async def on_ready():
             s=f"- {cogName}: {commandName}"
             a+=s+"\n"
         writeLog("log",a,"all_commands",False,False,"w","discord_deadlock_bot.py","on_ready",True)
-        exit()
+        #exit()
         
     #this is last in on_ready()
     printLog("info",f"Bot running version: {bot.version}\t(on_ready finnished)")

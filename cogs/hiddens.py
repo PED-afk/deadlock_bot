@@ -55,10 +55,13 @@ class Hiddens(commands.Cog):
 
         def after_playing(error):
             elapsed=time.monotonic()-start_time
+            self.bot.debuge=None
             if error:
                 printLog("error",f"Playback error after {elapsed:.2f}s: {error!r}")
+                self.bot.debuge=error
             else:
                 printLog("debug",f"Playback finished after {elapsed:.2f}s")
+            self.bot.debug=f"{elapsed:.2f}"
             loop.call_soon_threadsafe(finished.set)
 
         source=None
@@ -68,6 +71,9 @@ class Hiddens(commands.Cog):
             vc.play(source, after=after_playing)
             printLog("debug", f"Started playback: {path}")
             await finished.wait()
+            await printLogToDc(self.bot,"debug",self.bot.debug)
+            if self.bot.debuge is not None:
+                await printLogToDc(self.bot,"debug",self.bot.debuge)
         except Exception as e:
             printLog("error",f"Could not play {path}: {e!r}")
             raise
@@ -80,7 +86,7 @@ class Hiddens(commands.Cog):
                 await vc.disconnect()
 
             if beforeChannel!=None:
-                vc.move_to(beforeChannel)
+                await vc.move_to(beforeChannel)
         
 
     @commands.command()
@@ -172,7 +178,7 @@ class Hiddens(commands.Cog):
             return
         if self.bot.dangerousPlayAfter:
             return
-        await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.WOO),volume=0.1)
+        await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.WOO),volume=0.5)
         
     @commands.command()
     async def elevator(self,ctx,id:int=None):
@@ -228,14 +234,11 @@ class Hiddens(commands.Cog):
     
     @commands.command()
     async def join_vc_bot(self,ctx):
-        printLog("debug","join_vc_bot command 1")
         if not await canUseCommand(ctx,-1,False,False,False):
             return
-        printLog("debug","join_vc_bot command 2")
         if self.bot.dangerousPlayAfter:
             return
-        printLog("debug","join_vc_bot command 3")
-        await self.play_sound(ctx,str(BotPaths.vcSounds.JOIN),volume=0.3)
+        await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.JOIN),volume=0.4)
 
 
 
