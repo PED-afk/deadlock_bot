@@ -266,7 +266,7 @@ class Unorganized(commands.Cog):
             await ctx.reply("Bot version: "+self.bot.version+"\n"+self.bot.versionSTR)
 
     @commands.command()
-    async def join(self,ctx,t:int=0):
+    async def join(self,ctx):
         if await canUseCommand(ctx,2):
             if ctx.guild.voice_client!=None:
                 await ctx.reply("Sorry I'm busy in another channel. "+chooseFaceFromCategory("nervous"))
@@ -277,12 +277,13 @@ class Unorganized(commands.Cog):
                     channel = ctx.author.voice.channel
                     await channel.connect()
                     printLog("debug","Joined vc")
-                    time.sleep(t)
+                    printLogToDc(self.bot,"debug","Joined vc")
                     message=await channel.send(".")
                     ctx2=await self.bot.get_context(message)
                     await message.delete()
                     await ctx2.invoke(self.bot.get_command("join_vc_bot"))
                     printLog("debug","Played audio")
+                    printLogToDc(self.bot,"debug","Played audio")
 
     @commands.command()
     async def leave(self,ctx):
