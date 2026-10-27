@@ -46,6 +46,8 @@ class Timer(commands.Cog):
                 for guild in self.bot.guilds:
                     for channel in discord.utils.get(guild.categories, name=VOICE_CHANNEL_CAT_NAME_PREFIX+"["+name+"]").voice_channels:
                         for member in channel.members:
+                            if member.bot:
+                                continue
                             if member.global_name=="PurpleEarthDragon":
                                 names.append(colorTextForDc(member.global_name,Colors.PURPLE)+" "+chooseFaceFromCategory("love"))
                             else:

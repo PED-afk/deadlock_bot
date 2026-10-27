@@ -199,7 +199,7 @@ class Hiddens(commands.Cog):
             return
         if self.bot.dangerousPlayAfter:
             return
-        await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.ELEVATORLONG),volume=0.1)
+        await self.play_sound(ctx,str(BotPaths.sounds_folder / BotPaths.vcSounds.ELEVATORLONG),volume=0.075)
 
     @commands.command()
     async def dc_ping(self,ctx):

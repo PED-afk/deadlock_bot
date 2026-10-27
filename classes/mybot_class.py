@@ -11,7 +11,7 @@ from pathlib import Path
 from classes.file_paths import BotPaths
 from classes.item import DeadlockItem
 from data_manage import load_json, save_json, deep_load_txt, deep_load_json, load_txt
-from constants import GREET_CD, MESSAGE_CD, SECOND_BASE
+from constants import GREET_CD, MESSAGE_CD, SECOND_BASE, TIMER_LENGTH_MINUTE
 
 
 class MyBot(commands.Bot):
@@ -72,7 +72,7 @@ class MyBot(commands.Bot):
                 break
 
 
-        self.startTimers={"A":9*60,"B":9*60}
+        self.startTimers={"A":TIMER_LENGTH_MINUTE*60,"B":TIMER_LENGTH_MINUTE*60}
         self.timers={"A":{"time":None,"paused":False},"B":{"time":None,"paused":False}}
 
         self.shhMod={}
