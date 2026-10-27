@@ -59,8 +59,8 @@ class Hiddens(commands.Cog):
                 printLog("error",f"Playback error after {elapsed:.2f}s: {error!r}")
             else:
                 printLog("debug",f"Playback finished after {elapsed:.2f}s")
-                a=f"{elapsed:.2f}"
-                printLogToDc(self.bot,"debug",f"Playback finished after {a}s")
+            a=f"{elapsed:.2f}"
+            printLogToDc(self.bot,"debug",f"Playback end after {a}s")
             loop.call_soon_threadsafe(finished.set)
 
         source=None
