@@ -57,7 +57,7 @@ class Power(commands.Cog):
                 f.write(str(tryUpdate))
             
             if activeTimerExists(self.bot):
-                ctx.reply("Sorry, I can't restart now, there is at least 1 active timer.")
+                await ctx.reply("Sorry, I can't restart now, there is at least 1 active timer.")
             else:
                 if ctx.guild.voice_client:
                     await ctx.guild.voice_client.disconnect()
