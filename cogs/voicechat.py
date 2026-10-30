@@ -112,7 +112,7 @@ class VoiceChat(commands.Cog):
             await ctx.reply("I'm not in any voice channels.")
     
     @commands.command()
-    async def volume(self,ctx,volume:int=100):
+    async def volume(self,ctx,volume:float=100):
         if await canUseCommand(ctx,2,True,True,True):
             if not (0<=volume and volume<=100):
                 await ctx.send("Volume must be between 0 and 100.")
