@@ -266,35 +266,6 @@ class Unorganized(commands.Cog):
             await ctx.reply("Bot version: "+self.bot.version+"\n"+self.bot.versionSTR)
 
     @commands.command()
-    async def join(self,ctx):
-        if await canUseCommand(ctx,2):
-            if ctx.guild.voice_client!=None:
-                await ctx.reply("Sorry I'm busy in another channel. "+chooseFaceFromCategory("nervous"))
-            else:
-                if ctx.author.voice==None:
-                    await ctx.reply("You must be in a voice channel so I know which channel to join.")
-                else:
-                    channel=ctx.author.voice.channel
-                    await channel.connect()
-                    message=await channel.send(".")
-                    ctx2=await self.bot.get_context(message)
-                    await message.delete()
-                    await ctx2.invoke(self.bot.get_command("join_vc_bot"))
-
-    @commands.command()
-    async def leave(self,ctx):
-        senderID=ctx.author.id
-        if await canUseCommand(ctx,2):
-            if ctx.voice_client:
-                if ctx.author.voice==None:
-                    await ctx.reply("You must be in a voice channel so I know if you are allowed to make me leave.")
-                else:
-                    if ctx.author.voice.channel == ctx.voice_client.channel:
-                        await ctx.guild.voice_client.disconnect()
-            else:
-                await ctx.reply("I'm not in any voice channels.")
-
-    @commands.command()
     async def source(self,ctx):
         if await canUseCommand(ctx):
             file=discord.File(Path(__file__))

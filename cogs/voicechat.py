@@ -10,6 +10,7 @@ import yt_dlp
 
 from own_utils import chooseFaceFromCategory, canUseCommand
 from constants import MAX_MESSAGE_LEN, MAX_PLAYLIST_PER_USER, MAX_PLAYLIST_PER_USER_HARD
+from constants import SpecialCharacters
 from debug import printLogToDc, printLog
 from classes.file_paths import BotPaths
 from classes.bot_faces import Faces
@@ -28,7 +29,7 @@ class PlayList():
 class VoiceChat(commands.Cog):
     def __init__(self,bot):
         self.bot=bot
-        self.volume=1.0
+        self.volume=0.5
         self.curentPlayList=PlayList()
 
 
@@ -77,6 +78,38 @@ class VoiceChat(commands.Cog):
                 await vc.move_to(beforeChannel)
 
 
+
+    @commands.command()
+    async def join(self,ctx,silently:int=0):
+        if not await canUseCommand(ctx,2):
+            return
+        if ctx.guild.voice_client!=None:
+            await ctx.reply("Sorry I'm busy in another channel. "+chooseFaceFromCategory("nervous"))
+        else:
+            if ctx.author.voice==None:
+                await ctx.reply("You must be in a voice channel so I know which channel to join.")
+            else:
+                channel=ctx.author.voice.channel
+                await channel.connect()
+                if silently!=0:
+                    return
+                message=await channel.send(SpecialCharacters.EMPTY)
+                ctx2=await self.bot.get_context(message)
+                await message.delete()
+                await ctx2.invoke(self.bot.get_command("join_vc_bot"))
+
+    @commands.command()
+    async def leave(self,ctx):
+        if not await canUseCommand(ctx,2):
+            return
+        if ctx.voice_client:
+            if ctx.author.voice==None:
+                await ctx.reply("You must be in a voice channel so I know if you are allowed to make me leave.")
+            else:
+                if ctx.author.voice.channel == ctx.voice_client.channel:
+                    await ctx.guild.voice_client.disconnect()
+        else:
+            await ctx.reply("I'm not in any voice channels.")
     
     @commands.command()
     async def volume(self,ctx,volume:int=100):
