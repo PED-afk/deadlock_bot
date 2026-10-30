@@ -284,7 +284,7 @@ class VoiceChat(commands.Cog):
         await ctx.reply(f"Deleted playlist named {name}.")
         
     @commands.command()
-    async def playPL(self,ctx,name:str=None):
+    async def playPL(self,ctx,name:str=None,idx:int=0):
         if not await canUseCommand(ctx,2):
             return
         if "playlists" not in self.bot.user_data[str(ctx.author.id)]:
@@ -307,7 +307,7 @@ class VoiceChat(commands.Cog):
         self.curentPlayList.queue=list(self.bot.user_data[str(ctx.author.id)]["playlists"][name])
         self.curentPlayList.PL_name=name
         await ctx.reply(f"Playing playlist {name}")
-        await ctx.invoke(self.bot.get_command("play"),url=self.bot.user_data[str(ctx.author.id)]["playlists"][name][0])
+        await ctx.invoke(self.bot.get_command("play"),url=self.bot.user_data[str(ctx.author.id)]["playlists"][name][idx])
         
     @commands.command()
     async def stopPL(self,ctx):
