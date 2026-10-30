@@ -112,8 +112,12 @@ class VoiceChat(commands.Cog):
             await ctx.reply("I'm not in any voice channels.")
     
     @commands.command()
-    async def volume(self,ctx,volume:float=100):
+    async def volume(self,ctx,volume:float=None):
         if await canUseCommand(ctx,2,True,True,True):
+            if volume==None:
+                v=self.volume*100
+                await ctx.send(f"Volume is set to {v}%")
+                return
             if not (0<=volume and volume<=100):
                 await ctx.send("Volume must be between 0 and 100.")
                 return
@@ -146,14 +150,16 @@ class VoiceChat(commands.Cog):
             if self.curentPlayList.supressLastAfterPlay or self.bot.dangerousPlayAfterOverride:
                 self.curentPlayList.supressLastAfterPlay=False
                 self.bot.dangerousPlayAfter=False
+                printLog("info","Supressed or dangerouse overode")
                 return
             if self.curentPlayList.queue==None:
                 self.bot.dangerousPlayAfter=False
+                printLog("info","Queue is none")
                 return
             self.curentPlayList.curIDX+=1
             if self.curentPlayList.curIDX==len(self.curentPlayList.queue):
-                #printLog("info","after_playing reset")
                 self.curentPlayList=PlayList()
+                printLog("info","End of playlist")
                 return
             future=asyncio.run_coroutine_threadsafe(
                 self.play(ctx,self.curentPlayList.queue[self.curentPlayList.curIDX]),
