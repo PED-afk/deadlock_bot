@@ -254,7 +254,7 @@ class Hiddens(commands.Cog):
         if clever and clever.voice and clever.voice.channel:
             extra="\n<@534796790105505794> was here. "+chooseFaceFromCategory(Faces.FaceBigCategory.clever)
         if mention==None:
-            extra+="\n\n-# mention a user in the command to add a point to the leaderboard "+chooseFaceFromCategory(Faces.nervous+" (not done yet)")
+            extra+="\n\n-# mention a user in the command to add a point to the leaderboard "+chooseFaceFromCategory(Faces.nervous)+" (not done yet)"
         await ctx.reply(f"The Degenerate Timer has been reset.\nTime before reset: {format_duration(time.time()-self.bot.degenTimer)}"+extra)
         self.bot.degenTimer=time.time()
     
