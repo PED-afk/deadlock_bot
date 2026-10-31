@@ -116,7 +116,7 @@ class VoiceChat(commands.Cog):
         if await canUseCommand(ctx,2,True,True,True):
             if volume==None:
                 v=self.volume*100
-                await ctx.send(f"Volume is set to {v}%")
+                await ctx.send(f"Volume is set to **{v}%**")
                 return
             if not (0<=volume and volume<=100):
                 await ctx.send("Volume must be between 0 and 100.")
