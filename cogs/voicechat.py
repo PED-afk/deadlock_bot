@@ -149,10 +149,10 @@ class VoiceChat(commands.Cog):
             
             if self.curentPlayList.supressLastAfterPlay or self.bot.dangerousPlayAfterOverride:
                 self.curentPlayList.supressLastAfterPlay=False
-                self.bot.dangerousPlayAfter=False
+                self.bot.dangerousPlayAfterOverride=False
                 printLog("info","Supressed or dangerouse overode.")
                 printLog("info",self.curentPlayList.supressLastAfterPlay)
-                printLog("info",self.bot.dangerousPlayAfter)
+                printLog("info",self.bot.dangerousPlayAfterOverride)
                 return
             if self.curentPlayList.queue==None:
                 self.bot.dangerousPlayAfter=False
@@ -165,10 +165,7 @@ class VoiceChat(commands.Cog):
                 self.curentPlayList=PlayList()
                 printLog("info","End of playlist.")
                 return
-            future=asyncio.run_coroutine_threadsafe(
-                self.play(ctx,self.curentPlayList.queue[self.curentPlayList.curIDX]),
-                self.bot.loop,
-            )
+            future=asyncio.run_coroutine_threadsafe(self.play(ctx,self.curentPlayList.queue[self.curentPlayList.curIDX]),self.bot.loop,)
         self.bot.dangerousPlayAfter=False
         
         channel=ctx.author.voice.channel
@@ -343,7 +340,6 @@ class VoiceChat(commands.Cog):
         self.curentPlayList.curIDX+=1
         if self.curentPlayList.curIDX>=len(self.curentPlayList.queue):
             await ctx.reply("You reached the end of the playlist.")
-            #printLog("info","playNEXT reset")
             self.curentPlayList=PlayList()
             return
         await ctx.reply("Playing next video.")
