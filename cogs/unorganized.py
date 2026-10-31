@@ -125,7 +125,7 @@ class Unorganized(commands.Cog):
                     "`!stops`: Stop all/any sound curently playing",
                     "`!play <youtube url>`: I will play the sound from any youtube video.",
                     "`!playlists`: I will list all your playlists.",
-                    "`!playlist <playlist name>`: I will list all videos in a playlist.",
+                    "`!playlist <playlist name> <start point>`: I will list all videos in a playlist. <start point> is at witch url to start at.(1 is the first)",
                     "`!createPL <playlist name>`: I will create a playlist for you with the given name.",
                     "`!deletePL <playlist name>`: I will delete the playlist with the given name.",
                     "`!playPL <playlist name>`: I will start playing the playlist.",
