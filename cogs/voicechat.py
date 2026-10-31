@@ -141,18 +141,16 @@ class VoiceChat(commands.Cog):
         def get_audio_info(url):
             with yt_dlp.YoutubeDL({"format": "bestaudio/best","noplaylist": True,"quiet": True,}) as ydl:
                 return ydl.extract_info(url, download=False)
-        if not await canUseCommand(ctx,2,True,inVoice=True,tellReason=True):
-            return
         def after_playing(error):
             if error:
                 printLog("error",f"Playback error: {error}")
             
             if self.curentPlayList.supressLastAfterPlay or self.bot.dangerousPlayAfterOverride:
-                self.curentPlayList.supressLastAfterPlay=False
-                self.bot.dangerousPlayAfterOverride=False
                 printLog("info","Supressed or dangerouse overode.")
                 printLog("info",self.curentPlayList.supressLastAfterPlay)
                 printLog("info",self.bot.dangerousPlayAfterOverride)
+                self.curentPlayList.supressLastAfterPlay=False
+                self.bot.dangerousPlayAfterOverride=False
                 return
             if self.curentPlayList.queue==None:
                 self.bot.dangerousPlayAfter=False
@@ -166,6 +164,9 @@ class VoiceChat(commands.Cog):
                 printLog("info","End of playlist.")
                 return
             future=asyncio.run_coroutine_threadsafe(self.play(ctx,self.curentPlayList.queue[self.curentPlayList.curIDX]),self.bot.loop,)
+
+        if not await canUseCommand(ctx,2,True,inVoice=True,tellReason=True):
+            return
         self.bot.dangerousPlayAfter=False
         
         channel=ctx.author.voice.channel
@@ -303,7 +304,7 @@ class VoiceChat(commands.Cog):
         if len(self.bot.user_data[str(ctx.author.id)]["playlists"][name])==0:
             await ctx.reply("This playlist is empty.\nUse `!addtoPL <youtube link/URL>` to add more links to it!")
             return
-        self.curentPlayList.curIDX=0
+        self.curentPlayList.curIDX=idx
         self.curentPlayList.userID=ctx.author.id
         self.curentPlayList.queue=list(self.bot.user_data[str(ctx.author.id)]["playlists"][name])
         self.curentPlayList.PL_name=name
@@ -406,8 +407,7 @@ class VoiceChat(commands.Cog):
                     self.bot.user_data[str(ctx.author.id)]["playlists"][name].remove(link)
                     await ctx.reply(f"Removed {title} from playlist.")
                     break
-                    
-        
+
     @commands.command()
     async def removeFromPL_id(self,ctx,name:str,sId:int):
         if not await canUseCommand(ctx,2):
