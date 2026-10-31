@@ -310,6 +310,7 @@ class VoiceChat(commands.Cog):
         if len(self.bot.user_data[str(ctx.author.id)]["playlists"][name])==0:
             await ctx.reply("This playlist is empty.\nUse `!addtoPL <youtube link/URL>` to add more links to it!")
             return
+        self.curentPlayList.supressLastAfterPlay=False
         self.curentPlayList.curIDX=idx
         self.curentPlayList.userID=ctx.author.id
         self.curentPlayList.queue=list(self.bot.user_data[str(ctx.author.id)]["playlists"][name])
