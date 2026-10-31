@@ -165,7 +165,8 @@ class VoiceChat(commands.Cog):
                 printLog("info","End of playlist.")
                 self.bot.dangerousPlayAfter=False
                 return
-            future=asyncio.run_coroutine_threadsafe(self.play(ctx,self.curentPlayList.queue[self.curentPlayList.curIDX]),self.bot.loop,)
+            #future=asyncio.run_coroutine_threadsafe(self.play(ctx,self.curentPlayList.queue[self.curentPlayList.curIDX]),self.bot.loop,)
+            ctx.invoke(self.bot.get_command("play"),self.curentPlayList.queue[self.curentPlayList.curIDX])
             printLog("info","Should be play next.")
             
         printLog("info","play cmd")
