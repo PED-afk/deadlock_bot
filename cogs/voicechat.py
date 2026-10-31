@@ -166,9 +166,8 @@ class VoiceChat(commands.Cog):
                 self.bot.dangerousPlayAfter=False
                 return
             #future=asyncio.run_coroutine_threadsafe(self.play(ctx,self.curentPlayList.queue[self.curentPlayList.curIDX]),self.bot.loop,)
-            asyncio.create_task(self.play(ctx, self.curentPlayList.queue[self.curentPlayList.curIDX]))
-            #await ctx.invoke(self.bot.get_command("play"),self.curentPlayList.queue[self.curentPlayList.curIDX])
-            printLog("info","Should be play next.")
+            nextUrl=self.curentPlayList.queue[self.curentPlayList.curIDX]
+            asyncio.create_task(self.play(ctx, nextUrl))
             
         printLog("info","play cmd")
         if not await canUseCommand(ctx,2,True,inVoice=True,tellReason=True):
