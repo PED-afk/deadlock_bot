@@ -150,18 +150,20 @@ class VoiceChat(commands.Cog):
             if self.curentPlayList.supressLastAfterPlay or self.bot.dangerousPlayAfterOverride:
                 self.curentPlayList.supressLastAfterPlay=False
                 self.bot.dangerousPlayAfter=False
-                printLog("info","Supressed or dangerouse overode")
+                printLog("info","Supressed or dangerouse overode.")
                 printLog("info",self.curentPlayList.supressLastAfterPlay)
                 printLog("info",self.bot.dangerousPlayAfter)
                 return
             if self.curentPlayList.queue==None:
                 self.bot.dangerousPlayAfter=False
-                printLog("info","Queue is none")
+                printLog("info","Queue is none.")
                 return
+            
+            printLog("info","Attempting to play next.")
             self.curentPlayList.curIDX+=1
             if self.curentPlayList.curIDX==len(self.curentPlayList.queue):
                 self.curentPlayList=PlayList()
-                printLog("info","End of playlist")
+                printLog("info","End of playlist.")
                 return
             future=asyncio.run_coroutine_threadsafe(
                 self.play(ctx,self.curentPlayList.queue[self.curentPlayList.curIDX]),
