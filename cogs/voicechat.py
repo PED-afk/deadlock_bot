@@ -354,7 +354,7 @@ class VoiceChat(commands.Cog):
             return
         await ctx.reply("Playing next video.")
         self.curentPlayList.supressLastAfterPlay=True
-        await ctx.invoke(self.bot.get_command("play"),url=self.bot.user_data[str(ctx.author.id)]["playlists"][self.curentPlayList.PL_name][self.curentPlayList.curIDX])
+        await ctx.invoke(self.bot.get_command("play"),url=self.curentPlayList.queue[self.curentPlayList.curIDX])
         
     @commands.command()
     async def playPREV(self,ctx):
@@ -373,7 +373,7 @@ class VoiceChat(commands.Cog):
             return
         await ctx.reply("Playing previous video.")
         self.curentPlayList.supressLastAfterPlay=True
-        await ctx.invoke(self.bot.get_command("play"),url=self.bot.user_data[str(ctx.author.id)]["playlists"][self.curentPlayList.PL_name][self.curentPlayList.curIDX])
+        await ctx.invoke(self.bot.get_command("play"),url=self.curentPlayList.queue[self.curentPlayList.curIDX])
 
     @commands.command()
     async def addtoPL(self,ctx,name:str,url:str):
