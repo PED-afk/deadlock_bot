@@ -151,6 +151,8 @@ class VoiceChat(commands.Cog):
                 self.curentPlayList.supressLastAfterPlay=False
                 self.bot.dangerousPlayAfter=False
                 printLog("info","Supressed or dangerouse overode")
+                printLog("info",self.curentPlayList.supressLastAfterPlay)
+                printLog("info",self.bot.dangerousPlayAfter)
                 return
             if self.curentPlayList.queue==None:
                 self.bot.dangerousPlayAfter=False
