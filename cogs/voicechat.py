@@ -244,7 +244,8 @@ class VoiceChat(commands.Cog):
             return
         await ctx.send("Getting video titles...\n-# (This may take a minute.)")
         msg="This playlist has the following videos:"
-        extra=f"\n{len(self.bot.user_data[str(ctx.author.id)]["playlists"][name])} video(s) in this playlist."
+        plLen=len(self.bot.user_data[str(ctx.author.id)]["playlists"][name])
+        extra=f"\n{plLen} video(s) in this playlist."
         for url in self.bot.user_data[str(ctx.author.id)]["playlists"][name]:
             info=await asyncio.to_thread(get_audio_info, url)
             title=info.get("title", "Unknown title")
