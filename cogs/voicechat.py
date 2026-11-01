@@ -137,7 +137,7 @@ class VoiceChat(commands.Cog):
 
 
     @commands.command()
-    async def play(self, ctx, *, url: str):
+    async def play(self, ctx, url: str):
         def get_audio_info(url):
             with yt_dlp.YoutubeDL({"format": "bestaudio/best","noplaylist": True,"quiet": True,}) as ydl:
                 return ydl.extract_info(url, download=False)
@@ -147,8 +147,6 @@ class VoiceChat(commands.Cog):
             
             if self.curentPlayList.supressLastAfterPlay or self.bot.dangerousPlayAfterOverride:
                 printLog("info","Supressed or dangerouse overode.")
-                printLog("info",self.curentPlayList.supressLastAfterPlay)
-                printLog("info",self.bot.dangerousPlayAfterOverride)
                 self.curentPlayList.supressLastAfterPlay=False
                 self.bot.dangerousPlayAfterOverride=False
                 self.bot.dangerousPlayAfter=False
@@ -165,15 +163,10 @@ class VoiceChat(commands.Cog):
                 printLog("info","End of playlist.")
                 self.bot.dangerousPlayAfter=False
                 return
-            #future=asyncio.run_coroutine_threadsafe(self.play(ctx,self.curentPlayList.queue[self.curentPlayList.curIDX]),self.bot.loop,)
-
             nextUrl=self.curentPlayList.queue[self.curentPlayList.curIDX]
-            self.bot.loop.call_soon_threadsafe(lambda: asyncio.create_task(self.play(ctx, nextUrl)))
-            #asyncio.create_task(self.play(ctx, nextUrl))
+            self.bot.loop.call_soon_threadsafe(lambda: asyncio.create_task(self.play(ctx,nextUrl)))
             
-        printLog("info","play cmd")
         if not await canUseCommand(ctx,2,True,inVoice=True,tellReason=True):
-            printLog("info","canUseCommand said return")
             return
         self.bot.dangerousPlayAfter=False
         
@@ -277,7 +270,7 @@ class VoiceChat(commands.Cog):
             return
         
         self.bot.user_data[str(ctx.author.id)]["playlists"][name]=[]
-        await ctx.reply(f"Created playlist named {name}. Add links to it with `!addtoPL <youtube link/URL>`!")
+        await ctx.reply(f"Created playlist named {name}. Add links to it with `!addtoPL <playlist name> <youtube link/URL>`!")
 
     @commands.command()
     async def deletePL(self,ctx,name:str):
