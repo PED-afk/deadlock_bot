@@ -242,15 +242,18 @@ class VoiceChat(commands.Cog):
         if len(self.bot.user_data[str(ctx.author.id)]["playlists"][name])==0:
             await ctx.reply("This playlist doesn't have any videos.\nAdd videos with `!addtoPL <playlist name> <youtube url>")
             return
+        await ctx.send("Getting video titles...\n-# (This may take a minute.)")
         msg="This playlist has the following videos:"
+        extra=f"\n{len(self.bot.user_data[str(ctx.author.id)]["playlists"][name])} video(s) in this playlist."
         for url in self.bot.user_data[str(ctx.author.id)]["playlists"][name]:
             info=await asyncio.to_thread(get_audio_info, url)
             title=info.get("title", "Unknown title")
-            curMsgLen=len(msg)+len(f"\n{title}")
+            curMsgLen=len(msg)+len(f"\n{title}")+len(extra)
             if curMsgLen>=MAX_MESSAGE_LEN:
                 printLog("info",f"message longer than limit:{curMsgLen}/{MAX_MESSAGE_LEN}")
                 break
             msg+=f"\n{title}"
+        msg+=extra
         await ctx.reply(msg)
         
     @commands.command()
