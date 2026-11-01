@@ -128,6 +128,7 @@ class Unorganized(commands.Cog):
                     "`!playlist <playlist name> <start point>`: I will list all videos in a playlist. <start point> is at witch url to start at.(1 is the first)",
                     "`!createPL <playlist name>`: I will create a playlist for you with the given name.",
                     "`!deletePL <playlist name>`: I will delete the playlist with the given name.",
+                    "`!renamePL <old name> <new name>`: Rename a playlist.",
                     "`!playPL <playlist name>`: I will start playing the playlist.",
                     "`!stopPL`: I will stop the playback of the curently active playlist.",
                     "`!playNEXT` and `!playPREV`: Play the next or previous video in the playlist.",

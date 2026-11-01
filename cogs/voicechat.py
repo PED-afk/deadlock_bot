@@ -430,7 +430,19 @@ class VoiceChat(commands.Cog):
         self.bot.user_data[str(ctx.author.id)]["playlists"][name].pop(sId-1)
         await ctx.reply(f"Removed video from playlist.")
 
-
+    @commands.command()
+    async def renamePL(self,ctx,oldName:str, newName:str):
+        if not await canUseCommand(ctx,2):
+            return
+        if "playlists" not in self.bot.user_data[str(ctx.author.id)]:
+            await ctx.reply("You don't have any playlists.")
+            return
+        if oldName not in self.bot.user_data[str(ctx.author.id)]["playlists"]:
+            await ctx.reply("You don't have a playlist with that name.\nSee your playlists with `!playlists`!")
+            return
+        self.bot.user_data[str(ctx.author.id)]["playlists"][newName]=self.bot.user_data[str(ctx.author.id)]["playlists"][oldName].copy()
+        self.bot.user_data[str(ctx.author.id)]["playlists"].pop(oldName, None)
+        await ctx.reply(f"Renamed playlist.")
 
 
 async def setup(bot):
