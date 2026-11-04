@@ -166,9 +166,9 @@ class Unorganized(commands.Cog):
                     "## The following are currently disabled",
                     "### And will remain disabled until determined date.",
                     #"### These were (there is no credible evidence) AI generated. And we don't know if even the creator knows what is happening in them.",
-                    "`!set_steam_id <steamid64>`: Add your Steam ID64 — your rank will be fetched automatically from the Deadlock API and your Discord role will be assigned.",
-                    "`!profile`: Show your deadlock steam profile.",
-                    "`!update_rank`: Refresh your rank from the Deadlock API (use after ranking up/down)."
+                    "~~`!set_steam_id <steamid64>`: Add your Steam ID64 — your rank will be fetched automatically from the Deadlock API and your Discord role will be assigned.~~",
+                    "~~`!profile`: Show your deadlock steam profile.~~",
+                    "~~`!update_rank`: Refresh your rank from the Deadlock API (use after ranking up/down).~~"
                 ]
             elif section=="extra":
                 anyView=True
