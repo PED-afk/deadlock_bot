@@ -272,18 +272,16 @@ class Hiddens(commands.Cog):
     @commands.command()
     async def degen_board(self,ctx,top:int=10,real:int=0):
         allMsg=""
-        if USER_CLEVER not in self.bot.degenLeaderboard:
-            self.bot.degenLeaderboard[USER_CLEVER]=0
+        if real==0:
+            user=await getUserById(self.bot,USER_CLEVER)
+            allMsg+="\n"+user.display_name+":\t∞"
         for userId in dict(sorted(self.bot.degenLeaderboard.items(), key=lambda item: item[1], reverse=True)[:top]):
             userId=int(userId)
+            user=await getUserById(self.bot,userId)
             if userId==USER_CLEVER:
-                user=await getUserById(self.bot,USER_CLEVER)
                 if real:
                     allMsg+="\n"+user.display_name+":\t"+str(self.bot.degenLeaderboard[userId])
-                else:
-                    allMsg+="\n"+user.display_name+":\t∞"
             else:
-                user=await getUserById(self.bot,userId)
                 allMsg+="\n"+user.display_name+":\t"+str(self.bot.degenLeaderboard[userId])
         printLog("debug",allMsg)
         await ctx.reply(allMsg)
