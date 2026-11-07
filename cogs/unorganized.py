@@ -209,7 +209,7 @@ class Unorganized(commands.Cog):
                 botcommands=[
                     "`!reset_the_timer`: When someone said something 'bad'. You can also trigger this command by sending a clock emoji.",
                     "`!the_timer`: I tell you how much time has passed since the last timer reset.",
-                    "`!degen_board <top>`: I tell you who is the top degenerate..."
+                    "`!degen_board <top>`: I tell you who are the top degenerate(s)... <top> can be left out to default to <top=10>"
                 ]
             else:
                 anyView=True
