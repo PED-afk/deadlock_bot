@@ -322,7 +322,7 @@ async def on_message(message):
     if message.content.split(" ")[0].lower() in DEGEN_TIMER_RESET_MESSAGES:
         message.content="!reset_the_timer"
         if len(message.content.split())>=2:
-            message.content="!reset_the_timer "+message.content.split(" ")[1:]
+            message.content="!reset_the_timer "+" ".join(message.content.split(" ")[1:])
         await bot.process_commands(message)
         return
 

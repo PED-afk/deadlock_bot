@@ -247,7 +247,7 @@ class Hiddens(commands.Cog):
 
 
     @commands.command()
-    async def reset_the_timer(self,ctx, mention=None):
+    async def reset_the_timer(self,ctx, mention:discord.Member=None):
         guild=self.bot.get_guild(FUNLOCK_SERVER_ID)
         clever=guild.get_member(USER_CLEVER)
         extra=""
