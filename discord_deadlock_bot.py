@@ -323,8 +323,11 @@ async def on_message(message):
         printLog("debug",message.content)
         printLog("debug",message.content.split(" "))
         printLog("debug",len(message.content.split(" ")))
+        printLog("debug",len(message.content.split(" "))>=2)
+        printLog("debug","!reset_the_timer "+" ".join(message.content.split(" ")[1:]))
         message.content="!reset_the_timer"
         if len(message.content.split(" "))>=2:
+            printLog("debug","!reset_the_timer "+" ".join(message.content.split(" ")[1:]))
             message.content="!reset_the_timer "+" ".join(message.content.split(" ")[1:])
         printLog("debug",message.content)
         await bot.process_commands(message)
