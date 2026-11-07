@@ -322,6 +322,7 @@ async def on_message(message):
     if message.content.split(" ")[0].lower() in DEGEN_TIMER_RESET_MESSAGES:
         printLog("debug",message.content)
         printLog("debug",message.content.split(" "))
+        printLog("debug",len(message.content.split(" ")))
         message.content="!reset_the_timer"
         if len(message.content.split(" "))>=2:
             message.content="!reset_the_timer "+" ".join(message.content.split(" ")[1:])
