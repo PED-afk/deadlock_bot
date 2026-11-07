@@ -279,12 +279,12 @@ class Hiddens(commands.Cog):
             if userId==USER_CLEVER:
                 user=await getUserById(self.bot,USER_CLEVER)
                 if real:
-                    allMsg+=user.display_name+":\t"+self.bot.degenLeaderboard[userId]
+                    allMsg+=user.display_name+":\t"+str(self.bot.degenLeaderboard[userId])
                 else:
                     allMsg+=user.display_name+":\t∞"
             else:
                 user=await getUserById(self.bot,userId)
-                allMsg+=user.display_name+":\t"+self.bot.degenLeaderboard[userId]
+                allMsg+=user.display_name+":\t"+str(self.bot.degenLeaderboard[userId])
 
 async def setup(bot):
     await bot.add_cog(Hiddens(bot))
