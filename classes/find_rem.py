@@ -76,7 +76,7 @@ class FindRem(discord.ui.View):
             bot.user_data[authorID]["money"]["unsecured"]=0
             return ("You died and lost "+str(moneyLost)+" unsecured souls.")
         elif buttonText=="Nothing...":
-            return ("Nothing...")
+            return ("")
         return "Something went wrong"
 
     async def interaction_check(self, interaction: discord.Interaction):
