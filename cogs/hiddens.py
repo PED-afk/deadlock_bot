@@ -255,7 +255,11 @@ class Hiddens(commands.Cog):
             extra="\n<@534796790105505794> was here. "+chooseFaceFromCategory(Faces.FaceBigCategory.clever)
         if mention==None:
             extra+="\n\n-# mention a user in the command to add a point to the leaderboard "+chooseFaceFromCategory(Faces.nervous)+" (not done yet)"
+        else:
+            extra+=f"the was a mention: {mention}"
         await ctx.reply(f"The Degenerate Timer has been reset.\nTime before reset: {format_duration(time.time()-self.bot.degenTimer)}"+extra)
+        await ctx.reply("Testing in progress...\nPreviose messages mean nothing.")
+        return
         self.bot.degenTimer=time.time()
     
     @commands.command()
