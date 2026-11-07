@@ -254,15 +254,13 @@ class Hiddens(commands.Cog):
         if clever and clever.voice and clever.voice.channel:
             extra=f"\n<@{USER_CLEVER}> was here. "+chooseFaceFromCategory(Faces.FaceBigCategory.clever)
         if mention==None:
-            extra+="\n\n-# mention a user in the command to add a point to the leaderboard "+chooseFaceFromCategory(Faces.nervous)+" (not done yet)"
+            extra+="\n\n-# mention a user in the command to add a point to the leaderboard "+chooseFaceFromCategory(Faces.nervous)
         else:
-            extra+=f"\nDegeneracy saved to leaderboard."+chooseFaceFromCategory(Faces.disgust)
+            extra+=f"\nDegeneracy saved to leaderboard. "+chooseFaceFromCategory(Faces.disgust)
             if mention.id not in self.bot.degenLeaderboard:
                 self.bot.degenLeaderboard[mention.id]=0
             self.bot.degenLeaderboard[mention.id]+=1
         await ctx.reply(f"The Degenerate Timer has been reset.\nTime before reset: {format_duration(time.time()-self.bot.degenTimer)}"+extra)
-        await ctx.reply("Testing in progress...\nPreviose messages mean nothing.")
-        return
         self.bot.degenTimer=time.time()
     
     @commands.command()
@@ -271,8 +269,9 @@ class Hiddens(commands.Cog):
 
     @commands.command()
     async def degen_board(self,ctx,top:int=10,real:int=0):
+        real=(False if real==0 else True)
         allMsg=""
-        if real==0:
+        if not real:
             user=await getUserById(self.bot,USER_CLEVER)
             allMsg+="\n"+user.display_name+":\t∞"
         for userId in dict(sorted(self.bot.degenLeaderboard.items(), key=lambda item: item[1], reverse=True)[:top]):
@@ -283,7 +282,6 @@ class Hiddens(commands.Cog):
                     allMsg+="\n"+user.display_name+":\t"+str(self.bot.degenLeaderboard[userId])
             else:
                 allMsg+="\n"+user.display_name+":\t"+str(self.bot.degenLeaderboard[userId])
-        printLog("debug",allMsg)
         await ctx.reply(allMsg)
 
 async def setup(bot):
