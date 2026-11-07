@@ -15,6 +15,10 @@ class BotPaths():
     degen_timer_file="degen_timer.txt"
     degen_timer_path=BASE / degen_timer_file
 
+    degen_leaderboard_file="degen_leaderboard.json"
+    degen_leaderboard_path=BASE / degen_leaderboard_file
+
+
     characters_file_json = BASE / "characters.json"
     items_file = BASE / "items.txt"
     map_graph_file = BASE / "map_graph.json"

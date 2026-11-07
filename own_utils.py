@@ -306,6 +306,13 @@ async def cleanChannel(bot:commands.Bot, channelID:int,cleanRange:int):
 
 
 
+async def getUserById(bot:commands.Bot, user_id:int):
+    """
+    Return a user object found with id
+    """
+    return await bot.fetch_user(user_id)
+
+
 
 
 

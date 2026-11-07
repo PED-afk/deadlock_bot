@@ -8,7 +8,7 @@ import shutil
 
 import yt_dlp
 
-from own_utils import chooseFaceFromCategory, canUseCommand, format_duration, cleanChannel
+from own_utils import chooseFaceFromCategory, canUseCommand, format_duration, cleanChannel, getUserById
 from constants import CHANNEL_IDS
 from user_bot_interaction import interact, getInteractValue, getGlobalInteractValue
 from debug import printLogToDc, printLog
@@ -255,11 +255,14 @@ class Hiddens(commands.Cog):
         clever=guild.get_member(USER_CLEVER)
         extra=""
         if clever and clever.voice and clever.voice.channel:
-            extra="\n<@534796790105505794> was here. "+chooseFaceFromCategory(Faces.FaceBigCategory.clever)
+            extra=f"\n<@{USER_CLEVER}> was here. "+chooseFaceFromCategory(Faces.FaceBigCategory.clever)
         if mention==None:
             extra+="\n\n-# mention a user in the command to add a point to the leaderboard "+chooseFaceFromCategory(Faces.nervous)+" (not done yet)"
         else:
-            extra+=f"the was a mention: {mention}"
+            extra+=f"\nDegeneracy saved to leaderboard."+chooseFaceFromCategory(Faces.disgust)
+            if mention.id not in self.bot.degenLeaderboard:
+                self.bot.degenLeaderboard[mention.id]=0
+            self.bot.degenLeaderboard[mention.id]+=1
         await ctx.reply(f"The Degenerate Timer has been reset.\nTime before reset: {format_duration(time.time()-self.bot.degenTimer)}"+extra)
         await ctx.reply("Testing in progress...\nPreviose messages mean nothing.")
         return
@@ -268,6 +271,21 @@ class Hiddens(commands.Cog):
     @commands.command()
     async def the_timer(self,ctx):
         await ctx.reply(f"The Degenerate Timer's time: {format_duration(time.time()-self.bot.degenTimer)}")
+
+    @commands.command()
+    async def degen_board(self,ctx,top:int=10,real:int=0):
+        allMsg=""
+        if USER_CLEVER not in self.bot.degenLeaderboard:
+            self.bot.degenLeaderboard[USER_CLEVER]=0
+        for userId in dict(sorted(self.bot.degenLeaderboard.items(), key=lambda item: item[1], reverse=True)[:top]):
+            userId=int(userId)
+            if userId==USER_CLEVER:
+                if real:
+                    allMsg+=await getUserById(USER_CLEVER).display_name+":\t"+self.bot.degenLeaderboard[userId]
+                else:
+                    allMsg+=await getUserById(USER_CLEVER).display_name+":\t∞"
+            else:
+                allMsg+=await getUserById(userId).display_name+":\t"+self.bot.degenLeaderboard[userId]
 
 async def setup(bot):
     await bot.add_cog(Hiddens(bot))

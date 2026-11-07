@@ -10,7 +10,7 @@ from pathlib import Path
 
 from classes.file_paths import BotPaths
 from classes.item import DeadlockItem
-from data_manage import load_json, save_json, deep_load_txt, deep_load_json, load_txt
+from data_manage import load_json, save_json, deep_load_txt, deep_load_json, load_txt, deep_save_json, deep_save_txt
 from constants import GREET_CD, MESSAGE_CD, SECOND_BASE, TIMER_LENGTH_MINUTE
 
 
@@ -81,7 +81,7 @@ class MyBot(commands.Bot):
 
 
         self.bootTime=time.time()//1
-        self.version="0.14.5.2"
+        self.version="0.14.6"
         self.versionSTR="\nMusic for everyone*"
 
 
@@ -89,6 +89,7 @@ class MyBot(commands.Bot):
         self.messageCD=MESSAGE_CD
         self.greetCD=GREET_CD
         self.degenTimer=int(float(deep_load_txt(BotPaths.degen_timer_file)))
+        self.degenLeaderboard=deep_load_json(BotPaths.degen_leaderboard_file)
 
         self.user_data=deep_load_json(BotPaths.user_data_file)
         idSTR="global"
@@ -134,6 +135,9 @@ class MyBot(commands.Bot):
         self.ttnskwii=time.time()
         self.tsnskwii=-1
         
-        
+        def saveAll(self):
+            deep_save_json(BotPaths.user_data_file,self.bot.user_data)
+            deep_save_txt(BotPaths.degen_timer_file,str(self.bot.degenTimer))
+            deep_save_json(BotPaths.degen_leaderboard_file,self.degenLeaderboard)
 
 
