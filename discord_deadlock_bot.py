@@ -321,7 +321,7 @@ async def on_message(message):
     #to keep track of time since last "degen" thing said
     if message.content.split(" ")[0].lower() in DEGEN_TIMER_RESET_MESSAGES:
         message.content="!reset_the_timer"
-        if len(message.content.split())>=2:
+        if len(message.content.split(" "))>=2:
             message.content="!reset_the_timer "+" ".join(message.content.split(" ")[1:])
         printLog("debug",message.content)
         await bot.process_commands(message)
