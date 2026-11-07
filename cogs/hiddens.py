@@ -285,7 +285,8 @@ class Hiddens(commands.Cog):
             else:
                 user=await getUserById(self.bot,userId)
                 allMsg+="\n"+user.display_name+":\t"+str(self.bot.degenLeaderboard[userId])
-        ctx.reply(allMsg)
+        printLog("debug",allMsg)
+        await ctx.reply(allMsg)
 
 async def setup(bot):
     await bot.add_cog(Hiddens(bot))
