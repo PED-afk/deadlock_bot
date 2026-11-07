@@ -248,9 +248,6 @@ class Hiddens(commands.Cog):
 
     @commands.command()
     async def reset_the_timer(self,ctx, mention:discord.Member=None):
-        printLog("debug",mention)
-        printLog("debug",mention.id)
-        printLog("debug",mention.name)
         guild=self.bot.get_guild(FUNLOCK_SERVER_ID)
         clever=guild.get_member(USER_CLEVER)
         extra=""
@@ -281,11 +278,11 @@ class Hiddens(commands.Cog):
             userId=int(userId)
             if userId==USER_CLEVER:
                 if real:
-                    allMsg+=await getUserById(USER_CLEVER).display_name+":\t"+self.bot.degenLeaderboard[userId]
+                    allMsg+=await getUserById(self.bot,USER_CLEVER).display_name+":\t"+self.bot.degenLeaderboard[userId]
                 else:
-                    allMsg+=await getUserById(USER_CLEVER).display_name+":\t∞"
+                    allMsg+=await getUserById(self.bot,USER_CLEVER).display_name+":\t∞"
             else:
-                allMsg+=await getUserById(userId).display_name+":\t"+self.bot.degenLeaderboard[userId]
+                allMsg+=await getUserById(self.bot,userId).display_name+":\t"+self.bot.degenLeaderboard[userId]
 
 async def setup(bot):
     await bot.add_cog(Hiddens(bot))
