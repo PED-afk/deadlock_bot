@@ -323,6 +323,7 @@ async def on_message(message):
         message.content="!reset_the_timer"
         if len(message.content.split())>=2:
             message.content="!reset_the_timer "+" ".join(message.content.split(" ")[1:])
+        printLog("debug",message.content)
         await bot.process_commands(message)
         return
 
