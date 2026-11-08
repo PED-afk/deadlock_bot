@@ -134,6 +134,7 @@ class MyBot(commands.Bot):
 
         x=deep_load_txt(BotPaths.autoOrgTimeStamp_file,APP_NAME)
         self.organizedMessageTime=(None if x==-1 else int(x))
+        deep_save_txt(BotPaths.autoOrgID_file,"")
         x=deep_load_txt(BotPaths.autoOrgID_file,APP_NAME)
         self.organizedMessageID=(None if x==-1 else int(x))
         
