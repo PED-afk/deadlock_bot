@@ -12,6 +12,7 @@ from classes.file_paths import BotPaths
 from classes.item import DeadlockItem
 from data_manage import load_json, save_json, deep_load_txt, deep_load_json, load_txt, deep_save_json, deep_save_txt
 from constants import GREET_CD, MESSAGE_CD, SECOND_BASE, TIMER_LENGTH_MINUTE
+from constants import APP_NAME
 
 
 class MyBot(commands.Bot):
@@ -130,7 +131,9 @@ class MyBot(commands.Bot):
         self.dangerousPlayAfter=False
         self.dangerousPlayAfterOverride=False
 
-        self.organizedMessageTime=None
+
+        x=deep_load_txt(BotPaths.autoOrgTimeStamp_file,APP_NAME)
+        self.organizedMessageTime=(None if x==-1 else x)
         
         
         #don't worry about these

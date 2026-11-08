@@ -274,6 +274,10 @@ PRIVATE_MESSAGE_CONTENT=(
     )
 
 
+CUSTOM_MATCH_ORGANIZE_MESSAGE=f"<@&{ROLES.CUSTOM_MATCH}>\nThere will be a custom match at: <t:÷:F>\n-# <t:÷:F>\nGet the role in <#{CHANNEL_IDS.ROLE_CHANNEL_ID}>\nThis is a test for now."
+
+
+
 MAX_MONEY_SECURE_AFTER_GAME=500
 
 

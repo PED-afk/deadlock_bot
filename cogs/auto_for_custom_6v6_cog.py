@@ -7,6 +7,9 @@ from own_utils import chooseFaceFromCategory, canUseCommand
 from debug import printLogToDc, printLog
 from classes.bot_faces import Faces
 from constants import CHANNEL_IDS, ROLES
+from constants import CUSTOM_MATCH_ORGANIZE_MESSAGE
+from data_manage import deep_save_txt
+from classes.file_paths import BotPaths
 
 #automated funtionality for custom matches on the weekend
 
@@ -43,7 +46,9 @@ class AutoOrganizer(commands.Cog):
             channel=self.bot.get_channel(CHANNEL_IDS.LOUNGE_CHANNEL_ID)
             if channel:
                 self.bot.organizedMessageTime=self.nextMatchMessage()
-                await channel.send(f"<@&{ROLES.CUSTOM_MATCH}>\nThere will be a custom match at: <t:{self.bot.organizedMessageTime}:F>\nThis is a test for now.")
+                deep_save_txt(BotPaths.autoOrgTimeStamp_file,str(self.bot.organizedMessageTime))
+                msg=CUSTOM_MATCH_ORGANIZE_MESSAGE.replace("÷",str(self.bot.organizedMessageTime))
+                await channel.send(msg)
 
 async def setup(bot):
     await bot.add_cog(AutoOrganizer(bot))
