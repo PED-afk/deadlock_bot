@@ -130,7 +130,7 @@ class MyBot(commands.Bot):
         self.dangerousPlayAfter=False
         self.dangerousPlayAfterOverride=False
 
-        self.bot.organizedMessageTime=None
+        self.organizedMessageTime=None
         
         
         #don't worry about these
