@@ -39,7 +39,7 @@ class AutoOrganizer(commands.Cog):
     @tasks.loop(seconds=1)
     async def tick(self):
         now=int(datetime.datetime.now(datetime.timezone.utc).timestamp())
-        if self.bot.organizedMessage==None or now-self.bot.organizedMessageTime>=7*24*60*60:
+        if self.bot.organizedMessageTime==None or now-self.bot.organizedMessageTime>=7*24*60*60:
             channel=self.bot.get_channel(CHANNEL_IDS.LOUNGE_CHANNEL_ID)
             self.bot.organizedMessageTime=self.nextMatchMessage()
             await channel.send(f"<@&{ROLES.CUSTOM_MATCH}>\nThere will be a custom match at: <t:{self.bot.organizedMessageTime}:F>\nThis is a test for now.")
