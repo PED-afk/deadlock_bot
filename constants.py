@@ -52,6 +52,7 @@ class ROLES():
     REGULAR=1530270967736041712
     IFONLINE=1550424746720624640
     BOT_PROGRAMMER_APLICANT=1543929441225412608
+    CUSTOM_MATCH=1569045662887055480
     class COLORS():
         PURPLE=1543693742031249418
         BLUE=1535060305116401704
@@ -156,6 +157,7 @@ IAM_MESSAGE_CONTENT=(
     "\n- If you know programing: ⌨️"
     "\n- If you want to edit the bot's code(\*)(\*2): 🤖"
     "\n- If you want to get notifications about all server announcements(\*3): 📢"
+    "\n- If you want to get notified if there is a planned custom match happening 🎭"
     "\n"
     "\n-# (*)We will periodically check this role to give access to the github repository; until we do use `!source` to get the active link to it."
     "\n-# (*2)Getting this role won't necessarily mean you get access, we may deny your 'application'"
@@ -182,6 +184,10 @@ WHO_AM_I_ROLES={
     "announcements":{
         "id":ROLES.ANNOUNCEMENTS,
         "emoji":"📢"
+    },
+    "custom_match":{
+        "id":ROLES.CUSTOM_MATCH,
+        "emoji":"🎭"
     }
 }
 

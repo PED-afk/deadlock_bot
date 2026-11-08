@@ -17,20 +17,21 @@ from constants import GREET_CD, MESSAGE_CD, SECOND_BASE, TIMER_LENGTH_MINUTE
 class MyBot(commands.Bot):
     sys.path.insert(0, str(SECOND_BASE))
     async def setup_hook(self):
+        await self.load_extension("cogs.auto_for_custom_6v6_cog")
         await self.load_extension("cogs.debug_cog")
-        await self.load_extension("cogs.funones")
+        await self.load_extension("cogs.funones_cog")
         await self.load_extension("cogs.games_cog")
-        await self.load_extension("cogs.hiddens")
+        await self.load_extension("cogs.hidden_cog")
         await self.load_extension("cogs.member_join_cog")
-        await self.load_extension("cogs.moderator")
-        await self.load_extension("cogs.power")
+        await self.load_extension("cogs.moderator_cog")
+        await self.load_extension("cogs.power_cog")
         await self.load_extension("cogs.reactions_cog")
         await self.load_extension("cogs.show_errors_cog")
         await self.load_extension("cogs.thread_cog")
-        await self.load_extension("cogs.timer")
-        await self.load_extension("cogs.tools")
-        await self.load_extension("cogs.unorganized")
-        await self.load_extension("cogs.voicechat")
+        await self.load_extension("cogs.timer_cog")
+        await self.load_extension("cogs.tool_cog")
+        await self.load_extension("cogs.unorganized_cog")
+        await self.load_extension("cogs.voicechat_cog")
 
         await self.load_extension("cogs.spok_cog")
         #await self.load_extension("cogs.priority_cog")
@@ -128,6 +129,8 @@ class MyBot(commands.Bot):
         
         self.dangerousPlayAfter=False
         self.dangerousPlayAfterOverride=False
+
+        self.bot.organizedMessageTime=None
         
         
         #don't worry about these
@@ -135,9 +138,9 @@ class MyBot(commands.Bot):
         self.ttnskwii=time.time()
         self.tsnskwii=-1
         
-        def saveAll(self):
-            deep_save_json(BotPaths.user_data_file,self.bot.user_data)
-            deep_save_txt(BotPaths.degen_timer_file,str(self.bot.degenTimer))
-            deep_save_json(BotPaths.degen_leaderboard_file,self.degenLeaderboard)
+    def saveAll(self):
+        deep_save_json(BotPaths.user_data_file,self.bot.user_data)
+        deep_save_txt(BotPaths.degen_timer_file,str(self.bot.degenTimer))
+        deep_save_json(BotPaths.degen_leaderboard_file,self.degenLeaderboard)
 
 
