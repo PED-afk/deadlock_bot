@@ -55,3 +55,5 @@ class BotPaths():
     autoMessage_file_gitignored=BASE / "data" / "send_these_at_time_gitignored.json"
 
     autoOrgTimeStamp_file="autoOrgTS.txt"
+    autoOrgID_file="autoOrgID.txt"
+    

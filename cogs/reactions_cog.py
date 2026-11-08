@@ -6,6 +6,7 @@ from discord.ext import commands, tasks
 
 from debug import printLog, printLogToDc
 from constants import COLORED_ROLES, WHO_AM_I_ROLES, COLOR_CHOOSER_MESSAGE_ID, IAM_MESSAGE_ID
+from constants import ROLES
 
 #if reaction is added or removed from message
 #moved here so main file is cleaner
@@ -21,6 +22,8 @@ class ReactionAddRemove(commands.Cog):
             lookingAt="color"
         elif payload.message_id==IAM_MESSAGE_ID:
             lookingAt="iam"
+        elif payload.message_id==self.bot.organizedMessageID:
+            lookingAt="customMatch"
         else:
             printLog("event","User reacted to other message")
             return
@@ -41,6 +44,9 @@ class ReactionAddRemove(commands.Cog):
                 if payload.emoji.name==role["emoji"]:
                     role_id=role["id"]
                     break
+        elif lookingAt=="customMatch":
+            role_id=ROLES.CUSTOM_MATCH
+        
         if role_id is None:
             printLog("event","Can't find role ID.")
             return
@@ -63,6 +69,8 @@ class ReactionAddRemove(commands.Cog):
             lookingAt="color"
         elif payload.message_id==IAM_MESSAGE_ID:
             lookingAt="iam"
+        elif payload.message_id==self.bot.organizedMessageID:
+            lookingAt="customMatch"
         else:
             return
 
@@ -81,6 +89,8 @@ class ReactionAddRemove(commands.Cog):
                 if payload.emoji.name==role["emoji"]:
                     role_id=role["id"]
                     break
+        elif lookingAt=="customMatch":
+            role_id=ROLES.CUSTOM_MATCH
         if role_id is None:
             return
         guild=self.bot.get_guild(payload.guild_id)
