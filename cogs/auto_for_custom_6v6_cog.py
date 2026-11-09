@@ -104,7 +104,7 @@ class AutoOrganizer(commands.Cog):
                 original_message=await c.fetch_message(self.bot.organizedMessageID)
                 
                 message_link = original_message.jump_url
-                await mention_channel.send(f"{''.join(CUSTOM_MATCH_REMINDER_MESSAGE_BORDER)}{CUSTOM_MATCH_REMINDER_MESSAGE}\n{message_link}{''.join(CUSTOM_MATCH_REMINDER_MESSAGE_BORDER.reverse())}",delete_after=11 * 60 * 60)
+                await mention_channel.send(f"{''.join(CUSTOM_MATCH_REMINDER_MESSAGE_BORDER)}{CUSTOM_MATCH_REMINDER_MESSAGE}\n{message_link}{''.join(reversed(CUSTOM_MATCH_REMINDER_MESSAGE_BORDER))}",delete_after=11 * 60 * 60)
                 
                 deep_save_txt(BotPaths.autoOrgLastMentionDate_file,today.isoformat())
                 self.bot.organizedMessageLastMention=today.isoformat()

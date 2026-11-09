@@ -27,7 +27,7 @@ class Debug(commands.Cog):
             #view=MultButton(ctx.author)
             #view=FindRem(ctx,self.bot)
             #await ctx.send("Buttons:", view=view)
-            await ctx.send(f"{''.join(CUSTOM_MATCH_REMINDER_MESSAGE_BORDER)}{CUSTOM_MATCH_REMINDER_MESSAGE}\n<link here>{''.join(CUSTOM_MATCH_REMINDER_MESSAGE_BORDER.reverse())}",delete_after=11)
+            await ctx.send(f"{''.join(CUSTOM_MATCH_REMINDER_MESSAGE_BORDER)}{CUSTOM_MATCH_REMINDER_MESSAGE}\n<link here>{''.join(reversed(CUSTOM_MATCH_REMINDER_MESSAGE_BORDER))}",delete_after=11)
 
     @commands.command()
     async def check_cog(self, ctx, cog_name:str):
