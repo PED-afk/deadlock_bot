@@ -35,19 +35,6 @@ class Unorganized(commands.Cog):
         self.bot=bot
 
     @commands.command()
-    async def test(self,ctx):
-        senderID=ctx.author.id
-        if await canUseCommand(ctx,2):
-            #await ctx.send("TEST:\nNothing to test.\n.=.",delete_after=10)
-            await ctx.reply(colorTextForDc("color?",Colors.PURPLE))
-            await ctx.reply(colorTextForDcRainbow("Rainbow with looooooooooooooooooooooooooooong text"))
-            await ctx.reply(colorTextForDcRainbow("Rainbow with looooooooooooooooooooooooooooong text and more letters the same",3))
-            view=Button()
-            view=MultButton(ctx.author)
-            view=FindRem(ctx,self.bot)
-            #await ctx.send("Buttons:", view=view)
-
-    @commands.command()
     async def minigames(self, ctx, game:str=None):
         senderID=ctx.author.id
         if await canUseCommand(ctx,3):

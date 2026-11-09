@@ -286,7 +286,7 @@ CUSTOM_MATCH_ORGANIZE_MESSAGE=(
     )
 
 CUSTOM_MATCH_REMINDER_MESSAGE="If you haven't done so check out the custom match we are organising:"
-
+CUSTOM_MATCH_REMINDER_MESSAGE_BORDER=[SpecialCharacters.EMPTY,"\n","\n","\n","\n","================================"]
 
 
 MAX_MONEY_SECURE_AFTER_GAME=500

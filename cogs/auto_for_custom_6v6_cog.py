@@ -7,7 +7,7 @@ from own_utils import chooseFaceFromCategory, canUseCommand
 from debug import printLogToDc, printLog
 from classes.bot_faces import Faces
 from constants import CHANNEL_IDS, ROLES
-from constants import CUSTOM_MATCH_ORGANIZE_MESSAGE, FUNLOCK_SERVER_ID, CUSTOM_MATCH_REMINDER_MESSAGE
+from constants import CUSTOM_MATCH_ORGANIZE_MESSAGE, FUNLOCK_SERVER_ID, CUSTOM_MATCH_REMINDER_MESSAGE,CUSTOM_MATCH_REMINDER_MESSAGE_BORDER
 from data_manage import deep_save_txt
 from classes.file_paths import BotPaths
 
@@ -104,7 +104,7 @@ class AutoOrganizer(commands.Cog):
                 original_message=await c.fetch_message(self.bot.organizedMessageID)
                 
                 message_link = original_message.jump_url
-                await mention_channel.send(f"{CUSTOM_MATCH_REMINDER_MESSAGE}\n{message_link}",delete_after=11 * 60 * 60)
+                await mention_channel.send(f"{''.join(CUSTOM_MATCH_REMINDER_MESSAGE_BORDER)}{CUSTOM_MATCH_REMINDER_MESSAGE}\n{message_link}{''.join(CUSTOM_MATCH_REMINDER_MESSAGE_BORDER.reverse())}",delete_after=11 * 60 * 60)
                 
                 deep_save_txt(BotPaths.autoOrgLastMentionDate_file,today.isoformat())
                 self.bot.organizedMessageLastMention=today.isoformat()
