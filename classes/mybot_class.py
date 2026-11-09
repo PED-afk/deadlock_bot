@@ -142,6 +142,12 @@ class MyBot(commands.Bot):
             self.organizedMessageID=(int(x) if x!=-1 else None)
         except:
             self.organizedMessageID=None
+            
+        x=deep_load_txt(BotPaths.autoOrgLastMentionDate_file,APP_NAME)
+        try:
+            self.organizedMessageLastMention=(x if x!=-1 else None)
+        except:
+            self.organizedMessageLastMention=None
         
         
         #don't worry about these

@@ -283,9 +283,9 @@ CUSTOM_MATCH_ORGANIZE_MESSAGE=(
     "\nReact to this message if you can participate!"
     "\n"
     "\nYou can/should react even if there are more than 12 reactions on this message, as others may decide to leave before or between the matches or we might start a second/third/etc. lobby.;"
-    "\n"
-    "\n-# Should work. Let's hope it doesn't start spamming."
     )
+
+CUSTOM_MATCH_REMINDER_MESSAGE="If you haven't done so check out the custom match we are organising:"
 
 
 

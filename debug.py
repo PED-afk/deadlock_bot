@@ -152,7 +152,7 @@ async def printLogToDc(bot:commands.Bot,type:str, content:str, file:str=None,fil
             await bot.get_channel(CHANNEL_IDS.BOT_DEBUG_CHANNEL).send("```ansi\n"+colorTextForDc(f"[{type.upper()}]",extra,False)+colorTextForDc(f" [{fromFunction.upper()}]",Colors.BLUE,False)+f"  {content}"+"\n```",file=sendFile)
         except Exception as e:
             printLog("error",e)
-            printLogToDc(bot,"error",e)
+            await printLogToDc(bot,"error",e)
     else:
         await bot.get_channel(CHANNEL_IDS.BOT_DEBUG_CHANNEL).send("```ansi\n"+colorTextForDc(f"[{type.upper()}]",extra,False)+colorTextForDc(f" [{fromFunction.upper()}]",Colors.BLUE,False)+f"  {content}"+"\n```")
 
