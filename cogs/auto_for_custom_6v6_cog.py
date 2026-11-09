@@ -26,7 +26,7 @@ class AutoOrganizer(commands.Cog):
     @commands.command()
     async def removeCustomMatchRole(self,ctx):
         guild=self.bot.get_guild(FUNLOCK_SERVER_ID)
-        role = guild.get_role(ROLES.CUSTOM_MATCH)
+        role = guild.get_role(ROLES.CUSTOM_MATCH_PART)
         if role is None:
             print("Role not found!")
             return
@@ -38,6 +38,7 @@ class AutoOrganizer(commands.Cog):
             except discord.HTTPException as e:
                 print(f"Failed to remove role from {member}: {e}")
         print(f"Removed {role.name} from everyone.")
+        await ctx.reply(f"Removed {role.name} from everyone.")
 
         
 
