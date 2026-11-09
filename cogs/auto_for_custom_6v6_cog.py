@@ -68,7 +68,7 @@ class AutoOrganizer(commands.Cog):
                 return True
             except discord.NotFound:
                 return False
-        channelID=CHANNEL_IDS.BOTS_CHANNEL_ID
+        channelID=CHANNEL_IDS.LOUNGE_CHANNEL_ID
         now=int(datetime.datetime.now(datetime.timezone.utc).timestamp())
         c=await self.bot.fetch_channel(channelID)
         oldMessageExists=self.bot.organizedMessageID is not None and await message_exists(c,self.bot.organizedMessageID)
