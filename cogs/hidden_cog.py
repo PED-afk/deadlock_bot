@@ -96,8 +96,6 @@ class Hiddens(commands.Cog):
             if many==None:
                 await ctx.reply("Range not specified.")
             else:
-                if many==-1:
-                    many=None
                 await cleanChannel(self.bot,CHANNEL_IDS.BOTS_CHANNEL_ID,many)
     
     @commands.command()

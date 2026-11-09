@@ -284,7 +284,6 @@ CUSTOM_MATCH_ORGANIZE_MESSAGE=(
     "\n"
     "\nYou can/should react even if there are more than 12 reactions on this message, as others may decide to leave before or between the matches or we might start a second/third/etc. lobby.;"
     "\n"
-    "\nYou will be **obligated** to join, no taking back 1 minutes before we start."
     "\n-# Should work. Let's hope it doesn't start spamming."
     )
 

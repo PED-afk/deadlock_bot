@@ -45,6 +45,8 @@ class AutoOrganizer(commands.Cog):
     def nextMatchMessage(self):
         now=datetime.datetime.now(datetime.timezone.utc)
         valid_days=[4, 5, 6]
+        #no friday
+        valid_days=[5, 6]
         days_until=min((day-now.weekday())%7 for day in valid_days)
         next_match=(now+datetime.timedelta(days=days_until)).replace(
             hour=20,

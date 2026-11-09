@@ -8,7 +8,7 @@ from dateutil.relativedelta import relativedelta
 from constants import ME, BOT_ROLE, MOD_ROLE
 from constants import DATE_FORMAT
 from constants import CHANNEL_IDS
-from constants import BOT_ID
+from constants import BOT_ID, ME
 from debug import printLog, printLogToDc
 from classes.bot_faces import Faces
 from classes.dc_colors import Colors
@@ -294,7 +294,28 @@ def add_auto_message(bot:commands.Bot, message:str,where:str,difA:int,difMes:str
 
 async def cleanChannel(bot:commands.Bot, channelID:int,cleanRange:int):
     import discord
+    wasMin2=False
+    if cleanRange==-1:
+        cleanRange=None
+    elif cleanRange==-1:
+        wasMin2=True
+        cleanRange=None
+        
     async for msg in bot.get_channel(channelID).history(limit=cleanRange):
+        should_delete = True
+
+        if wasMin2:
+            should_delete=(msg.author.id == ME or (
+                    msg.author.bot
+                    and msg.reference is not None
+                    and msg.reference.message_id is not None
+                    and msg.reference.resolved is not None
+                    and msg.reference.resolved.author.id == ME
+                )
+            )
+        if not should_delete:
+            continue
+        
         try:
             await msg.delete()
         except discord.Forbidden:
