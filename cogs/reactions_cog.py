@@ -45,7 +45,7 @@ class ReactionAddRemove(commands.Cog):
                     role_id=role["id"]
                     break
         elif lookingAt=="customMatch":
-            role_id=ROLES.CUSTOM_MATCH
+            role_id=ROLES.CUSTOM_MATCH_PART
         
         if role_id is None:
             printLog("event","Can't find role ID.")
@@ -90,7 +90,7 @@ class ReactionAddRemove(commands.Cog):
                     role_id=role["id"]
                     break
         elif lookingAt=="customMatch":
-            role_id=ROLES.CUSTOM_MATCH
+            role_id=ROLES.CUSTOM_MATCH_PART
         if role_id is None:
             return
         guild=self.bot.get_guild(payload.guild_id)

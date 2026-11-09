@@ -61,15 +61,31 @@ class AutoOrganizer(commands.Cog):
 
     @tasks.loop(seconds=1)
     async def tick(self):
+        async def message_exists(channel:discord.TextChannel, message_id: int) -> bool:
+            try:
+                await channel.fetch_message(message_id)
+                return True
+            except discord.NotFound:
+                return False
+        channelID=CHANNEL_IDS.BOTS_CHANNEL_ID
         now=int(datetime.datetime.now(datetime.timezone.utc).timestamp())
-        if self.bot.organizedMessageTime==None or now-self.bot.organizedMessageTime>=7*24*60*60:
-            channel=self.bot.get_channel(CHANNEL_IDS.LOUNGE_CHANNEL_ID)
-            if channel:
-                self.bot.organizedMessageTime=self.nextMatchMessage()
-                deep_save_txt(BotPaths.autoOrgTimeStamp_file,str(self.bot.organizedMessageTime))
-                msg=CUSTOM_MATCH_ORGANIZE_MESSAGE.replace("÷",str(self.bot.organizedMessageTime))
-                message=await channel.send(msg)
-                self.organizedMessageID=message.id
+        c=await self.bot.fetch_channel(channelID)
+        oldMessageExists=self.bot.organizedMessageID is not None and await message_exists(c,self.bot.organizedMessageID)
+        if self.bot.organizedMessageTime==None or now-self.bot.organizedMessageTime>=7*24*60*60 or not oldMessageExists:
+            try:
+                channel=self.bot.get_channel(channelID)
+                if channel:
+                    self.bot.organizedMessageTime=self.nextMatchMessage()
+                    deep_save_txt(BotPaths.autoOrgTimeStamp_file,str(self.bot.organizedMessageTime))
+                    msg=CUSTOM_MATCH_ORGANIZE_MESSAGE.replace("÷",str(self.bot.organizedMessageTime))
+                    message=await channel.send(msg)
+                    self.bot.organizedMessageID=message.id
+                    deep_save_txt(BotPaths.autoOrgID_file,str(self.bot.organizedMessageID))
+            except Exception as e:
+                import traceback
+                with open(BotPaths.exception_file, "w") as f:
+                    traceback.print_exc(file=f)
+                await printLogToDc(self.bot,"error","",BotPaths.exception_file)
 
 async def setup(bot):
     await bot.add_cog(AutoOrganizer(bot))

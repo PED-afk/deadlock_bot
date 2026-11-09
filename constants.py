@@ -53,6 +53,7 @@ class ROLES():
     IFONLINE=1550424746720624640
     BOT_PROGRAMMER_APLICANT=1543929441225412608
     CUSTOM_MATCH=1569045662887055480
+    CUSTOM_MATCH_PART=1569082222181355690
     class COLORS():
         PURPLE=1543693742031249418
         BLUE=1535060305116401704
@@ -274,7 +275,18 @@ PRIVATE_MESSAGE_CONTENT=(
     )
 
 
-CUSTOM_MATCH_ORGANIZE_MESSAGE=f"<@&{ROLES.CUSTOM_MATCH}>\nThere will be a custom match at: <t:÷:F>\n-# <t:÷:R>\nGet the role in <#{CHANNEL_IDS.ROLE_CHANNEL_ID}>\nReact to this message if you can participate; You will be obligated to join, no taking back 1 minutes before we start."
+CUSTOM_MATCH_ORGANIZE_MESSAGE=(
+    f"<@&{ROLES.CUSTOM_MATCH}>"
+    "\nThere will be a custom match at: <t:÷:F>"
+    "\n-# <t:÷:R>"
+    f"\nGet the role in <#{CHANNEL_IDS.ROLE_CHANNEL_ID}>"
+    "\nReact to this message if you can participate!"
+    "\n"
+    "\nYou can/should react even if there are more than 12 reactions on this message, as others may decide to leave before or between the matches or we might start a second/third/etc. lobby.;"
+    "\n"
+    "\nYou will be **obligated** to join, no taking back 1 minutes before we start."
+    "\n# Still testing."
+    )
 
 
 

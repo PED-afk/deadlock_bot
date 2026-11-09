@@ -57,3 +57,5 @@ class BotPaths():
     autoOrgTimeStamp_file="autoOrgTS.txt"
     autoOrgID_file="autoOrgID.txt"
     
+    exception_file=BASE / "exception.txt"
+    
