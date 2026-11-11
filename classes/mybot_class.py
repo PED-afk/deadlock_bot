@@ -34,7 +34,8 @@ class MyBot(commands.Bot):
         await self.load_extension("cogs.unorganized_cog")
         await self.load_extension("cogs.voicechat_cog")
 
-        await self.load_extension("cogs.spok_cog")
+        #do not reenable
+        #await self.load_extension("cogs.spok_cog")
         #await self.load_extension("cogs.priority_cog")
 
         await self.load_extension("external_cogs.debug_cog")

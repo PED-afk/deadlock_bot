@@ -20,7 +20,7 @@ class ThreadMod(commands.Cog):
     @commands.Cog.listener()
     async def on_thread_create(self,thread: discord.Thread):
         # Only handle posts created in the target forum
-        if thread.parent_id!=CHANNEL_IDS.SUGGESTIONS_ID:
+        if thread.parent_id!=CHANNEL_IDS.SUGGESTIONS_CHANNEL_ID:
             return
         forum=thread.parent
 
@@ -44,7 +44,7 @@ class ThreadMod(commands.Cog):
     @commands.Cog.listener()
     async def on_thread_update(self,before: discord.Thread, after: discord.Thread):
         #only posts in correct forum
-        if after.parent_id != CHANNEL_IDS.SUGGESTIONS_ID:
+        if after.parent_id != CHANNEL_IDS.SUGGESTIONS_CHANNEL_ID:
             return
 
         before_tags={tag.id for tag in before.applied_tags}
