@@ -236,7 +236,7 @@ FLOOR_PLAN_MESSAGE=("Here are the channels and what they are used for!\n"
                     "  - #10# Share whatever you made.\n"
                     "  - #11# Suggestions/changes about the server or our bot go here.\n"
                     "- Miss Shelly's Workshop\n"
-                    "  - #12# Commands for our dedicadet bot and the outputs from those commands. Use `!help_me` to learn more.\n"
+                    "  - #12# Commands for our dedicadet bot and the outputs from those commands. Use `!help` to learn more.\n"
                     "  - #13# Deadlock stat tracker bot and it's commands.\n"
                     )
 
