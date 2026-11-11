@@ -83,7 +83,7 @@ class MyBot(commands.Bot):
 
 
         self.bootTime=time.time()//1
-        self.version="0.14.7"
+        self.version="0.14.8"
         self.versionSTR=""
 
 
