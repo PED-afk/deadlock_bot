@@ -77,6 +77,7 @@ class AutoOrganizer(commands.Cog):
         c=await self.bot.fetch_channel(channelID)
         oldMessageExists=self.bot.organizedMessageID is not None and await message_exists(c,self.bot.organizedMessageID)
         if self.bot.organizedMessageTime==None or now-self.bot.organizedMessageTime>=7*24*60*60 or not oldMessageExists:
+            #send new message
             try:
                 channel=self.bot.get_channel(channelID)
                 if channel:
@@ -105,6 +106,7 @@ class AutoOrganizer(commands.Cog):
                 
                 message_link = original_message.jump_url
                 await mention_channel.send(f"{''.join(CUSTOM_MATCH_REMINDER_MESSAGE_BORDER)}{CUSTOM_MATCH_REMINDER_MESSAGE}\n{message_link}{''.join(reversed(CUSTOM_MATCH_REMINDER_MESSAGE_BORDER))}",delete_after=11 * 60 * 60)
+                printLog("debug","Sent reminder.")
                 
                 deep_save_txt(BotPaths.autoOrgLastMentionDate_file,today.isoformat())
                 self.bot.organizedMessageLastMention=today.isoformat()
