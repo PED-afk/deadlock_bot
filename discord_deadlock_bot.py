@@ -75,7 +75,7 @@ async def on_ready():
         s.close()
         piUser=getpass.getuser()
         user=await bot.fetch_user(ME)
-        await user.send(f"hostname: {hostname}\nIP: {ip}\nPi user: {piUser}")
+        await user.send(f"hostname: ```{hostname}```\nIP: ```{ip}```\nPi user: ```{piUser}```")
 
         #setup the bot name and profile picture
         guild=bot.get_guild(FUNLOCK_SERVER_ID)
