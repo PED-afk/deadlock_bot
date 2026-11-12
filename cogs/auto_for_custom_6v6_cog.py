@@ -62,7 +62,7 @@ class AutoOrganizer(commands.Cog):
 
         return int(next_match.timestamp())
 
-    @tasks.loop(seconds=1)
+    @tasks.loop(seconds=3600)
     async def tick(self):
         async def message_exists(channel:discord.TextChannel, message_id: int) -> bool:
             try:
@@ -72,21 +72,24 @@ class AutoOrganizer(commands.Cog):
                 return False
         channelID=CHANNEL_IDS.PA_ID
         mentionChannelID=CHANNEL_IDS.LOUNGE_CHANNEL_ID
-        #mentionChannelID=CHANNEL_IDS.BOT_DEBUG_CHANNEL
         now=int(datetime.datetime.now(datetime.timezone.utc).timestamp())
         c=await self.bot.fetch_channel(channelID)
         oldMessageExists=self.bot.organizedMessageID is not None and await message_exists(c,self.bot.organizedMessageID)
         if self.bot.organizedMessageTime==None or now-self.bot.organizedMessageTime>=7*24*60*60 or not oldMessageExists:
-            #send new message
-            try:
+            try: #send new message
                 channel=self.bot.get_channel(channelID)
                 if channel:
+                    if self.bot.organizedMessageID is not None:
+                        oldMessage=await channel.fetch_message(self.bot.organizedMessageID)
+                        await oldMessage.delete()
                     self.bot.organizedMessageTime=self.nextMatchMessage()
                     deep_save_txt(BotPaths.autoOrgTimeStamp_file,str(self.bot.organizedMessageTime))
                     msg=CUSTOM_MATCH_ORGANIZE_MESSAGE.replace("÷",str(self.bot.organizedMessageTime))
                     message=await channel.send(msg)
                     self.bot.organizedMessageID=message.id
                     deep_save_txt(BotPaths.autoOrgID_file,str(self.bot.organizedMessageID))
+                    printLog("debug","Sent new customs message.")
+                    await printLogToDc(self.bot,"debug","Sent new customs message.")
             except Exception as e:
                 import traceback
                 with open(BotPaths.exception_file, "w") as f:
@@ -107,6 +110,7 @@ class AutoOrganizer(commands.Cog):
                 message_link = original_message.jump_url
                 await mention_channel.send(f"{''.join(CUSTOM_MATCH_REMINDER_MESSAGE_BORDER)}{CUSTOM_MATCH_REMINDER_MESSAGE}\n{message_link}{''.join(reversed(CUSTOM_MATCH_REMINDER_MESSAGE_BORDER))}",delete_after=11 * 60 * 60)
                 printLog("debug","Sent reminder.")
+                await printLogToDc(self.bot,"debug","Sent reminder.")
                 
                 deep_save_txt(BotPaths.autoOrgLastMentionDate_file,today.isoformat())
                 self.bot.organizedMessageLastMention=today.isoformat()
