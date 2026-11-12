@@ -76,6 +76,13 @@ class AutoOrganizer(commands.Cog):
                 return True
             except discord.NotFound:
                 return False
+            except discord.Forbidden:
+                return False
+            except discord.HTTPException as e:
+                if e.status>=500:
+                    printLog("error",f"Discord server error checking message: {e}")
+                    raise
+                return False
         channelID=CHANNEL_IDS.PA_ID
         mentionChannelID=CHANNEL_IDS.LOUNGE_CHANNEL_ID
         now=int(datetime.datetime.now(datetime.timezone.utc).timestamp())
