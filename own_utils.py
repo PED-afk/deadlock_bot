@@ -1,6 +1,7 @@
 
 import random
 from discord.ext import commands
+import discord
 from datetime import datetime, timedelta
 import time
 from dateutil.relativedelta import relativedelta
@@ -9,6 +10,7 @@ from constants import ME, BOT_ROLE, MOD_ROLE
 from constants import DATE_FORMAT
 from constants import CHANNEL_IDS
 from constants import BOT_ID, ME
+from constants import FUNLOCK_SERVER_ID
 from debug import printLog, printLogToDc
 from classes.bot_faces import Faces
 from classes.dc_colors import Colors
@@ -293,7 +295,6 @@ def add_auto_message(bot:commands.Bot, message:str,where:str,difA:int,difMes:str
 
 
 async def cleanChannel(bot:commands.Bot, channelID:int,cleanRange:int):
-    import discord
     wasMin2=False
     if cleanRange==-1:
         cleanRange=None
@@ -333,7 +334,24 @@ async def getUserById(bot:commands.Bot, user_id:int):
     """
     return await bot.fetch_user(user_id)
 
-
+async def removeRoleFromEveryone(bot:commands.Bot,roleID:int,guildID:int=FUNLOCK_SERVER_ID):
+    guild=bot.get_guild(guildID)
+    if guild is None:
+        printLog("error","Guild not found")
+        return
+    role=guild.get_role(roleID)
+    if role is None:
+        printLog("error","Role not found")
+        return
+    
+    for member in role.members:
+        try:
+            await member.remove_roles(role)
+            printLog("error",f"Removed role from {member.name}")
+        except discord.Forbidden:
+            printLog("error",f"Missing permissions for {member.name}")
+        except discord.HTTPException as e:
+            printLog("error",f"Failed to remove role from {member.name}: {e}")
 
 
 
