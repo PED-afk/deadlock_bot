@@ -45,6 +45,10 @@ class AutoOrganizer(commands.Cog):
         
 
     def nextMatchMessageTimeStamp(self):
+        """
+        returns the timestamp of the next valid date for a custom match
+        """
+        
         now=datetime.datetime.now(datetime.timezone.utc)
         valid_days=[4, 5, 6]
         #no friday
