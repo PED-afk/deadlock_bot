@@ -123,8 +123,6 @@ class AutoOrganizer(commands.Cog):
                 
                 message_link = original_message.jump_url
                 await mention_channel.send(f"{''.join(CUSTOM_MATCH_REMINDER_MESSAGE_BORDER)}{CUSTOM_MATCH_REMINDER_MESSAGE.replace('÷',str(self.bot.organizedMessageTime))}\n{message_link}{''.join(reversed(CUSTOM_MATCH_REMINDER_MESSAGE_BORDER))}",delete_after=11 * 60 * 60)
-                printLog("debug","Sent reminder.")
-                await printLogToDc(self.bot,"debug","Sent reminder.")
                 
                 deep_save_txt(BotPaths.autoOrgLastMentionDate_file,today.isoformat())
                 self.bot.organizedMessageLastMention=today.isoformat()
