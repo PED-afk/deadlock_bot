@@ -76,6 +76,13 @@ class AutoOrganizer(commands.Cog):
                 return True
             except discord.NotFound:
                 return False
+            except discord.Forbidden:
+                return False
+            except discord.HTTPException as e:
+                if e.status>=500:
+                    printLog("error",f"Discord server error checking message: {e}")
+                    raise
+                return False
         channelID=CHANNEL_IDS.PA_ID
         mentionChannelID=CHANNEL_IDS.LOUNGE_CHANNEL_ID
         now=int(datetime.datetime.now(datetime.timezone.utc).timestamp())
@@ -115,7 +122,9 @@ class AutoOrganizer(commands.Cog):
                 original_message=await c.fetch_message(self.bot.organizedMessageID)
                 
                 message_link = original_message.jump_url
-                await mention_channel.send(f"{''.join(CUSTOM_MATCH_REMINDER_MESSAGE_BORDER)}{CUSTOM_MATCH_REMINDER_MESSAGE}\n{message_link}{''.join(reversed(CUSTOM_MATCH_REMINDER_MESSAGE_BORDER))}",delete_after=11 * 60 * 60)
+                await mention_channel.send(f"{''.join(CUSTOM_MATCH_REMINDER_MESSAGE_BORDER)}{CUSTOM_MATCH_REMINDER_MESSAGE.replace('÷',str(self.bot.organizedMessageTime))}\n{message_link}{''.join(reversed(CUSTOM_MATCH_REMINDER_MESSAGE_BORDER))}",delete_after=11 * 60 * 60)
+                printLog("debug","Sent reminder.")
+                await printLogToDc(self.bot,"debug","Sent reminder.")
                 
                 deep_save_txt(BotPaths.autoOrgLastMentionDate_file,today.isoformat())
                 self.bot.organizedMessageLastMention=today.isoformat()

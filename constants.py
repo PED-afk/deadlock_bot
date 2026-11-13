@@ -285,7 +285,7 @@ CUSTOM_MATCH_ORGANIZE_MESSAGE=(
     "\nYou can/should react even if there are more than 12 reactions on this message, as others may decide to leave before or between the matches or we might start a second/third/etc. lobby.;"
     )
 
-CUSTOM_MATCH_REMINDER_MESSAGE="If you haven't done so check out the custom match we are organising:"
+CUSTOM_MATCH_REMINDER_MESSAGE="If you haven't done so check out the custom match we are organising at ÷:"
 CUSTOM_MATCH_REMINDER_MESSAGE_BORDER=[SpecialCharacters.EMPTY,"\n","\n","\n","\n","================================","\n"]
 
 
