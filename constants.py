@@ -199,6 +199,7 @@ WARNING_MESSAGE_IN_NAMETAG_CHANNEL=(
     "\nIf you haven't recieved the roles you wanted, remove and readd your reactions (when the bot is online)."
     "\n"
     "\n-# The bot may appear online right after it shuts down or crashes. Check the # channel for shutdown and startup messages."
+    "\n-# In the # channel use !ping to see if the bot is really online."
     )
 WARNING_MESSAGE_IN_NAMETAG_CHANNEL_ID=1553357812409704489
 
