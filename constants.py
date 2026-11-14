@@ -236,7 +236,7 @@ FLOOR_PLAN_MESSAGE=("Here are the channels and what they are used for!\n"
                     "  - #3#  Choose your name color and roles here, check it out to learn more.\n"
                     "  - #4#  Here you can read about server wide announcements.\n"
                     "- The Hideout\n"
-                    "  - #5# Talk about all kind of things\n"
+                    "  - #5# Talk about all kind of things.\n"
                     "  - #6# When you want to play with others this is where you put your in-game lobby codes.\n"
                     "  - #7# Share your builds.\n"
                     "  - #8# You seek knowledge or want to share some of yours? You can do it here.\n"
@@ -284,7 +284,7 @@ PRIVATE_MESSAGE_CONTENT=(
 
 
 CUSTOM_MATCH_ORGANIZE_MESSAGE=(
-    f"<@&{ROLES.CUSTOM_MATCH}>"
+    f"<@&{ROLES.CUSTOM_MATCH}> and <@&{ROLES.ANNOUNCEMENTS}>"
     "\nThere will be a custom match at: <t:÷:F>:"
     "\n-# <t:÷:R>"
     f"\nGet the role in <#{CHANNEL_IDS.ROLE_CHANNEL_ID}>"
