@@ -153,7 +153,7 @@ IAM_MESSAGE_CONTENT=(
     "\nWhat notifications do you want?"
     "\nYou can choose more than 1."
     "\n"
-    "\n- If you usually available to play with (you will be pinged by people looking for players): 🎮"
+    "\n- If you are usually available to play with (you will be pinged by people looking for players): 🎮"
     "\n- If someone is looking for players and you want to be pinged only if you appear as online: 👻"
     "\n- If you want to get notified if there is a planned custom match happening: 🎭"
     "\n- If you want to get notifications about all server announcements (\*3): 📢"
@@ -161,9 +161,9 @@ IAM_MESSAGE_CONTENT=(
     "\n- If you know programming: ⌨️"
     "\n- If you want to help edit the bot's code (\*)(\*2): 🤖"
     "\n"
-    "\n-# (*)We will periodically check this role to give access to the github repository; until we do use `!source` to get the active link to it."
+    "\n-# (*)We will periodically check this role to grant access to the GitHub repository; until we do use `!source` to get the active link to it."
     "\n-# (*2)Getting this role won't necessarily mean you get access, we may deny your 'application'"
-    "\n-# (\*3) By \"default\" we use `@everyone` when an important announcement is posted; for less important announcement we will use this role to ping you."
+    "\n-# (\*3) By \"default\" we use `@everyone` when an important announcement is posted; for less important announcement, we will use this role to ping you."
     )
 
 WHO_AM_I_ROLES={
@@ -236,7 +236,7 @@ FLOOR_PLAN_MESSAGE=("Here are the channels and what they are used for!\n"
                     "  - #3#  Choose your name color and roles here, check it out to learn more.\n"
                     "  - #4#  Here you can read about server wide announcements.\n"
                     "- The Hideout\n"
-                    "  - #5# Talk About all kind of things\n"
+                    "  - #5# Talk about all kind of things\n"
                     "  - #6# When you want to play with others this is where you put your in-game lobby codes.\n"
                     "  - #7# Share your builds.\n"
                     "  - #8# You seek knowledge or want to share some of yours? You can do it here.\n"
@@ -279,18 +279,18 @@ PRIVATE_MESSAGE_CONTENT=(
     "\n-# - If you notice any spelling mistakes or bad formatting please take a screenshot of this message,"
     " send it to the #3# channel with the `BUG Report` tag applied and describe the problem."
     "\n"
-    "\n### Thank you for your time and again Welcome!"
+    "\n### Thank you for your time and again: Welcome!"
     )
 
 
 CUSTOM_MATCH_ORGANIZE_MESSAGE=(
     f"<@&{ROLES.CUSTOM_MATCH}>"
-    "\nThere will be a custom match at: <t:÷:F>"
+    "\nThere will be a custom match at: <t:÷:F>:"
     "\n-# <t:÷:R>"
     f"\nGet the role in <#{CHANNEL_IDS.ROLE_CHANNEL_ID}>"
     "\nReact to this message if you can participate!"
     "\n"
-    "\nYou can/should react even if there are more than 12 reactions on this message, as others may decide to leave before or between the matches or we might start a second/third/etc. lobby.;"
+    "\nYou can/should react even if there are more than 12 reactions on this message, as others may decide to leave before or between the matches or we might start a second/third/etc. lobby."
     )
 
 CUSTOM_MATCH_REMINDER_MESSAGE="If you haven't done so check out the custom match we are organising at <t:÷:F>:"
