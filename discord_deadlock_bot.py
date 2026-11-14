@@ -143,7 +143,7 @@ async def on_ready():
         await message.add_reaction(WHO_AM_I_ROLES[i]["emoji"])
 
     message=await channel.fetch_message(WARNING_MESSAGE_IN_NAMETAG_CHANNEL_ID)
-    await message.edit(content=WARNING_MESSAGE_IN_NAMETAG_CHANNEL.replace("@",bot.user.mention).replace(" #",bot.get_channel(CHANNEL_IDS.BOTS_CHANNEL_ID).mention))
+    await message.edit(content=WARNING_MESSAGE_IN_NAMETAG_CHANNEL.replace("@",bot.user.mention).replace("#",bot.get_channel(CHANNEL_IDS.BOTS_CHANNEL_ID).mention))
 
     channel=bot.get_channel(CHANNEL_IDS.FLOOR_PLAN_CHANNEL_ID)
     message=await channel.fetch_message(FLOOR_PLAN_MESSAGE_ID)
