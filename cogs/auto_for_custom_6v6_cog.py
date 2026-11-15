@@ -92,7 +92,7 @@ class AutoOrganizer(commands.Cog):
             try: #send new message
                 channel=self.bot.get_channel(channelID)
                 if channel:
-                    if self.bot.organizedMessageID is not None:
+                    if self.bot.organizedMessageID is not None and oldMessageExists:
                         oldMessage=await channel.fetch_message(self.bot.organizedMessageID)
                         await oldMessage.delete()
                     self.bot.organizedMessageTime=self.nextMatchMessageTimeStamp()
@@ -115,7 +115,6 @@ class AutoOrganizer(commands.Cog):
         now_utc=datetime.datetime.now(datetime.timezone.utc)
         
         last_mention_date=self.bot.organizedMessageLastMention
-
         if now_utc.hour>=12 and last_mention_date!=today.isoformat():
             try:
                 mention_channel=await self.bot.fetch_channel(mentionChannelID)
