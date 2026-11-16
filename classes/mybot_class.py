@@ -94,6 +94,11 @@ class MyBot(commands.Bot):
         self.degenTimer=int(float(deep_load_txt(BotPaths.degen_timer_file)))
         self.degenLeaderboard=deep_load_json(BotPaths.degen_leaderboard_file)
 
+        self.brainSyncCounter=int(deep_load_txt(BotPaths.brain_sync_file,APP_NAME))
+        if self.brainSyncCounter==-1:
+            self.brainSyncCounter=0
+            deep_save_txt(BotPaths.brain_sync_file,str(self.brainSyncCounter))
+
         self.user_data=deep_load_json(BotPaths.user_data_file)
         idSTR="global"
         if idSTR not in self.user_data.keys():
@@ -162,5 +167,7 @@ class MyBot(commands.Bot):
         
         deep_save_txt(BotPaths.degen_timer_file,str(self.bot.degenTimer))
         deep_save_json(BotPaths.degen_leaderboard_file,self.bot.degenLeaderboard)
+
+        deep_save_txt(BotPaths.brain_sync_file,str(self.brainSyncCounter))
 
 

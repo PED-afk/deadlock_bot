@@ -27,6 +27,10 @@ class Funs(commands.Cog):
                     allM+=f"<@{i}>"
                 await ctx.reply(f"<@{ctx.author.id}> is wishing \n{allM}, Good luck and Have fun!{chooseFaceFromCategory(Faces.FaceBigCategory.happies)}")
         ctx.message.delete
+        
+    @commands.command()
+    async def braincell(self,ctx):
+        await ctx.reply("The deadlock hivemind synced "+str(self.bot.brainSyncCounter)+" times.")
 
 async def setup(bot):
     await bot.add_cog(Funs(bot))

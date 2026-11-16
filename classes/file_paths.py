@@ -59,4 +59,6 @@ class BotPaths():
     autoOrgLastMentionDate_file="autoOrgLastMention.txt"
     
     exception_file=BASE / "exception.txt"
+
+    brain_sync_file="bSync.txt"
     

@@ -161,6 +161,7 @@ class Unorganized(commands.Cog):
                 anyView=True
                 botcommands=[
                     "`!gl`: Wish good luck to people.",
+                    "`!braincell`: When 2 or more people synced their brainwaves.",
                     "`!minigames`: Play some games while you wait for matchmaking. (W.I.P.)",
                     "`!shop`: Buy items for our minigames.",
                     "`!source`: Lobotomy (source code).",
