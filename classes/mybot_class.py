@@ -157,8 +157,10 @@ class MyBot(commands.Bot):
         self.tsnskwii=-1
         
     def saveAll(self):
+        save_json(BotPaths.user_data_path,self.bot.user_data)
         deep_save_json(BotPaths.user_data_file,self.bot.user_data)
+        
         deep_save_txt(BotPaths.degen_timer_file,str(self.bot.degenTimer))
-        deep_save_json(BotPaths.degen_leaderboard_file,self.degenLeaderboard)
+        deep_save_json(BotPaths.degen_leaderboard_file,self.bot.degenLeaderboard)
 
 
