@@ -116,10 +116,13 @@ async def on_ready():
     if bot.opSys: #skip these running on windows (same as before)
         face=chooseFaceFromCategory("big_eyes")
         with open(BotPaths.hotboot_file,"r") as f:
-            if int(f.readline().strip())==0:
-                await bot.get_channel(CHANNEL_IDS.BOTS_CHANNEL_ID).send("I'm awake!\nGood morning!\n"+face)
-            else:
-                await bot.get_channel(CHANNEL_IDS.BOTS_CHANNEL_ID).send("Back online! "+face)
+            channel=bot.get_channel(CHANNEL_IDS.BOTS_CHANNEL_ID)
+            if channel:
+                if int(f.readline().strip())==0:
+                    await channel.send("I'm awake!\nGood morning!\n"+face)
+                else:
+                    await channel.send("Back online! "+face)
+            await channel.send("Running bot version: "+bot.version+"\n"+bot.versionSTR)
 
 
     #print debug about updates
