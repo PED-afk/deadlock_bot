@@ -29,9 +29,13 @@ class Funs(commands.Cog):
         ctx.message.delete
         
     @commands.command()
-    async def braincell(self,ctx):
-        self.bot.brainSyncCounter+=1
-        await ctx.reply("The deadlock hivemind synced "+str(self.bot.brainSyncCounter)+" times.")
+    async def braincell(self,ctx,get:str):
+        if get.lower()!="get":
+            self.bot.brainSyncCounter+=1
+        if self.bot.brainSyncCounter==1:
+            await ctx.reply("The Deadlock hivemind™ synced "+str(self.bot.brainSyncCounter)+" time.")
+        else:
+            await ctx.reply("The Deadlock hivemind™ synced "+str(self.bot.brainSyncCounter)+" times.")
 
 async def setup(bot):
     await bot.add_cog(Funs(bot))
