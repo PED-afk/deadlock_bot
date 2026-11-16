@@ -30,6 +30,7 @@ class Funs(commands.Cog):
         
     @commands.command()
     async def braincell(self,ctx):
+        self.bot.brainSyncCounter+=1
         await ctx.reply("The deadlock hivemind synced "+str(self.bot.brainSyncCounter)+" times.")
 
 async def setup(bot):
