@@ -97,6 +97,7 @@ class Hiddens(commands.Cog):
                 await ctx.reply("Range not specified.")
             else:
                 await cleanChannel(self.bot,CHANNEL_IDS.BOTS_CHANNEL_ID,many)
+                await ctx.send("Running bot version: "+self.bot.version+"\n"+self.bot.versionSTR)
     
     @commands.command()
     async def cleanDebug(self,ctx):
