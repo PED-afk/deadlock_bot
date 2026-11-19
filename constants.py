@@ -203,12 +203,55 @@ WARNING_MESSAGE_IN_NAMETAG_CHANNEL=(
     )
 WARNING_MESSAGE_IN_NAMETAG_CHANNEL_ID=1553357812409704489
 
+class SuggestionForum():
+    ACCEPTED_MESSAGE=(
+        "Your suggestion was **accepted**!"
+        "\n"
+        "\nIf your suggestion had to do something with the server's channels it should already be done."
+        "\nIf it was about the bot, your suggestion will be worked on and depending on the complexity it will be in the next second number update (0.x.y; x is the second)"
+        "\n"
+        "\nThis thread will be closed."
+    )
+    REJECTED_MESSAGE=(
+        "Your suggestion was **rejected**!"
+        "\n"
+        "\nThe reason should have been explained before this message apeared."
+        "\n"
+        "\nThis thread will be closed."
+    )
+    CANT_DO_MESSAGE=(
+        "Your suggestion was tagged as \"`Unable to do`\""
+        "\n"
+        "\nThis means that your idea would be implemented if it was possible."
+        "\n"
+        "\nReasons should have been explained to you by a moderator, but if it wasn't:"
+        "\nThe reason could be one of the following:"
+        "\n- Goes against the rules."
+        "\n- No ways available to do the task."
+        "\n- Available tools are unable to handle the functionality."
+    )
+    MORE_DETAIL_MESSAGE=(
+        "Your suggestion was tagged as \"`More details needed`\"!"
+        "\n"
+        "\nYour idea requires further explanation in order for the moderators to best evaluate your suggestion."
+    )
+    LIGHT_REJ_MESSAGE=(
+        "Your idea was \"light rejected\"!"
+        "\n"
+        "\nThis means that the fundamental idea is not bad but the whole idea can not be done, goes against the rules, has no purpose"
+        " or the fundamental idea alone is too insignificant to be considered."
+        "\n"
+        "\nIf you want to know the specific reason please ask."
+    )
+    class SuggestionTags():
+        NEW=1544065933948223558
 
-SUGGESTIONS_NEW_TAG_ID=1544065933948223558
-
-SUGGESTIONS_REJ_TAG_ID=1544065901794426981
-SUGGESTIONS_ACC_TAG_ID=1544065868537794660
-SUGGESTIONS_CANT_TAG_ID=1545425498581110846
+        REJ=1544065901794426981
+        ACC=1544065868537794660
+        CANT=1545425498581110846
+        
+        REJ_LIGHT=1571926188581060809
+        MORE_DETAIL_PLS=1571913203028332625
 
 
 HANDPICKED_SUP_USER_IDS=[
