@@ -207,8 +207,9 @@ class SuggestionForum():
     ACCEPTED_MESSAGE=(
         "Your suggestion was **accepted**!"
         "\n"
-        "\nIf your suggestion had to do something with the server's channels it should already be done."
-        "\nIf it was about the bot, your suggestion will be worked on and depending on the complexity it will be in the next second number update (0.x.y; x is the second)"
+        "\nIf your suggestion concerns a server channel, it should already be implemented."
+        "\nIf your suggestion concerns the bot, work on it will begin soon and will be completed based on its complexity "
+        "and will be included in a future update (0.x.y; x is the major update number)."
         "\n"
         "\nThis thread will be closed."
     )
@@ -220,26 +221,27 @@ class SuggestionForum():
         "\nThis thread will be closed."
     )
     CANT_DO_MESSAGE=(
-        "Your suggestion was tagged as \"`Unable to do`\""
+        "Your suggestion was tagged as \"`Unable to do`\"!"
         "\n"
         "\nThis means that your idea would be implemented if it was possible."
         "\n"
-        "\nReasons should have been explained to you by a moderator, but if it wasn't:"
-        "\nThe reason could be one of the following:"
-        "\n- Goes against the rules."
-        "\n- No ways available to do the task."
-        "\n- Available tools are unable to handle the functionality."
+        "\nThe reason should have been explained to you by a moderator."
+        "\nIf it wasn't the reason may be one of the following:"
+        "\n- It goes against the rules."
+        "\n- No method is available to achive what you suggested."
+        "\n- The available tools cannot support this functionality."
     )
     MORE_DETAIL_MESSAGE=(
         "Your suggestion was tagged as \"`More details needed`\"!"
         "\n"
-        "\nYour idea requires further explanation in order for the moderators to best evaluate your suggestion."
+        "\nYour idea requires further explanation so that the moderators can evaluate your suggestion."
     )
     LIGHT_REJ_MESSAGE=(
         "Your idea was \"light rejected\"!"
         "\n"
-        "\nThis means that the fundamental idea is not bad but the whole idea can not be done, goes against the rules, has no purpose"
-        " or the fundamental idea alone is too insignificant to be considered."
+        "\nThis means the fundamental idea is not bad, but the complete idea cannot be implemented "
+        "because it goes against the rules or has no purpose"
+        "\nand the fundamental idea alone is too insignificant to consider."
         "\n"
         "\nIf you want to know the specific reason please ask."
     )
