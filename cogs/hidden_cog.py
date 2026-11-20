@@ -97,6 +97,7 @@ class Hiddens(commands.Cog):
                 await ctx.reply("Range not specified.")
             else:
                 await cleanChannel(self.bot,CHANNEL_IDS.BOTS_CHANNEL_ID,many)
+                await ctx.send("Running bot version: "+self.bot.version+"\n"+self.bot.versionSTR)
     
     @commands.command()
     async def cleanDebug(self,ctx):
@@ -249,7 +250,7 @@ class Hiddens(commands.Cog):
         guild=self.bot.get_guild(FUNLOCK_SERVER_ID)
         clever=guild.get_member(USER_CLEVER)
         extra=""
-        if clever and clever.voice and clever.voice.channel:
+        if clever and clever.voice and clever.voice.channel and mention is None:
             extra=f"\n<@{USER_CLEVER}> was here. "+chooseFaceFromCategory(Faces.FaceBigCategory.clever)
         if mention==None:
             extra+="\n\n-# mention a user in the command to add a point to the leaderboard "+chooseFaceFromCategory(Faces.nervous)
