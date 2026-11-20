@@ -78,6 +78,7 @@ class Tools(commands.Cog):
                     num=12
                 for i in range(num):
                     r=random.randint(0,len(oChars))
+                    printLog("debug",list(oChars.keys()))
                     returnChars+=list(oChars.keys())[r]+"\n"
                     oChars.pop(r)
                 await ctx.reply(returnChars)
