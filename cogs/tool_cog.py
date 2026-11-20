@@ -77,7 +77,7 @@ class Tools(commands.Cog):
                 elif num>12:
                     num=12
                 for i in range(num):
-                    r=random.randint(0,len(oChars))
+                    r=random.randint(0,len(list(oChars.keys())))
                     printLog("debug",list(oChars.keys()))
                     returnChars+=list(oChars.keys())[r]+"\n"
                     oChars.pop(r)
