@@ -77,7 +77,7 @@ class Tools(commands.Cog):
                     num=12
                 for i in range(num):
                     r=random.randint(0,len(oChars))
-                    returnChars+=oChars[r]+"\n"
+                    returnChars+=oChars[oChars.keys()[r]]+"\n"
                     oChars.pop(r)
                 await ctx.reply(returnChars)
             elif sub=="char_pair":
@@ -90,10 +90,10 @@ class Tools(commands.Cog):
                 for i in range(num):
                     smallList=""
                     r=random.randint(0,len(oChars))
-                    smallList+=oChars[r]+"; "
+                    smallList+=oChars[oChars.keys()[r]]+"; "
                     oChars.pop(r)
                     r=random.randint(0,len(oChars))
-                    smallList+=oChars[r]
+                    smallList+=oChars[oChars.keys()[r]]
                     oChars.pop(r)
                     returnChars+=smallList+"\n"
                 await ctx.reply(returnChars)
