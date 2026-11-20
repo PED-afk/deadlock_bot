@@ -70,21 +70,21 @@ class Tools(commands.Cog):
                 await ctx.reply('\n'.join(botcommands))
             elif sub=="char":
                 returnChars=""
-                oChars=self.bot.characters.copy()
+                oChars=list(self.bot.characters.copy().keys())
                 printLog("debug",oChars)
                 if num<1:
                     num=1
                 elif num>12:
                     num=12
                 for i in range(num):
-                    r=random.randint(0,len(list(oChars.keys())))
-                    printLog("debug",list(oChars.keys()))
-                    returnChars+=list(oChars.keys())[r]+"\n"
+                    r=random.randint(0,len(oChars))
+                    printLog("debug",oChars)
+                    returnChars+=oChars[r]+"\n"
                     oChars.pop(r)
                 await ctx.reply(returnChars)
             elif sub=="char_pair":
                 returnChars=""
-                oChars=self.bot.characters.copy()
+                oChars=list(self.bot.characters.copy().keys())
                 if num<1:
                     num=1
                 elif num>6:
@@ -92,10 +92,10 @@ class Tools(commands.Cog):
                 for i in range(num):
                     smallList=""
                     r=random.randint(0,len(oChars))
-                    smallList+=list(oChars.keys())[r]+"; "
+                    smallList+=oChars[r]+"; "
                     oChars.pop(r)
                     r=random.randint(0,len(oChars))
-                    smallList+=list(oChars.keys())[r]
+                    smallList+=oChars[r]
                     oChars.pop(r)
                     returnChars+=smallList+"\n"
                 await ctx.reply(returnChars)
