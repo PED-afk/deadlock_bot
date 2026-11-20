@@ -71,6 +71,7 @@ class Tools(commands.Cog):
             elif sub=="char":
                 returnChars=""
                 oChars=self.bot.characters.copy()
+                printLog("debug",oChars)
                 if num<1:
                     num=1
                 elif num>12:
