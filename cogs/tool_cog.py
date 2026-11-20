@@ -71,14 +71,12 @@ class Tools(commands.Cog):
             elif sub=="char":
                 returnChars=""
                 oChars=list(self.bot.characters.copy().keys())
-                printLog("debug",oChars)
                 if num<1:
                     num=1
                 elif num>12:
                     num=12
                 for i in range(num):
                     r=random.randint(0,len(oChars))
-                    printLog("debug",oChars)
                     returnChars+=oChars[r]+"\n"
                     oChars.pop(r)
                 await ctx.reply(returnChars)
