@@ -170,7 +170,7 @@ class Unorganized(commands.Cog):
             elif section=="tools":
                 anyView=True
                 botcommands=[
-                    f'`!onlines`: Ping peopple who selected the "ping me if I\'m online" role in {self.bot.get_channel(CHANNEL_IDS.ROLE_CHANNEL_ID).mention}'
+                    f"`!onlines`: Ping peopple who selected the \"ping me if I'm online\" role in {self.bot.get_channel(CHANNEL_IDS.ROLE_CHANNEL_ID).mention}"
                     "`!rand`: All sorts of randomly given stuff. (use `!rand` to learn more)",
                     "`!remind @<person_to_be_reminded> <number of> <minute/hour/day later> <reminder text>`: I will send a message after the specified amount of time, to remind someone about something.",
                     f"`!countdown <countdown name> | <date in {tz}(*)>`: I will send multiple reminder before the countdown expires.",
