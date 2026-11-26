@@ -5,52 +5,19 @@ from discord.ext import commands, tasks
 
 import os
 from dotenv import load_dotenv
-import time
-import random
-from datetime import datetime, timedelta
-import asyncio
 
-from data_manage import save_json, load_json, load_txt, deep_load_json, deep_load_txt, deep_save_txt
-from own_utils import chooseFaceFromCategory, canUseCommand, getShhValue, updateShh, cleanChannel
-from debug import printLog, printLogToDc, writeLog
-from constants import MESSAGE_CD, VOICE_CHANNEL_CAT_NAME_PREFIX, BOT_SECRET_NICKNAMES, GREET_CD
-from constants import WHO_AM_I_ROLES, COLOR_CHOOSER_MESSAGE_ID, IAM_MESSAGE_ID, IAM_MESSAGE_CONTENT, COLOR_CHOOSER_MESSAGE_CONTENT, COLORED_ROLES
-from constants import AUTODELETE_TRESHOLD, MIN_TIME_BETWEEN_SHH_UPDATE_SECONDS
-from constants import DEGEN_TIMER_RESET_MESSAGES, DEGEN_TIMER_ASK_MESSAGES, THANKING_MESSAGES
-from constants import WARNING_MESSAGE_IN_NAMETAG_CHANNEL_ID, WARNING_MESSAGE_IN_NAMETAG_CHANNEL
-from constants import FLOOR_PLAN_MESSAGE, FLOOR_PLAN_MESSAGE_ID, RULES_MESSAGE, RULES_MESSAGE_ID
-from constants import CHANNEL_IDS, ROLES, FUNLOCK_SERVER_ID, BOT_SERVER_SPEC_NAME
-from constants import MAX_MONEY_SECURE_AFTER_GAME
-from constants import ME
-from constants import SECOND_BASE
-
-from classes.item import DeadlockItem
-from classes.file_paths import BotPaths
 from classes.mybot_class import MyBot
-from user_bot_interaction import interact, getGlobalInteractValue, getInteractValue, wasGreeted, botGreets
 
-
-import importlib.util
-spec = importlib.util.spec_from_file_location("second", SECOND_BASE / "second_main.py")
-module = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(module)
 
 #Set up the bot with a command prefix
 intents = discord.Intents.default()
 intents.messages = True
 intents.message_content = True
 intents.voice_states = True
-
 intents.reactions = True
 intents.members = True
 intents.guilds = True
-
 intents.presences = True
-
-#bot=commands.Bot(command_prefix='!', intents=intents)
-#this does NOT work with cogs for some reason
-
-
 
 #later maybe remove help_command=None
 #if do:
@@ -61,6 +28,7 @@ intents.presences = True
 #and we have more controll over custom with `help_command=None`
 bot=MyBot(command_prefix='!', intents=intents,help_command=None)
 
+"""
 @bot.event
 async def on_ready():
     if bot.opSys: #skip these running on windows (this assumes we test on windows and run on linux (or other op sys))
@@ -171,13 +139,13 @@ async def on_ready():
     await message.edit(content=RULES_MESSAGE)
 
     #need a message in a channel? use this:
-    """channel=bot.get_channel(1524176375903420466)
+    ""channel=bot.get_channel(1524176375903420466)
     if channel is None:
         channel=await bot.fetch_channel(1524176375903420466)
-    await channel.send("New message!")"""
+    await channel.send("New message!")""
 
     #thess were needed once
-    """
+    ""
     forum = bot.get_channel(1544085021156184214)
 
     if not isinstance(forum, discord.ForumChannel):
@@ -190,7 +158,7 @@ async def on_ready():
             continue
 
         await forum.create_tag(name=name)
-    """
+    ""
 
     
     #start the tick task
@@ -209,8 +177,9 @@ async def on_ready():
         #exit()
         
     #this is last in on_ready()
-    printLog("info",f"Bot running version: {bot.version}\t(on_ready finnished)")
+    printLog("info",f"Bot running version: {bot.version}\t(on_ready finnished)")"""
 
+"""
 @bot.event
 async def on_message(message):
     #update auto "moderation"
@@ -221,6 +190,15 @@ async def on_message(message):
     #return if we don't care
     if message.author.bot or message.webhook_id is not None or message.author == bot.user:
         return
+    
+    #if lobby code
+    #do fun with it
+    if message.channel.id==CHANNEL_IDS.LOBBY_CODES_ID:
+        from lobby_code_analizer import isValidCode, analyze_string
+        if isValidCode(message.content):
+            analized_message=analyze_string(message.content)
+            if analized_message is not None:
+                await message.reply(analized_message)
     
     #auto "moderate"
     if getShhValue(message.author.id,bot.shhMod)>=AUTODELETE_TRESHOLD:
@@ -343,10 +321,11 @@ async def on_message(message):
                 message.content="!"+content.strip()
                 await bot.process_commands(message)
     else:
-        await bot.process_commands(message)
+        await bot.process_commands(message)"""
 
 Disable=True
 
+"""
 @tasks.loop(seconds=1)
 async def tick():
     if not bot.opSys:
@@ -475,7 +454,7 @@ async def tick():
                             moneyToBeSecured=bot.user_data[userID]["money"]["unsecured"]
                         bot.user_data[userID]["money"]["secured"]+=moneyToBeSecured
                         bot.user_data[userID]["money"]["unsecured"]-=moneyToBeSecured
-                bot.timers[name]["time"]=None
+                bot.timers[name]["time"]=None"""
 
 
 

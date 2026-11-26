@@ -49,6 +49,7 @@ class ROLES():
     BOT_ROLE_NOT_AUTO_CREATED=1544310435451248660
     ANNOUNCEMENTS=1557693455772164096
     PROGRAMMER=1543698321279946874
+    MODER=1573725539452194907
     REGULAR=1530270967736041712
     IFONLINE=1550424746720624640
     BOT_PROGRAMMER_APLICANT=1543929441225412608
@@ -158,6 +159,8 @@ IAM_MESSAGE_CONTENT=(
     "\n- If you want to get notified if there is a planned custom match happening: 🎭"
     "\n- If you want to get notifications about all server announcements (\*3): 📢"
     "\n"
+    "\n- If you made/make mods for Deadlock: ⚙️"
+    "\n"
     "\n- If you know programming: ⌨️"
     "\n- If you want to help edit the bot's code (\*)(\*2): 🤖"
     "\n"
@@ -190,6 +193,10 @@ WHO_AM_I_ROLES={
     "custom_match":{
         "id":ROLES.CUSTOM_MATCH,
         "emoji":"🎭"
+    },
+    "dl_moder":{
+        "id":ROLES.MODER,
+        "emoji":"⚙️"
     }
 }
 
@@ -340,6 +347,17 @@ CUSTOM_MATCH_ORGANIZE_MESSAGE=(
 
 CUSTOM_MATCH_REMINDER_MESSAGE="If you haven't done so check out the custom match we are organising at <t:÷:F>:"
 CUSTOM_MATCH_REMINDER_MESSAGE_BORDER=[SpecialCharacters.EMPTY,"\n","\n","\n","\n","================================","\n"]
+
+
+
+class LOBBY_CODE_FUN_MESSAGES():
+    START="Your lobby code contanins "
+    
+    REPEATS="# repeating characters."
+    ORDER="consecutive numbers in # order."
+    WORD="a # letter word: $"
+    
+    END=" How lucky! ÷"
 
 
 MAX_MONEY_SECURE_AFTER_GAME=500
