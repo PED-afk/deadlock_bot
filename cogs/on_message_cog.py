@@ -165,6 +165,7 @@ class OnMessage(commands.Cog):
                     message.content="!"+content.strip()
                     await self.bot.process_commands(message)
         else:
+            pass
             await self.bot.process_commands(message)
         
         

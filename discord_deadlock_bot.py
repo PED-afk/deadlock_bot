@@ -321,7 +321,8 @@ async def on_message(message):
                 message.content="!"+content.strip()
                 await bot.process_commands(message)
     else:
-        await bot.process_commands(message)"""
+        await bot.process_commands(message)
+"""
 
 Disable=True
 

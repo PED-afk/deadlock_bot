@@ -16,6 +16,8 @@ from constants import APP_NAME
 
 
 class MyBot(commands.Bot):
+    async def on_message(self, message):
+        pass
     sys.path.insert(0, str(SECOND_BASE))
     async def setup_hook(self):
         await self.load_extension("cogs.auto_for_custom_6v6_cog")
