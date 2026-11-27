@@ -356,6 +356,9 @@ class LOBBY_CODE_FUN_MESSAGES():
     REPEATS="# repeating characters."
     ORDER="consecutive numbers in # order."
     WORD="a # letter word: $"
+    MIRROR="a mirrored part: #."
+    FUNNY_NUM_69="NICE."
+    FUNNY_NUM_420="NICE"
     
     END=" How lucky! ÷"
 

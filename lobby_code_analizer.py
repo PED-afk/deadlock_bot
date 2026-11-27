@@ -1,6 +1,7 @@
 
 
 import re
+import requests
 import cmudict
 
 
@@ -60,7 +61,7 @@ def word_match(s):
         if word in BANNED_WORDS:
             continue
         # 3-letter words must match exactly
-        if len(word)==3 and s==word:
+        if len(word)==3 and word in s:
             return word,0
 
         # 4 or 5 letter words can have one character difference
@@ -71,17 +72,27 @@ def word_match(s):
 
     return None,0
 
+def mirror_substring(s):
+    best = ""
+    for i in range(len(s)):
+        for j in range(i + 3, len(s) + 1):
+            sub = s[i:j]
+            if sub == sub[::-1] and len(set(sub)) > 1:
+                if len(sub) > len(best):
+                    best = sub
+    return best, len(best)
+
 def isValidCode(s)->bool:
     s=s.lower()
-    if not re.fullmatch(r"[a-z0-9]{5}", s):
-        return False
-    return True
+    if re.fullmatch(r"[a-z0-9]{5}", s):
+        return True
+    return False
     
 def analyze_string(s):
     s=s.lower()
 
     #Validate input
-    if isValidCode(s):
+    if not isValidCode(s):
         printLog("warning","Invalid input: must be exactly 5 letters/numbers.")
         return -1
 
@@ -98,23 +109,35 @@ def analyze_string(s):
         else:
             max_sequence=1
 
-    # WORD priority: must be at least as long as the other match counts
-    matched_word=word_match(s)
+    #WORD priority: must be at least as long as the other match counts
+    matched_word,matched_word_dist=word_match(s)
     if matched_word:
+        matched_word=matched_word.upper()
         word_length=len(matched_word)
         if word_length>=max_repeat and word_length>=max_sequence:
             return LOBBY_CODE_FUN_MESSAGES.START+LOBBY_CODE_FUN_MESSAGES.WORD.replace("#",str(word_length)).replace("$",matched_word)+LOBBY_CODE_FUN_MESSAGES.END.replace("÷",chooseFaceFromCategory(Faces.wink))
 
-    # Number sequence takes priority over repeated characters
+    #mirrored substr in str
+    mirror_word, mirror_word_len=mirror_substring(s)
+    if mirror_word:
+        mirror_word=mirror_word.upper()
+        return LOBBY_CODE_FUN_MESSAGES.START+LOBBY_CODE_FUN_MESSAGES.MIRROR.replace("#",mirror_word)+LOBBY_CODE_FUN_MESSAGES.END.replace("÷",chooseFaceFromCategory(Faces.wink))
+
+    #Number sequence takes priority over repeated characters
     hns,dir=has_number_sequence(s)
     if hns:
         return LOBBY_CODE_FUN_MESSAGES.START+LOBBY_CODE_FUN_MESSAGES.ORDER.replace("#",("ascending" if dir==1 else "descending"))+LOBBY_CODE_FUN_MESSAGES.END.replace("÷",chooseFaceFromCategory(Faces.wink))
 
-    # 3+ repeated characters
+    #3+ repeated characters
     if max_repeat>=3:
+        max_repeat=str(max_repeat)
         return LOBBY_CODE_FUN_MESSAGES.START+LOBBY_CODE_FUN_MESSAGES.REPEATS.replace("#",max_repeat)+LOBBY_CODE_FUN_MESSAGES.END.replace("÷",chooseFaceFromCategory(Faces.wink))
-        return "Repeated characters"
+    
+    #69
+    if "69" in s:
+        return LOBBY_CODE_FUN_MESSAGES.FUNNY_NUM_69
+    #420
+    if "420" in s:
+        return LOBBY_CODE_FUN_MESSAGES.FUNNY_NUM_420
 
     return None
-
-
